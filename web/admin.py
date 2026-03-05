@@ -1,14 +1,21 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import user, tips,room, message,topic, update,cash_expenditure
+from .models import user, tips,room, message,group, update,cash_expenditure,Msg, MpesaTransaction
 admin.site.register(user)
 admin.site.register(tips)
 admin.site.register(room)
 admin.site.register(message)
-admin.site.register(topic)
+admin.site.register(group)
+admin.site.register(Msg)
 admin.site.register(update)
 admin.site.register(cash_expenditure)
+admin.site.register(MpesaTransaction)
+from .models import WhatsAppContact
+
+@admin.register(WhatsAppContact)
+class WhatsAppContactAdmin(admin.ModelAdmin):
+    list_display = ("name", "phone")
 
 
 

@@ -11,7 +11,7 @@ class tips(models.Model):
     name=models.CharField(max_length=200)  
     description=models.TextField(null=True, blank=True)
 
-class topic(models.Model):
+class group(models.Model):
     name=models.CharField(max_length=200)
 
     def __str__(self):
@@ -20,15 +20,16 @@ class topic(models.Model):
 
 
 
-class room(models.Model):
+
+class room(models.Model): 
     host=models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    topic=models.ForeignKey(topic, on_delete=models.SET_NULL, null=True) 
+    group=models.ForeignKey(group, on_delete=models.SET_NULL, null=True) 
     Firstname = models.CharField(null=True, blank=True, max_length=200)
     name=models.CharField(max_length=255)
     lastName = models.CharField(null=True, blank=True, max_length=200)
     Email = models.EmailField(null=True, blank=True, max_length=200)
     phone = models.CharField(null=True, blank=True, max_length=200)
-    identity= models.IntegerField(null=True, blank=True)
+    id_number= models.CharField(null=True, blank=True, max_length=255) 
     KANGOYA = 'KANGOYA'  
     KASPHAT = 'KASPHAT'  
     NGARA = 'NGARA'
@@ -48,6 +49,7 @@ class room(models.Model):
     KAHAWA = 'KAHAWA'
     BLOOM_HILL_KAWAIDA = 'BLOOM_HILL_KAWAIDA'
     THIKA= 'THIKA'
+    JUJA= 'JUJA'
 
     CHOICES = [
         (KANGOYA,'Kangoya'),
@@ -69,29 +71,21 @@ class room(models.Model):
         (KAHAWA,'Kahawa'),
         (BLOOM_HILL_KAWAIDA,'Bloom_hill_kawaida'),
         (THIKA,'Thika'),
+        (JUJA,'juja'),
         
 
     ]
-    HBC = models.CharField(null=True, blank=True, max_length=100)  
-    choice = models.CharField(  
+   # HBC = models.CharField(null=True, blank=True, max_length=100)  
+    HBC = models.CharField(  
         max_length=100,  
         choices=CHOICES,  
         default=KANGOYA,  
     )
-    #HBC = models.CharField(null=True, blank=True, max_length=200)
-   # option1= 'parent'
-   # option2= 'child'
-    #opition3 ='Spouse'
-    #MY_CHOICES =[
-        #(option1, 'option 1' ),
-        #(option2, 'option 2' ),
-        #(option2, 'option 3' ),
-   # ]
-   # dropdown_field = models.CharField(max_length=20, choices=MY_CHOICES, default=option1) 
+
     Parent = models.CharField(null=True, blank=True, max_length=200)
     Child = models.CharField(null=True, blank=True, max_length=200)
     Spouse = models.CharField(null=True, blank=True, max_length=200)
-    description=models.TextField(null=True, blank=True)
+    #description=models.TextField(null=True, blank=True)
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
     
@@ -100,7 +94,7 @@ class room(models.Model):
         ordering = ['-updated', '-created']
 
     def __str__(self):
-        return self.name
+     return self.name if self.name is not None else "Unnamed"
     
 class message(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE) 
@@ -109,30 +103,80 @@ class message(models.Model):
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
 
+    
+
+    class Meta:
+          ordering = ['-updated', '-created']
+
     def __str__(self):
-        return self.body[0:50]
+     return self.body or ""
+
+    
+
+class Msg(models.Model):
+    sender=models.ForeignKey(User, on_delete=models.CASCADE)
+    room=models.ForeignKey(room, on_delete=models.CASCADE)
+    body = models.TextField(null=True, blank=True ,max_length=100)
+    updated= models.DateTimeField(auto_now=True)
+    created=models.DateTimeField(auto_now_add=True)
+    class Meta:
+          ordering = ['-updated', '-created']
+
+    def __str__(self):
+     return self.body or ""
+
+class MpesaTransaction(models.Model):
+    user= models.ForeignKey(User, on_delete=models.CASCADE, blank=True,null=True) 
+    profile=models.ForeignKey(room, on_delete=models.CASCADE, blank=True,null=True)
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Success', 'Success'),
+        ('Failed', 'Failed'),
+    ) 
+    full_name = models.CharField(max_length=100, blank=True)
+    phone_number = models.CharField(max_length=20)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    checkout_request_id = models.CharField(max_length=100, unique=True)
+    merchant_request_id = models.CharField(max_length=100, blank=True, null=True)
+    mpesa_receipt_number = models.CharField(max_length=100, blank=True, null=True)
+    transaction_date = models.CharField(max_length=50, blank=True, null=True)  # sometimes comes as int
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    result_code = models.IntegerField(blank=True, null=True)
+    result_desc = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.created_at.strftime('%Y-%m-%d')} - {self.full_name} - {self.phone_number} - {self.status}"
+
+
+    
     
 class update(models.Model):
-        owner= models.ForeignKey(User,on_delete=models.CASCADE)
-        room=models.ForeignKey(room,on_delete=models.CASCADE)
-        code=models.CharField(max_length=100)
-        name=models.CharField(null=True, blank=True, max_length=100)
-        amount = models.DecimalField(max_digits=10, decimal_places=1)
-        #month = models.CharField(null=True, blank=True, max_length=100)
-        JANUARY = 'JAN'  
-        FEBRUARY = 'FEB'  
-        MARCH = 'MAR'
-        APRIL= 'APR'
+        user_name= models.ForeignKey(User,on_delete=models.CASCADE)
+        #last_name=models.ForeignKey(room,on_delete=models.CASCADE, null=True)
+        #transaction=models.ForeignKey(MpesaTransaction, on_delete=models.CASCADE, null=True, blank=True)
+        transaction = models.OneToOneField(MpesaTransaction, on_delete=models.CASCADE, null=True, blank=True)
+        #code=models.CharField(max_length=100)
+       # name=models.CharField(null=True, blank=True, max_length=100)
+        #amount = models.DecimalField(max_digits=10, decimal_places=1)
+        Select= 'Select' 
+        bbf= 'bff (OCT 2024 - JUL 2025)' 
+        JANUARY = 'JANUARY'  
+        FEBRUARY = 'FEBRUARY'  
+        MARCH = 'MARCH'
+        APRIL= 'APRIL'
         MAY = 'MAY'
         JUNE = 'JUNE'
         JULY = 'JULY'
-        AUGUST = 'AUG'
-        SEPTEMBER = 'SEP'
-        OCTOBER = 'OCT'
-        NOVEMBER = 'NOV'
-        DECEMBER = 'DEC'
+        AUGUST = 'AUGUST'
+        SEPTEMBER = 'SEPTEMBER'
+        OCTOBER = 'OCTOBER'
+        NOVEMBER = 'NOVEMBER'
+        DECEMBER = 'DECEMBER'
 
         CHOICES = [
+        (Select,'select'),
+        (bbf,'bbf'),
         (JANUARY,'January'),
         (FEBRUARY,'February'),
         (MARCH,'March'),
@@ -148,11 +192,43 @@ class update(models.Model):
 
     ]
         month = models.CharField(null=True, blank=True, max_length=100)  
+        choose = models.CharField(  
+        max_length=100,  
+        choices=CHOICES,  
+        default=Select,  
+    )
+        select= 'Select' 
+        year1 = '2022'  
+        year2 = '2023'  
+        year3 = '2024' 
+        year4 = '2025' 
+        year5 ='2026' 
+        year6 = '2027' 
+        year7 = '2028'
+        year8 = '2029'
+        year9 = '2030'
+        
+
+        CHOICES = [
+        (year1 ,'2022'),
+        (year2,'2023'),
+        (year3,'2024'),
+        (year4,'2025'),
+        (year5 ,'2026'),
+        (year6,'2027'),
+        (year7,'2028'),
+        (year8 ,'2029'),
+        (year9, '2030'),
+    
+       
+
+    ]
+        Year = models.CharField(null=True, blank=True, max_length=100)  
         choice = models.CharField(  
         max_length=100,  
         choices=CHOICES,  
-        default=JANUARY,  
-    )
+        default=2025, 
+        )
         updated=models.DateTimeField(auto_now=True)
         created=models.DateTimeField(auto_now_add=True)
 
@@ -160,11 +236,11 @@ class update(models.Model):
           ordering = ['-updated', '-created']
 
         def __str__(self):
-          return self.choice
+          return self.choose if self.choose is not None else "Unnamed"
 
 class cash_expenditure(models.Model):
-    name =models.CharField(max_length=100)
-    date =models.DateField(max_length=20)
+    Expense =models.CharField(max_length=100, blank=True)
+    Date =models.CharField(max_length=20, blank=True)
     Amount=models.DecimalField(max_digits=10, decimal_places=2)
     updated=models.DateTimeField(auto_now=True, null=True, blank=True)
     created=models.DateTimeField(auto_now_add=True, null=True, blank=True)
@@ -173,11 +249,16 @@ class cash_expenditure(models.Model):
      ordering = ['-updated', '-created']
 
     def __str__(self):
-      return self.name
-
-        
-
+      return self.Expense or ""
     
+class WhatsAppContact(models.Model):
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)  # Store as 2547XXXXXXX
+
+    def __str__(self):
+        return f"{self.name} ({self.phone})"
+
+
 
     
 

@@ -1,10 +1,11 @@
 from django import forms
 from django.forms import ModelForm
 from .models import room
-from .models import update,cash_expenditure
+from .models import update,cash_expenditure, message, Msg
 from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm  
 from django.core.exceptions import ValidationError
+from .models import WhatsAppContact
 
 
 
@@ -13,6 +14,19 @@ class RoomForm(ModelForm):
         model=room
         fields='__all__'
         exclude = ['host']
+
+class MsgForm(ModelForm):
+    class Meta:
+        model=Msg
+        fields='__all__'
+        exclude = ['host']
+
+class MessageForm(ModelForm):
+    class Meta:
+        model=message
+        fields='__all__'
+        exclude = ['host']        
+
 
 class cash_expenditureForm(ModelForm):
     class Meta:
@@ -26,7 +40,7 @@ class cash_expenditureForm(ModelForm):
 class UpdateForm(ModelForm):
     class Meta:
         model=update
-        fields='__all__'
+        fields = ['user_name','transaction',  "choose", "choice"]
 
 
          
@@ -44,4 +58,18 @@ class CustomUserCreationForm(UserCreationForm):
         username = self.cleaned_data.get('username')  
         if User.objects.filter(username=username).exists():  
             raise ValidationError("This username is already taken.")  
-        return username       
+        return username    
+    
+
+class WhatsAppMessageForm(forms.Form):
+    contacts = forms.ModelMultipleChoiceField(
+        queryset=WhatsAppContact.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+    message = forms.CharField(widget=forms.Textarea, required=True)   
+
+class MpesaForm(forms.Form):
+    full_name = forms.CharField(max_length=100)
+    phone_number = forms.CharField(max_length=15)
+    amount = forms.IntegerField()    
