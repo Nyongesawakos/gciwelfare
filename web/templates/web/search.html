@@ -1,0 +1,23 @@
+<!-- search_update.html -->
+
+<h3>Search Customer</h3>
+
+<form method="GET">
+    <input type="text" name="query" placeholder="Enter name or email" value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% if Update %}
+    <h3>Update Details</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="Update_id" value="{{ Update.id }}">
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+{% elif query %}
+    <p>No customer found.</p>
+{% endif %}

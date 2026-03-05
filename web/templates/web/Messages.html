@@ -1,0 +1,140 @@
+{% extends 'main.html' %}
+{%load static%}
+{% block content %}
+{% if user.is_superuser %} 
+
+
+<br>
+<div class="form-container" style="align-items: center;">
+
+<div class="roomList__header">
+  <a class="btn btn--primary" href="{% url 'Msge' %}">Reply</a>
+</div>
+  
+  <p>Messages from Members</p>
+    {% for message in R_messages|slice:':15'%}
+    
+    <small style="color: brown;">@{{message.user}}</small><br><br>
+    
+    
+<p > <b>{{message.body}}</b></p>
+ <small><p style="font-size: x-small; color: royalblue; padding: 30px; text-align: right;"><i>{{message.updated|timesince}} ago</i></p></small>
+  <hr>
+  
+{%endfor%}
+</div >
+{%endif%}
+<br><br>
+
+{% if not user.is_superuser %}
+
+<div class="form-container" style="align-items: center;">
+<h2>Notifications for You</h2>
+<hr>
+<br>
+{% for Msg in adm%}
+{% if request.user == Msg.sender %}
+<p><p>{{Msg.body}}</p></p>
+<small style="padding: 30px; text-align: right;"><p style="font-size: x-small; color: royalblue;"><i>{{Msg.updated|timesince}} ago</i></p></small>
+<hr>
+{%endif%}
+{%endfor%}
+</div>
+
+{%endif%}
+</div>
+
+<style>
+    .form-container {
+  margin: auto;
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+ 
+  color: black;
+}
+    </style>
+    <br><br>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+ 
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+      display: block;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .payment-card {
+      background-color: #008c44; /* Safaricom Green */
+      color: white;
+      width: 370px;
+      margin: auto;
+      border-radius: 15px;
+      padding: 30px 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .payment-card h2 {
+      margin: 0 0 20px;
+      font-size: 22px;
+      border-bottom: 2px solid #ffffff33;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    .payment-card label {
+      display: block;
+      margin-top: 15px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .payment-card input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .payment-card button {
+      margin-top: 2px;
+      width: 100%;
+      padding: 4px;
+      background-color: #ff0000; /* Safaricom Red */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .payment-card button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+
+
+  <div class="payment-card">
+    <h2>Contributions Details</h2>
+    <label for="phone">Paybill Number:   <b>4146385</b> </label>
+   <!--input type="tel" id="phone" placeholder="e.g. 07xxxxxxxx"-->
+
+    <label for="amount">Name: <b>Input your name</b></label>
+    <label for="amount">Amount: <b>200 per person</b></label>
+    <!--input type="number" id="amount" placeholder="Enter amount"-->
+<br>
+    <button type="submit">Thank you</button>
+  </div>
+
+</body>
+</html>
+
+    {%endblock%}

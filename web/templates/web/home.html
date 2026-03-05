@@ -14,19 +14,13 @@
             <li>
               <a href="{% url 'home' %}"class="active">All <span>{{room_count}}</span></a>
             </li>
-            {% for topic in topics %}
+            {% for group in topics %}
             <li>
-              <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}<span>{{topic.room_set.all.count}}</span></a>
+              <a href="{% url 'home' %}?q={{group.name}}">{{group.name}}<span>🤍</span></a>
             </li>
             {% endfor %}
           </ul>
-          <a class="btn btn--link" href="topics.html">
-            More
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-              <title>chevron-down</title>
-              <path d="M16 21l-13-13h-3l16 16 16-16h-3l-13 13z"></path>
-            </svg>
-          </a>
+         
         </div>
         <!-- Topics End -->
 
@@ -45,36 +39,80 @@
               </label>
             </form>
             <div class="mobile-menuItems">
-              <a class="btn btn--main btn--pill" href="#">GCI Groups</a>
-              <a class="btn btn--main btn--pill" href="#">Recent Notices</a>
+              <a class="btn btn--main btn--pill" href="{% url 'gci' %}">GCI Groups</a>
+             
+              <a class="btn btn--main btn--pill" href="{% url 'Message'%}">Recent Notices</a>
+            
+             
+              
+             
             </div>
           </div>
           <div class="roomList__header">
             <div>
               <h2>GCI WELFARE</h2>
-              <p>{{room_count}} Welfare Members</p>
+              <p>Get welfare updates here</p>
             </div>
-            {% if user.is_superuser %} 
-            <a class="btn btn--primary" href="{% url 'insert' %}">Update</a>
-            <a class="btn btn--primary" href="{% url 'user_list' %}">Admin</a>
-            {%endif%}
-          <!--  {% if request.user.is_authenticated %}
-            <a class="btn btn--main" href="{% url 'createRoom' %}">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                <title>add</title>
-                <path
-                  d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
-                ></path>
-              </svg>
-              Create Profile
-            </a>
-            {%endif%}-->
+           <div>
+                       {% if contributions %}
+    <a class="btn btn--primary" href="{% url 'contributions' contributions.0.id %}">
+        updates
+    </a>
+{% endif %}
+           </div>
+ 
+             {% if user.is_superuser %}
             
+            <a class="btn btn--primary" href="{% url 'user_list' %}">Admin</a>
+            {%else%}
+
+            {% for room in tips %}
+            {% if request.user == room.host %}
+           <a class="mpesa-btn" style="margin-left: 4px;" href="{% url 'mpesa' %}">
+     M-Pesa
+</a>
+
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+        <style>
+          .mpesa-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #00A651, #008f45);
+    color: white;
+    padding: 14px 28px;
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    letter-spacing: 0.5px;
+    box-shadow: 0 5px 15px rgba(0, 166, 81, 0.3);
+    transition: all 0.3s ease;
+}
+
+.mpesa-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 166, 81, 0.4);
+}
+
+.mpesa-btn:active {
+    transform: scale(0.98);
+}
+@media (max-width: 768px) {
+    .mpesa-btn {
+        width: 39%;       /* button takes full width on small screens */
+        padding: 12px 12px;   /* reduce horizontal padding */
+        font-size: 12px;   /* keep text readable */
+    }
+}
+        </style>          
              {% for room in tips %}
+             {% if room.host == request.user %}
           </div>
           <div class="roomListRoom">
             <div class="roomListRoom__header">
-              <a href="" class="roomListRoom__author">
+              <a href="{% url 'index' room.id %}" class="roomListRoom__author">
                 <div class="avatar avatar--small">
                   <img src="{% static 'images/avatar.svg'%}" />
                 </div>
@@ -89,22 +127,21 @@
               </div>
             </div>
             <div class="roomListRoom__content">
-              {% if request.user == room.host %}
-              <a href="{% url 'index' room.id %}"> {{room.lastName}},<br> <small>View your Information HERE</small></a>
-              {%else%}
-              <small>{{room.lastName}} is a </small>
-              {%endif%}
-              <p>
-               ({{room.topic.name}})
+              <p>More details click on your profile</p>
+              <i><a href="#">If you have any challenge, please do not hesitate to contact our welfare team 
+              via 0742364421</a>
+              </i><p>
+               ({{room.group.name}})
               </p>
             </div>
             <div class="roomListRoom__meta">
-              <a href="room.html" class="roomListRoom__joined">
+              <a href="#" class="roomListRoom__joined">
                
                 Updated {{room.updated|timesince}}
               </a>
               <p class="roomListRoom__topic">{{room.name}}</p>
             </div>
+            {%endif%}
             {%endfor%}
           </div>
           </div>
@@ -116,7 +153,7 @@
       
         <div class="activities">
           <div class="activities__header">
-            <h2>Recent Notices</h2>
+            <h2>Contributions Details</h2>
           </div>
           <div class="activities__box">
             <div class="activities__boxHeader roomListRoom__header">
@@ -126,7 +163,7 @@
                 </div>
                 <p>
                   
-                  <span>ADMIN</span>
+                  <span>GCIWELFARE</span>
                 </p>
               </a>
               <div class="roomListRoom__actions">
@@ -142,14 +179,14 @@
             </div>
             
             <div class="activities__boxContent">
-              <p>Posted A reminder <a href="room.html">Payment Reminder</a></p>
+              <p><a href="room.html"></a></p>
               <div class="activities__boxRoomContent">
-                Hello Welfare Members!!. I wish to Remind You of This Month's Contribution...
+                <P>For Contributions<br> PAYBILL: <b>4146385</b> <br> NAME: <b>Input your Name</b><br>AMOUNT: <b>Ksh.200 per person</b></P>
               </div>
             </div>
           </div>
-          {% for room in tips %}
-          {% if request.user == room.host %}
+         {% for Msg in adm|slice:':1'%}
+         {% if request.user == Msg.sender %}
           <div class="activities__box">
             <div class="activities__boxHeader roomListRoom__header">
               <a href="profile.html" class="roomListRoom__author">
@@ -157,8 +194,8 @@
                   <img src="{% static 'images/avatar.svg'%}" />
                 </div>
                 <p>
-                  {{room.host}}
-                  <span>5 days ago</span>
+                  {{Msg.sender}}
+                  <span>{{Msg.updated|timesince}} ago</span>
                 </p>
               </a>
               <div class="roomListRoom__actions">
@@ -175,9 +212,9 @@
            
             
             <div class="activities__boxContent">
-              <p>Message<a href="room.html"></a></p>
+              <p>New Message<a href="room.html"></a></p>
               <div class="activities__boxRoomContent">
-           {{room.identity}}
+           {{Msg.body}}
               </div>
             </div>
             {% endif %}
@@ -187,4 +224,7 @@
         <!-- Activities End -->
       </div>
     </main>
+    <footer style="background-color:#051634; color:white; padding:40px 20px; font-family:sans-serif;">
+<p style="text-align: center;"> 2026 GCIWelfare Management. All rights reserved.</p>
+
     {% endblock %}

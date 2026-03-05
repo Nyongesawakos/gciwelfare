@@ -1,0 +1,27 @@
+{% extends 'main.html '%}
+
+{% block content %}
+<div>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="room_name">Select Group</label>
+        {{form.topic}}<br>
+        <label for="room_name">Details</label>
+        {{form.name}}<br>
+        <label for="room_name">lastname</label>
+        {{form.lastName}}<br>
+        <label for="room_name">phone</label>
+        {{form.phone}} <br>
+        <label for="room_name">Id number</label>
+        {{form.identity}} <br>
+        <label for="room_name">HBC</label>
+        {{form.HBC}}<br>
+        <label for="room_description">Your depandants</label><br>
+    {{form.description}}<br>
+
+        <input type="submit" value="submit">
+
+    </form>
+</div>
+
+{% endblock content%}

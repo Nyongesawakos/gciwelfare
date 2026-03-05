@@ -1,114 +1,213 @@
 {% extends 'main.html' %}
-
+{%load static%}
 {% block content %}
- <div>
-<p><b>{{index.host}} {{index.name}}</b></p>
-<br>
-</div>
-</div>
-      <table class="table table-borderless">
-        <thead>
-         
-         
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row"><b><h4>HOME BIBLE CHURCH<b><h4></th>
-            <td><h4>{{index.choice}}<h4></td>
-            
-          </tr>
-          <tr>
-            <th scope="row"><b><h4>PHONE NUMBER<b><h4></th>
-            <td><h4>+254 {{index.phone}}<h4></td>
-          </tr>
-          <tr>
-            <th scope="row"><b><h4>ID NUMBER<b><h4></th>
-            <td colspan="2"><h4>{{index.identity}}<h4></td>
-          </tr>
-          <tr>
-            <th scope="row"><b><h4>DEPENDANTS<b><h4></th>
-            <td><h4><h1>Parent:</h1>{{index.Parent}}<br><b>Child:</b> {{index.Child}} <br> <b>Spouse:</b>{{index.Spouse}}<h4></td>
-            
-          </tr>
-        </tbody>
-      </table>
-      <p><b>Updates</b></p>
-<br> 
-    </div>
-      <div class="card">
-        <div class="card-body">
-        <table id="example" class="table table-bordered table-hover" style="width:95%">
-          <thead>
-            <tr class="bg-primary">
-                 
-                  <th class="bg-info">Date</th>
-                  <th class="bg-info">Code</th>
-                  <th class="bg-info">Month</th>
-                  <th class="bg-info">contribution</th>
-                  
-              </tr>
-          </thead>
-          <tbody>
-           
-            {%for update in payment%}
-            {% if request.user == update.owner %}
-              <tr class="table-warning">
-                  <td>{{update.updated| date}}</td>
-                  <td>{{update.code}}</td>
-                  <td>{{update.choice}}</td>
-                  <td>{{update.amount}}</td> 
-                   
-               
-                  
-              </tr>
-              {%endif%}
-              {%endfor%}
-              
-             
-              
-          <tfoot>
-           
-          </tfoot>
-      </table>
+
+
+<div class="profile-container">
     
-      </div>
-      </div>
+    <div class="profile-header">
+        <h2>{{room.name}}'s Profile</h2>
+        <small>Member Information</small>
+    </div>
+
+    <div class="profile-info">
+        <div>
+            <span>HBC:</span>
+            <p>{{room.HBC}}</p>
+        </div>
+
+        <div>
+            <span>Phone Number:</span>
+            <p>{{room.phone}}</p>
+        </div>
+
+        <div>
+            <span>ID Number:</span>
+            <p>{{room.id_number}}</p>
+        </div>
+
+        <div>
+            <span>Parents:</span>
+            <p>{{room.Parent}} </p>
+        </div>
+          <div>
+            <span>Children:</span>
+            <p>{{room.Child}}</p>
+        </div>
+          <div>
+            <span>Spouse:</span>
+            <p>{{room.Spouse}}</p>
+        </div>
+
+        <div>
+            <span>Date Joined:</span>
+            <p>{{room.created}}</p>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+     
+    </div>
+
+</div>
+
+ 
+    
+
+
       
+
+         
+        
       
-        <p></p>
-  
-        <head>
-          <style>
-          table card-body{
-            font-family: arial, sans-serif;
-            font-size: medium;
-            font:300;
-            border-collapse: collapse;
-            width: 100%;
-          }
-          
-          td, th {
-            border: 1px solid #051634;
-            text-align: left;
-            color: #1e1e1f;
-            padding: 8px;
-            background-color: #C0C0C0;
-          }
-          
-          tr:nth-child(even) {
-            background-color: #C0C0C0;
-          }
-          p{
-            font-size: medium;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            color: #051634;
-            padding: 1%;
-          }
-          
-          </style>
-          <br> <br>
-          
-             
-                 
-                </div>
-          {%endblock%}
+       
+                
+        
+
+
+ 
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .profile-header h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .profile-info {
+        margin-top: 20px;
+    }
+
+    .profile-info div {
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .profile-info div span {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .profile-actions {
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        margin: 5px;
+        display: inline-block;
+    }
+
+    .btn-edit {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .btn-back {
+        background-color: #2196F3;
+        color: white;
+    }
+
+
+
+    /* Page background */
+body {
+    background-color: #f4f6f9;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Card container */
+.card {
+    width: 95%;
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+p{
+  color: #0d6efd;
+}
+
+/* Header */
+.table thead tr {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.table th {
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Table body */
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Hover effect */
+.table tbody tr:hover {
+    background-color: #f1f7ff;
+    transition: 0.3s;
+}
+
+/* Warning row */
+.table-warning {
+    background-color: #fff8e1;
+}
+
+/* Total row */
+.table-success {
+    background-color: #051634 !important;
+    color: white !important;
+    font-size: 15px;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .card {
+        padding: 15px;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+</style>
+
+
+{% endblock %}

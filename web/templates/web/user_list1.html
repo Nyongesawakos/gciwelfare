@@ -1,0 +1,81 @@
+{%include 'main.html'%}
+{% block content %}
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+
+<div class="card">
+    <div class="card-body">
+    <table id="example" class="table table-striped table-hover" style="width:95%">
+      <thead>
+        <tr class="bg-primary">
+            <th class="bg-info">Date Updated</th>
+            <th class="bg-info">UserName</th>
+            <th class="bg-info">LastName</th>
+            <th class="bg-info">Email address</th>
+              <th class="bg-info">code</th>
+              <th class="bg-info">Month</th>
+              <th class="bg-info">Amount</th>  
+              
+              
+          </tr>
+      </thead>
+      
+      <tbody>
+        {% for update in payment %}  
+        <tr class="table-warning">
+            <td>{{update.created}} </td>
+            <td>{{ update.owner}} </td>
+            <td>{{ update.room}}</td>
+            <td>{{ update.owner.email}}</td>
+            <td>{{ update.code }}</td>
+            <td>{{ update.month }}</td>
+            <td>{{ update.amount }}</td>
+            <td><a class="btn btn--main" href="{% url 'deleteRecord'  update.id %}">Delete</a></td>
+            
+        </tr>
+       
+        </tbody>
+        {% endfor %}  
+        <tr>
+          <td> Total Contributions = {{ Totals }}</td>
+        </tr>
+        <br>
+        
+        <div>
+          <a class="btn btn--primary" href="{% url 'insert' %}">UPDATE PAY</a>
+        </div>
+           
+        <style>
+          table card-body{
+            font-family: arial, sans-serif;
+            font-size: medium;
+            font:300;
+            border-collapse: collapse;
+            width: 100%;
+          }
+          
+          td, th {
+            border: 1px solid #C0C0C0;
+            text-align: left;
+            padding: 8px;
+            background-color: #051634;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #C0C0C0;
+          }
+         </style>
+         </table>
+         </div>
+         </div>
+         <br><br>
+        {%endblock%}
+        <br>
+       
+        
+
+        
+       
+

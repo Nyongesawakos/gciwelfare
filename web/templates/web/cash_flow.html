@@ -1,145 +1,179 @@
+   {%include 'web/main1.html'%}
 {%load static%}
 {% block content %}
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>GCIWELFARE</title>
-        <link rel="stylesheet" 
-              href="{% static 'style/Style2.css'%}">
-        <link rel="stylesheet" 
-        media="screen" href="{% static 'style/responsive.css'%}">
-    </head>
-    <header>
-
-        <div class="logosec">
-            <div class="logo">ADMIN PANEL</div>
-            <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
-                class="icn menuicn" 
-                id="menuicn" 
-                alt="menu-icon">
-        </div>
-
-        <div class="searchbar">
-            <input type="text" 
-                   placeholder="Search">
-            <div class="searchbtn">
-              <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
-                    class="icn srchicn" 
-                    alt="search-icon">
-              </div>
-        </div>
-
-        <div class="message">
-            <div class="circle"></div>
-            <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png" 
-                 class="icn" 
-                 alt="">
-            <div class="dp">
-              <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
-                    class="dpicn" 
-                    alt="dp">
-              </div>
-        </div>
-        
-     
-    
-    </header>
-  <br><br><br><br>
-  <div>
-    <br><br>
-    <form method="POST" action="">
-        {%csrf_token %}
-        <label for="fname">Expense:</label>
-{{form.name}}
-<label for="fname">Date:</label>
-{{form.date}}
-<label for="fname">Amount:</label>
-{{form.Amount}}
 
         
-        <input type="submit" value="submit"/>   
+
+    <!-- Content -->
+  <div class="content">
+    <div class="card">
+        <h1>Cashflows</h1>
+
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn primary">Add Record</button>
+        </form>
+
+      
+
        
-    </form>
     </div>
+</div>
 
-                <div class="report-header">
-                    <h1 class="recent-Articles">TotalOutflows</h1>
-                    <a href="{% url 'user_list' %}">Back</a>
-                    
-                </div>
 
-             
-                    <table id="example" class="table table-striped table-hover" style="width:95%">
-                        <thead>
-                          <tr class="bg-primary">
-                              <th class="bg-info">Date</th>
-                              <th class="bg-info">Expenditure on</th>
-                              <th class="bg-info">Amount Spent</th>
-                               
-                                
-                                
-                            </tr>
-                        </thead>
-                        
-                    <tbody>
-                        {% for cash_expenditure in s %}  
-                        <tr class="table-warning">
-                            <td>{{cash_expenditure.date}} </td>
-                            <td>{{ cash_expenditure.name}} </td>
-                            <td>ksh.{{ cash_expenditure.Amount}}</td>
-                         
-                            
-                            
-                        </tr>
-                       
-                        </tbody>
-                   
-                        {% endfor %}
-                        
-                        <style>
-                            table card-body{
-                              font-family: arial, sans-serif;
-                              font-size: medium;
-                              font:300;
-                              border-collapse: collapse;
-                              width: 100%;
-                            }
-                            
-                            td, th {
-                              border: 1px solid #C0C0C0;
-                              text-align: left;
-                              padding: 8px;
-                              background-color: #d3d8e0;
-                            }
-                            
-                            tr:nth-child(even) {
-                              background-color: #C0C0C0;
-                            }
-                            label{
-                              font-size: medium;
-                            }
-                            a{
-                              font-size: medium;
-                              text-decoration: none;
-                            }
-                           </style>
-                           </table>
+<style>
+   /* Page wrapper */
+.content {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f6f8;
+    padding: 20px;
+}
 
-                       
-            </div>
-        </div>
-   
+/* Card */
+.card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.4s ease-in-out;
+}
 
-    <script src="{% static 'style/index.js' %}"></script>
-    
-</body>
-</html>
+/* Headings */
+.card h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #111827;
+}
 
-{% endblock %}
+.card h3 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    text-align: center;
+    color: #374151;
+}
 
+/* Django form styling */
+.form p {
+    margin-bottom: 15px;
+}
+
+.form label {
+    display: flex;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #374151;
+}
+
+/* Inputs */
+.form input,
+.form select,
+.form textarea,
+.upload-form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    border-color: #10b981;;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn.primary {
+    background: #BA8E23;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn.secondary {
+    background: #10b981;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.divider::before {
+    margin-right: 10px;
+}
+
+.divider::after {
+    margin-left: 10px;
+}
+
+/* Upload form */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
+}
+
+</style>
+{%endblock%}

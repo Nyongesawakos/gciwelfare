@@ -1,0 +1,298 @@
+{% include 'main.html' %}
+{%load static%}
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .sub-header {
+      background-color: #BA8E23;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .sub-nav {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sub-nav li a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 12px;
+      display: block;
+    }
+
+    .sub-nav li a:hover {
+      background-color: #575757;
+      border-radius: 4px;
+    }
+
+    /* Mobile view */
+    @media (max-width: 768px) {
+      .sub-nav {
+        display: none;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      .sub-nav.show {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sub-header">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <ul class="sub-nav" id="subNav">
+       <li><a href="{% url 'root' %}">Home</a></li>
+      <li><a href="{% url 'home' %}">Go to welfare</a></li>
+      <li><a href="{% url 'about' %}">About Us</a></li>
+      <li><a href="{% url 'activities' %}">Activities</a></li>
+      
+    </ul>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('subNav').classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>
+
+<body>
+    
+  <div class="hero-section">
+    <div class="background-overlay"></div>
+    <br>
+    <p style="text-align: center; color: #fabb1c;"><b>The benefits for Membership</b></p>
+ <div class="card" style="display: block; align-items: center; padding-left: 10%">
+        <div class="card-body">
+        <table id="example" class="table table-bordered table-hover" style="width:95%">
+          <thead>
+            <tr class="bg-primary">
+                 
+                  <th class="bg-info">Description of benefit</th>
+                  <th class="bg-info">Amount</th>
+                  
+                  
+              </tr>
+          </thead>
+          <tbody>
+           
+            
+              <tr class="table-warning">
+                  <td>Wedding of a member (Cash or gift).</td>
+                  <td>5,000. If both members 7,500</td>
+                  
+                   
+               
+                  
+              </tr>
+                     
+              </tr>
+              <tr class="table-warning">
+              <td>Newborn</td>
+              <td>3000</td>
+              </tr>
+              <tr class="table-warning">
+              <td>Death of a member</td>
+              <td>30000</td>
+              </tr>
+               <tr class="table-warning">
+              <td>Death of a spouse</td>
+              <td>30,000</td>
+              </tr>
+               <tr class="table-warning">
+              <td>Death of a child</td>
+              <td>25,000</td>
+              </tr>
+               <tr class="table-warning">
+              <td>Death of a parent/ parent -in law </td>
+              <td>20,000</td>
+              </tr>
+               <tr class="table-warning">
+              <td>Hospital visitation /ailment of a member</td>
+              <td> 5% of a bill. Max 15,000</td>
+              </tr>
+           
+              
+             
+              
+          <tfoot>
+           
+          </tfoot>
+      </table>
+    
+      </div>
+    </div>
+      <style>
+
+
+
+          table card-body{
+            font-family: arial, sans-serif;
+            font-size: medium;
+            font:300;
+            border-collapse: collapse;
+            width: 100%;
+          }
+          
+          td, th {
+            border: 1px solid #051634;
+            text-align: left;
+            color: #1e1e1f;
+            padding: 8px;
+            background-color: #fff;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #fff;
+          }
+          p{
+            font-size: medium;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #fff;
+            padding: 1%;
+          }
+          
+          </style>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.hero-section {
+  position: relative;
+  height: 100vh;
+  background: url("{% static '/images/welfare2.jpg' %}") no-repeat center center/cover;
+  overflow: hidden;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Faded overlay */
+  z-index: 1;
+}
+
+.carousel {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+}
+
+.slide {
+  display: none;
+  font-size: 2.5rem;
+  padding: 20px;
+  animation: fade 1s ease-in-out;
+}
+
+.slide.active {
+  display: block;
+}
+
+button.prev, button.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0,0,0,0.3);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+button.prev { left: 20px; }
+button.next { right: 20px; }
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+</style>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.remove('active');
+    if (i === index) slide.classList.add('active');
+  });
+}
+
+document.querySelector('.prev').addEventListener('click', () => {
+  current = (current - 1 + slides.length) % slides.length;
+  showSlide(current);
+});
+
+document.querySelector('.next').addEventListener('click', () => {
+  current = (current + 1) % slides.length;
+  showSlide(current);
+});
+
+// Auto-rotate every 5 seconds
+setInterval(() => {
+  current = (current + 1) % slides.length;
+  showSlide(current);
+}, 14000);
+
+</script>
+<footer style="background-color:#002147; color:white; padding:40px 20px; font-family:sans-serif;">
+<p style="text-align: center;"> 2025 GCIWelfare Management. All rights reserved.</p>

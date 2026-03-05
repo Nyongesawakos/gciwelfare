@@ -1,0 +1,141 @@
+{%include 'main.html'%}
+{%load static%}
+{% block content %}
+
+
+<div class="content">
+
+
+    <div class="table-container">
+
+<div class="table-wrapper">
+        <table class="students-table">
+            <thead>
+    <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Month</th>
+        <th>Year</th>
+       
+        
+        
+    </tr>
+    </thead>
+    
+<tbody>
+{% for update in contributions %}
+<tr>
+    <td>{{ update.transaction.created_at }}</td>
+    <td>{{ update.transaction.amount }}</td>
+    <td>{{ update.choose }}</td>
+    <td>{{ update.choice }}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="4">No contributions found.</td>
+</tr>
+{% endfor %}
+</tbody>
+        
+      <style>
+        a {
+    text-decoration: none;
+}
+
+      </style>
+    </tr>
+   
+   
+    
+    </tbody>
+    
+</table>
+</div>
+</div>
+    
+</div>
+
+
+
+
+<style>
+    
+
+
+/* Main container */
+.table-container {
+    width: 100%;
+    min-height: calc(100vh - 80px); /* fills screen below topbar */
+    margin: 0;
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 0;
+    box-shadow: none;
+    
+}
+
+/* Header */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    
+}
+
+.table-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+
+
+
+
+
+
+
+/* Table wrapper (for horizontal scroll on mobile) */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* Table */
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.students-table th {
+    background: #f0f3ff;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+    color: #000;
+}
+
+.students-table td {
+    padding: 14px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #000;
+}
+
+.students-table tr:hover {
+    background: #f9faff;
+}
+
+/* Empty state */
+.no-results {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+   .content {
+        margin-top: 25px;
+        padding: 10px;
+    }
+
+
+</style>
+{%endblock%}

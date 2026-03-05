@@ -1,66 +1,73 @@
 {%include 'web/main1.html'%}
 {%load static%}
-{% load tz %}
 {% block content %}
 
 
+
 <div class="content">
-    <form method="get" action="{% url 'payment_list' %}" class="search-bar">
+<form method="get" action="{% url 'members' %}" class="search-bar">
     <input
         type="text"
         name="q"
-        placeholder="Search by name, reg no, email..."
+        placeholder="Search by name, hbc, email..."
         value="{{ query|default:'' }}"
     >
     <button type="submit">Search</button>
 </form>
-   <div class="table-container">
+<form method="get" action="{% url 'download_members_excel' %}">
+    <button type="submit" class="btn btn--pri" style="margin-bottom: 15px;">
+        Download Excel
+    </button>
+</form>
+    
+    <div class="table-container">
 
 <div class="table-wrapper">
         <table class="students-table">
             <thead>
     <tr>
-   <th>Date</th>
-   <th>Full Name</th>
-   <th>Phone</th>
-    <th>Amount</th>
-    <th>Receipt</th>
-    <th>Transaction ID</th>
-    <th>Status</th>
-    
+        <th>Username</th>
+        <th>Firstname</th>
+        <th>lastName</th>
+        <th>Category</th>
+        <th>HBC</th>
+        <th>More info</th>
+        <th>Edit Info</th>
+        <th>Remove Member</th>
         
         
     </tr>
-    
-
     </thead>
  <tbody>
- {% for payment in payments %}
-<tr>
-   <td>{{payment.created_at|localtime}}</td>
-   <td>{{ payment.full_name }}</td>
-   <td>{{ payment.phone_number }}</td>
-    <td>{{ payment.amount}}</td>
-    <td>{{ payment.mpesa_receipt_number }}</td>
-    <td>{{ payment.checkout_request_id }}</td>
-    <td>{{ payment.status }}</td>
+     {% for room in member %} 
+    <tr>
+         <td>{{room.host}}</td>
+        <td>{{room.Firstname}}</td>
+        <td>{{room.lastName}}</td>
+        <td>{{room.group}}</td>
+        <td>{{room.HBC}}</td>
+        <td><a style="color: #10b981;;" class="btn btn--main" href="{% url 'index'  room.id %}">View more</a></td>
+         <td><a style="color: #10b981;;" class="btn btn--main"  href="{% url 'updateRoom'  room.id %}">Edit Info</a></td>
+         <td><a style="color: red;" class="btn btn--main" href="{% url 'deleteRoom'  room.id %}">Remove Member</a></td>
+         
+      
+        
+        
+      <style>
+        a {
+    text-decoration: none;
+}
 
-    
-</tr>
- </tr>
+      </style>
+    </tr>
     {% empty %}
     <tr>
         <td colspan="4">No results found</td>
     </tr>
-{% endfor %}
+    {% endfor %}
     </tbody>
-    <tr>
-    <td colspan="3"><strong>Total</strong></td>
-    <td><strong>Ksh {{ total_amount }}</strong></td>
-</tr>
     
 </table>
-</div>
 </div>
 </div>
 
@@ -209,11 +216,43 @@ body {
 .students-table {
     min-width: 700px;   /* adjust depending on number of columns */
 }
+ /* excel */
 
+ /* Main button style */
+.btn--pri {
+    display: inline-block;
+    background: #10b981; /* green like your links */
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 1.2rem;
+    padding: 5x 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn--pri:hover {
+    background: #059669; /* slightly darker green on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.btn--pri:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Optional: smaller button for mobile */
+@media (max-width: 768px) {
+    .btn--pri {
+        font-size: 1.2rem;
+        padding: 8px 16px;
+    }
+}
 </style>
 {%endblock%}
 
        
     
-
-

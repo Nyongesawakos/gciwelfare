@@ -1,281 +1,51 @@
+{%include 'web/main1.html'%}
 {%load static%}
 {% block content %}
 
-<head>
+{% if request.user.is_authenticated%}
 
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GCIWELFARE</title>
-    <link rel="stylesheet" 
-          href="{% static 'style/Style2.css'%}">
-    <link rel="stylesheet" 
-    media="screen" href="{% static 'style/responsive.css'%}">
-    
-</head>
-<style>
-    a{
-            display: inline-block;
-            text-decoration: none;
-            font-size: medium;
-            }
-</style>
-<body>
-  
-    <!-- for header part -->
-    <header>
-
-        <div class="logosec">
-            <div class="logo">ADMIN PANEL</div>
-            <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
-                class="icn menuicn" 
-                id="menuicn" 
-                alt="menu-icon">
-        </div>
-
-        <div class="searchbar">
-            <input type="text" 
-                   placeholder="Search">
-            <div class="searchbtn">
-              <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
-                    class="icn srchicn" 
-                    alt="search-icon">
-              </div>
-        </div>
-
-        <div class="message">
-            <div class="circle"></div>
-            <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png" 
-                 class="icn" 
-                 alt="">
-            <div class="dp">
-              <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
-                    class="dpicn" 
-                    alt="dp">
-              </div>
-        </div>
-
-    </header>
-
-    <div class="main-container">
-        <div class="navcontainer">
-            <nav class="nav">
-                <div class="nav-upper-options">
-                    <div class="nav-option option1">
-                        <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
-                            class="nav-img" 
-                            alt="dashboard">
-                        <h3> Dashboard</h3>
-                    </div>
-
-                    <div class="option2 nav-option">
-                        
-
-                            <a href="{% url 'cashflow' %}">
-   
-                           <h3> Members</h3>
-                           </a>
-                       
-                       
-                       </div>
-
-                    <div class="nav-option option3">
-
-                         <a href="{% url 'Panel' %}">
-
-                        <h3> Reports</h3>
-                        </a>
-                    
-                    
-                    </div>
-
-                    <div class="nav-option option4">
-                       
-
-                            <a href="{% url 'insert' %}">
-   
-                           <h3> Updates</h3>
-                           </a>
-                       
-                       
-                       </div>
-
-                    <div class="nav-option option5">
-                        
-
-                            <a href="{% url 'cashflow' %}">
-   
-                           <h3> Outflows</h3>
-                           </a>
-                       
-                       
-                       </div>
+<div class="content">
+    <form class="search-bar">
+             <form method="get" action="{% url 'members' %}" class="search-bar">
+    <input
+        type="text"
+        name="q"
+        placeholder="Search by name, reg no, email..."
+        value="{{ query|default:'' }}"
+    >
+    <button type="submit">Search</button>
+</form>
+    </form>
 
      
+    <div class="content">
+        <h1>Welcome, {{request.user}} 👋</h1>
+        {%endif%}
+<a href="" class="card-link">
+      <div class="cards">
+            <div class="card">
+                <h3 style="color: black;">Members</h3>
+                <p>{{User_count}} Enrolled</p>
+            </div>
+</a>
+      <style>
+        a {
+    text-decoration: none;
+}
 
-                </div>
-            </nav>
+      </style>
+            <div class="card">
+                <h3>Total contribution</h3>
+                <p>ksh.{{total_amount}}</p>
+            </div>
+            <div class="card">
+                <h3>Outflows</h3>
+                <p>ksh. {{cash}}</p>
+            </div>
         </div>
-        <div class="main">
 
-            <div class="searchbar2">
-                <input type="text" 
-                       name="" 
-                       id="" 
-                       placeholder="Search">
-                <div class="searchbtn">
-                  <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
-                        class="icn srchicn" 
-                        alt="search-button">
-                  </div>
-            </div>
-
-            <div class="box-container">
-
-                <div class="box box1">
-                    <div class="text">
-                        <h2 class="topic-heading">{{User_count}}</h2>
-                        <h2 class="topic">Registered Members </h2>
-                    </div>
-
-                 <!--   <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
-                        alt="Views">-->
-                </div>
-
-                <div class="box box2">
-                    <div class="text">  
-                        <h2 class="topic-heading">{{ Totals|floatformat:2 }}</h2>
-                        <h2 class="topic">Total Contributions</h2>
-                    </div>
-
-                   <!-- <img src=
-
-                       >-->
-                </div>
-
-                <div class="box box3">
-                    <div class="text">
-                        <h2 class="topic-heading">{{cash}}</h2>
-                        <h2 class="topic">Total outflows</h2>
-                    </div>
-
-                      <!--<img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
-                        alt="comments">-->
-                </div>
-
-                <div class="box box4">
-                    <div class="text">
-                        <h2 class="topic-heading">{{net_profit}}</h2>
-                        <h2 class="topic">Net Balance</h2>
-                    </div>
-
-                     <!-- <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">-->
-                </div>
-            </div>
-
-            
-                <div class="report-container">
-                    <div class="report-header">
-                        <h1 class="recent-Articles">Update-Report</h1>
-                        
-                       <h3> <a class="btn btn--primary" href="{% url 'pdf' %}">FULL REPORT</a></h3>
-                    </div>
-                    
-                    
     
-                        
-                        <table id="example" class="table table-striped table-hover" style="width:95%">
-                            <thead>
-                              <tr class="bg-primary">
-                                  <th class="bg-info">Date Updated</th>
-                                  <th class="bg-info">UserName</th>
-                                  <th class="bg-info">Email address</th>
-                                    <th class="bg-info">code</th>
-                                    <th class="bg-info">Month</th>
-                                    <th class="bg-info">Amount</th>  
-                                    
-                                    
-                                </tr>
-                            </thead>
-                            
-                        <tbody>
-                            {% for update in payment|slice:':5'%}  
-                            <tr class="table-warning">
-                                <td>{{update.created|date}} </td>
-                                <td>{{ update.owner}} </td>
-                                <td>{{ update.owner.email}}</td>
-                                <td>{{ update.code }}</td>
-                                <td>{{ update.choice }}</td>
-                                <td>{{ update.amount }}</td>
-                                
-                               
-                                
-                                
-                            </tr>
-                           
-                            </tbody>
-                          
-                        
-                            {% endfor %}
-                           <!--<div class="pagination">  
-                                <span class="step-links">  
-                                  {% if page_obj.has_previous %}  
-                                    <a href="?page=1">&laquo; first</a>  
-                                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>  
-                                  {% endif %}  
-                              
-                                  <span class="current">  
-                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.  
-                                  </span>  
-                              
-                                  {% if page_obj.has_next %}  
-                                    <a href="?page={{ page_obj.next_page_number }}">next</a>  
-                                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>  
-                                  {% endif %}  
-                                </span>  
-                              </div>--> 
-                            <style>
-                                table card-body{
-                                  font-family: arial, sans-serif;
-                                  font-size: medium;
-                                  font:300;
-                                  border-collapse: collapse;
-                                  width: 100%;
-                                }
-                                
-                                td, th {
-                                  border: 1px solid #C0C0C0;
-                                  text-align: left;
-                                  padding: 8px;
-                                  background-color: #d3d8e0;
-                                }
-                                
-                                tr:nth-child(even) {
-                                  background-color: #C0C0C0;
-                                }
-                               </style>
-                               </table>
-    
-                               
-                </div>
-               
-            </div>
-           
-        </div>
-    </div>
+</div>
 
-   
- 
 
-    <script src="{% static 'style/index.js' %}"></script>
-</body>
 {% endblock %}

@@ -2,6 +2,7 @@
 {%load static%}
 {% block content %}
 <title>GCIWELFARE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <div class="div" id="mn">
 <div class="image">
     <img src="{% static 'images/logo.png'%}" />
@@ -20,6 +21,7 @@
               <th class="bg-info">Username</th>
               <th class="bg-info">Id Number</th>
               <th class="bg-info">phone number</th>
+              <th class="bg-info">Category</th>
               <th class="bg-info">HBC</th>
               <th class="bg-info">Dependants</th>
               
@@ -31,6 +33,7 @@
     <td>{{detail.host}} {{detail.name}}</td>
     <td>{{detail.identity}}</td>
     <td>{{detail.phone}}</td>
+    <td>{{detail.topic}}</td>
     <td>{{detail.choice}}</td> 
     <td><b>Parent: </b>({{detail.Parent}}) <br><b>Child: </b>({{detail.Child}})<br> <b>Spouse: </b>({{detail.Spouse}})</td> 
      

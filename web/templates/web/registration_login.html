@@ -1,95 +1,188 @@
-{% extends 'main.html '%}
+{%extends 'main.html'%}
 {% block content %}
-
-    <main class="auth layout">
-      <div class="container">
-        <div class="layout__box">
-          <div class="layout__boxHeader">
-            <div class="layout__boxTitle">
-              <h3>Sign up</h3>
-            </div>
-          </div>
-          <br><br><br><br>
-          <div class="layout__body">
-            {% if page == 'login'%}
-            <h2 class="auth__tagline">Welcome to  our Welfare</h2>
-            {% else %}
-            <h2 class="auth__tagline">Be part of our Welfare</h2>
-            {%endif%}
+    
+           
 
 {% if page == 'login'%}
-<form class="form" method="post" action="">
-  {%csrf_token %}
-  <div class="form__group form__group">
+
+
+<div class="content">
+    <div class="card">
+        <h1>Sign In</h1>
+
+        <form method="post" class="form">
+            {% csrf_token %}
+            
     <label for="room_name">Username</label>
   
     <input type="text" name="username" placeholder="enter username">
-  </div>
-<div>
-  <div class="form__group">
+
     <label for="password">Password</label>
     <input type="password" name="password" placeholder="enter password">
+            <div class="btn-wrapper">
+    <button type="submit"  class="btn primary">Sign In</button>
+    
+</div>
 
-  </div>
-
-  <button class="btn btn--main" input type="submit" value="login">
-    <svg
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      width="32"
-      height="32"
-      viewBox="0 0 32 32"
-    >
-      <title>lock</title>
-      <path
-        d="M27 12h-1v-2c0-5.514-4.486-10-10-10s-10 4.486-10 10v2h-1c-0.553 0-1 0.447-1 1v18c0 0.553 0.447 1 1 1h22c0.553 0 1-0.447 1-1v-18c0-0.553-0.447-1-1-1zM8 10c0-4.411 3.589-8 8-8s8 3.589 8 8v2h-16v-2zM26 30h-20v-16h20v16z"
-      ></path>
-      <path
-        d="M15 21.694v4.306h2v-4.306c0.587-0.348 1-0.961 1-1.694 0-1.105-0.895-2-2-2s-2 0.895-2 2c0 0.732 0.413 1.345 1 1.694z"
-      ></path>
-    </svg>
-
-    login
-  </button>
-</form>
-    <!--<form method="POST" action="">
-        {%csrf_token %}
-        <label>username</label>
-        <input type="text" name="username" placeholder="enter username">
-        <label>password</label>
-        <input type="password" name="password" placeholder="enter password">
-        <input type="submit" value="login"/>   
-    </form>-->
+   
     <p>haven't you signed up?</p>
     <a href="{% url 'register'%}">Register</a>
     
 </div>
 {% else %}
+ <div class="content">
+    <div class="card">
+        <h1>Register</h1>
 
-            <form class="form" method="post" action="#">
-              {%csrf_token %}
-              {%for field in form%}
-              <div class="form__group form__group">
-                <label for="room_name">{{field.label}}</label>
-                {{field}}
-              </div>
-              
-            {%endfor%}
-            
-           
-            <div class="form__action">
-              <a class="btn btn--primary" href="{% url 'home' %}">Cancel</a>
-              <button class="btn btn--main" input type="submit" value="register">Register</button>
-            </div>
-          </form>
+        <form method="post" class="form">
+            {% csrf_token %}
+            <label>Username</label>
+            {{form.username}}
+             {% if form.username.errors %}
+    <div class="form__error">
+      {{ form.username.errors }}
+    </div>
+  {% endif %}
+         <label>Email</label>
+            {{form.email}}
+              {% if form.email.errors %}
+    <div class="form__error">
+      {{ form.email.errors }}
+    </div>
+  {% endif %}
+         <label>Password</label>
+            {{form.password1}}
+              {% if form.password1.errors %}
+    <div class="form__error">
+      {{ form.password1.errors }}
+    </div>
+  {% endif %}
+    
+         <label>Confirm Password</label>
+            {{form.password2}}
+              {% if form.password2.errors %}
+    <div class="form__error">
+      {{ form.password2.errors }}
+    </div>
+    {% endif %}
+    
+  
+
+            <div class="btn-wrapper">
+    <button type="submit"  class="btn primary">Register</button>
+    
+</div>
+
+        </form>
 
             <div class="auth__action">
               <p>Already have an account?</p>
               <a href="{% url 'login'%}" class="btn btn--link">LogIn</a>
             </div>
-            {%endif%}
-          </div>
-        </div>
-      </div>
-    </main>
-    {% endblock %}
+            
+    </div>
+</div>
+{% endif %}
+
+
+    <style>
+      .form__error {
+  color: #ff4d4f;
+  font-size: 1.3rem;
+  margin-top: 0.5rem;
+}
+  /* Page wrapper */
+.content {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+
+
+/* Card */
+.card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Headings */
+.card h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #111827;
+}
+
+.card h3 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    text-align: center;
+    color: #374151;
+}
+
+/* Django form styling */
+.form p {
+    margin-bottom: 15px;
+}
+
+.form label {
+    display: flex;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #374151;
+}
+
+/* Inputs */
+.form input,
+.form select,
+.form textarea,
+.upload-form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    border-color: #10b981;;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Buttons */
+
+
+.btn.primary {
+    background: #BA8E23;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn.secondary {
+    background: #10b981;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Divider */
+</style>
+    {%endblock%}

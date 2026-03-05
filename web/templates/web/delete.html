@@ -1,11 +1,89 @@
-{% extends 'main.html' %}
+{%include 'main.html'%}
 
 {% block content %}
+<br>
+ 
+  <div class="card card-sm">
+    <form method="POST">
+        {% csrf_token %}
 
-<form method="POST" action="" >
-    {% csrf_token %}
-<p> Are you Sure you Want to delete THIS "{{obj}}"?</p>
-<a href="{{request.META.HTTP_REFERER}}">Go back</a>
-<input type="submit" value="confirm"/>
-</form>
-{% endblock content %}
+        <p class="danger-text">
+            Are you sure you want to Remove
+            Member with <i>Name</i> <strong>"{{ obj }}"</strong>?
+        </p>
+
+        <div class="actions">
+            <a href="{{ request.META.HTTP_REFERER }}" class="link-back">
+                Go back
+            </a>
+
+            <input type="submit" value="Confirm" class="btn-confirm">
+        </div>
+    </form>
+</div>
+
+ 
+ 
+ 
+
+
+            
+
+{%endblock%}
+<style>
+ /* Compact card */
+.card-sm {
+    max-width: 320px;          /* smaller width */
+    margin: 500px auto;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    text-align: center;
+    margin-bottom:0;
+    margin-top: 0;
+}
+
+/* Text */
+.danger-text {
+    color: #c0392b;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Back link */
+.link-back {
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+}
+
+/* Button already styled earlier */
+.btn-confirm {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 14px;   /* smaller button */
+    font-size: 13px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Mobile tweak */
+@media (max-width: 600px) {
+    .card-sm {
+        max-width: 90%;
+        margin: 480px auto;
+        margin-top: 0;
+         margin-bottom: 0;
+    }
+}
+
+</style>

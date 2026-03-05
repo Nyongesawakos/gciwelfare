@@ -1,59 +1,196 @@
-{% extends 'main.html '%}
-
-{% block content %}
-<main class="create-room layout">
-    <div class="container">
-      <div class="layout__box">
-        <div class="layout__boxHeader">
-          <div class="layout__boxTitle">
-            
-            <a href="{% url 'user_list' %}">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                <title>arrow-left</title>
-                <path
-                  d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z">
-                </path>
-              </svg>
-            </a>
-            <h3>Please Update Member Payments</h3>
-            
-            <br> <br>  <br> <br>   
-          </div>
-        </div>
-        <div><small>This page Can only Be seen by Administrators</small></div>
-<div class="layout__body">
-<h3>Update Payments</h3>
-<form method="post" action="">
-  {%csrf_token %}
-  <div class="form__group">
-    <form method="post" action="">
-    <label for="room_topic">Select Member's username</label>
-        {{form.owner}} 
-  </div>
-  <div class="form__group">
-    <label for="room_topic">Phone number(This is to confirm the member)</label>
-    {{form.room}} 
-        
-      </div>
-      <div class="form__group">
-        <label for="room_topic" >Month</label>
-     {{form.choice}}
-  </div>
-  <div class="form__group">
-    <label for="room_topic">Mpesa Code</label>
+{%include 'web/main1.html'%}
+{%load static%}
+   {% block content %}
    
-        {{form.code}}
-  </div>
-  <div class="form__group">
-    <label for="room_topic">Amount</label>
-        {{form.amount}}
-  </div>
-  
-  <div class="form__action">
-    <a class="btn btn--primary" href="{% url 'home' %}">Cancel</a>
-    <button class="btn btn--main" input type="submit" value="submit">Update Now</button>
+
+   
+<head>
+    <title>Excel Upload</title>
     
-  </div>
-</form>
+
+
+</head>
+<body>
+
+<!-- Mobile Topbar -->
+
+
+
+
+    <!-- Sidebar -->
+    
+
+        
+
+    <!-- Content -->
+  <div class="content">
+    <div class="card">
+        <h1>Add Payment Record</h1>
+
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn primary">Add Record</button>
+        </form>
+
+    
+       
+    </div>
 </div>
-{% endblock%}
+
+
+<style>
+   /* Page wrapper */
+.content {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+/* Card */
+.card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Headings */
+.card h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #111827;
+}
+
+.card h3 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    text-align: center;
+    color: #374151;
+}
+
+/* Django form styling */
+.form p {
+    margin-bottom: 15px;
+}
+
+.form label {
+    display: flex;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #374151;
+}
+
+/* Inputs */
+.form input,
+.form select,
+.form textarea,
+.upload-form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    border-color: #10b981;;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn.primary {
+    background: #BA8E23;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn.secondary {
+    background: #10b981;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.divider::before {
+    margin-right: 10px;
+}
+
+.divider::after {
+    margin-left: 10px;
+}
+
+/* Upload form */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
+}
+
+</style>
+{%endblock%}

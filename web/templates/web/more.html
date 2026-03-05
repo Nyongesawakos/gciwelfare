@@ -1,0 +1,131 @@
+
+      <p><b>Contributions</b></p>
+    </div>
+   
+      <div class="card">
+        <div class="card-body">
+        <table id="example" class="table table-bordered table-hover" style="width:95%">
+          <thead>
+            <tr class="bg-primary">
+                 
+                  <th class="bg-info">Date</th>
+                  <th class="bg-info">Month</th>
+                  <th class="bg-info">Year</th>
+                  <th class="bg-info">contribution</th>
+                  
+              </tr>
+          </thead>
+          <tbody>
+           
+           
+           <!--{% if request.user == user_name.user%}--> 
+              <tr class="table-warning">
+                  <td>{{more.updated| date}}</td>
+                  <td>{{payment.choose}}</td>
+                  <td>{{payment.choice}}</td>
+                  <td>{{payment.amount}}</td> 
+                   
+               
+                  
+              </tr>
+             <!-- {%endif%}-->
+             
+              <br><br>
+            <tr class="table-success" style="background-color: #051634; color: white;">
+  <td colspan="3"><strong>Total</strong></td>
+  <td><strong>{{ total_amount }}</strong></td>
+</tr>
+              
+          <tfoot>
+           
+          </tfoot>
+      </table>
+    
+      </div>
+    </div>
+    
+  
+    </div>
+
+    <style>
+            /* Page background */
+body {
+    background-color: #f4f6f9;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Card container */
+.card {
+    width: 95%;
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+p{
+  color: #0d6efd;
+}
+
+/* Header */
+.table thead tr {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.table th {
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Table body */
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Hover effect */
+.table tbody tr:hover {
+    background-color: #f1f7ff;
+    transition: 0.3s;
+}
+
+/* Warning row */
+.table-warning {
+    background-color: #fff8e1;
+}
+
+/* Total row */
+.table-success {
+    background-color: #051634 !important;
+    color: white !important;
+    font-size: 15px;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .card {
+        padding: 15px;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+</style>
+
+   

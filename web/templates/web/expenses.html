@@ -2,55 +2,44 @@
 {%load static%}
 {% block content %}
 
+
 <div class="content">
-<form method="get" action="{% url 'pdf' %}" class="search-bar">
+    <form class="search-bar">
+
+        <form method="get" action="{% url 'members' %}" class="search-bar">
     <input
         type="text"
         name="q"
-        placeholder="Search by name, hbc, email..."
+        placeholder="Search by name, reg no, email..."
         value="{{ query|default:'' }}"
     >
     <button type="submit">Search</button>
 </form>
 
+    </form>
 
-<form method="get" action="{% url 'download_contributions_excel' %}">
-    <button type="submit" class="btn btn--pri" style="margin-bottom: 15px;">
-        Download Excel
-    </button>
-</form>
-
-<div class="table-container">
+    <div class="table-container">
 
 <div class="table-wrapper">
         <table class="students-table">
             <thead>
     <tr>
-       
-        <th>Payment Date</th>
-        <th>Name</th>
-        <th>Year</th>
-        <th>Month</th>
+        <th>Expense</th>
+        <th>Date</th>
         <th>Amount</th>
-        <th>Phone number</th>
-        <th>Transaction id</th>
-        <th>Edit Record</th>
-        <th>Delete Record</th>
+        <th>Edit</th>
+        <th>Delete</th>
        
         
         
     </tr>
     </thead>
  <tbody>
-     {% for update in payment %} 
+     {% for cash_expenditure in s %} 
     <tr>
-          <td>{{update.transaction.created_at|date:"d/m/Y"}}</td> 
-        <td>{{update.transaction.full_name}}</td>
-        <td>{{update.choice}}</td>
-        <td>{{update.choose}}</td>
-         <td>{{update.transaction.amount}}</td>
-         <td>{{update.transaction.phone_number}}</td>
-         <td>{{update.transaction.checkout_request_id }}</td>
+         <td>{{cash_expenditure.Expense}}</td>
+        <td>{{cash_expenditure.Date}}</td>
+        <td>{{cash_expenditure.Amount}}</td>
          <td><a style="color: #10b981;;" class="btn btn--main"  href="">Edit Info</a></td>
          <td><a style="color: red;" class="btn btn--main" href="">Delete record</a></td>
       
@@ -73,6 +62,12 @@
 </table>
 </div>
 </div>
+    
+</div>
+
+
+
+
 <style>
     
 
