@@ -1,0 +1,167 @@
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Google Login</title>
+
+<style>
+    
+      .form__error {
+  color: #ff4d4f;
+  font-size: 1.3rem;
+  margin-top: 0.5rem;
+}
+  /* Page wrapper */
+.content {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+
+
+/* Card */
+.card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Headings */
+.card h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #111827;
+}
+
+.card h3 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    text-align: center;
+    color: #374151;
+}
+
+/* Django form styling */
+.form p {
+    margin-bottom: 15px;
+}
+
+.form label {
+    display: flex;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #374151;
+}
+
+/* Inputs */
+.form input,
+.form select,
+.form textarea,
+.upload-form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    border-color: #10b981;;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* Buttons */
+
+
+.btn.primary {
+    background: #BA8E23;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn.secondary {
+    background: #10b981;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Divider */
+
+body{
+    font-family: Arial;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    background:white;
+    padding:40px;
+    width:380px;
+    border-radius:8px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#4285F4;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.google-icon{
+    width:22px;
+    vertical-align:middle;
+    margin-right:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Sign in with Google</h2>
+
+<p>You are about to sign in WELFARE Account using your Google account.</p>
+
+<form method="post">
+{% csrf_token %}
+<button type="submit">
+<img src="https://developers.google.com/identity/images/g-logo.png" class="google-icon">
+Continue with Google
+</button>
+</form>
+
+</div>
+
+</body>
+</html>
