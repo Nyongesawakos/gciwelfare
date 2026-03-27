@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.db.models.functions import Cast
 from django.contrib import messages
 from django.db.models import CharField
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.db.models import Q
 from django.contrib.auth.models import User
 import openpyxl
@@ -118,7 +118,7 @@ def registerPage(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-            login(request, user)
+            login(request, user, backend='allauth.account.auth_backends.AuthenticationBackend')
             messages.success(request, 'success')  
             return redirect('createRoom')
      
@@ -140,6 +140,12 @@ def home(request):
         
                                      
                                 )
+    if request.user.is_authenticated:
+
+        room_exists = room.objects.filter(host=request.user).exists()
+
+        if not room_exists:
+            return redirect("createRoom")   # url name of room form  
     
     
     topics=group.objects.all()
@@ -212,6 +218,7 @@ def deleteRoom(request, pk):
         return redirect('createRoom')
     return render(request, 'web/delete.html', {'obj' :remove} )
 @login_required(login_url='/login')
+@user_passes_test(lambda u: u.is_superuser)
 def pdf(request): 
     detail=room.objects.all()
     payment=update.objects.all() 
@@ -247,6 +254,7 @@ def single(request):
     context = {'payment': payment,'r_count':r_count }
     return render(request, 'web/import.html', context)
 @login_required(login_url='/login')
+@user_passes_test(lambda u: u.is_superuser)
 def members(request):
     query = request.GET.get('q')
     gci =update.objects.all()
@@ -340,7 +348,7 @@ def about(request):
 
 def activities(request):
     return render(request, 'web/activities.html')
-
+@login_required(login_url='/login')
 def deleteRecord(request, pk):
     cancel=update.objects.get(id=pk)
     if request.method == 'POST':
@@ -350,9 +358,23 @@ def deleteRecord(request, pk):
     
     return render(request, 'web/delete.html', {'obj' :cancel} )
 
+def updateRecord(request, pk):
+    change = update.objects.get(id=pk)
+    form=UpdateForm(instance=change)
+    #if request.user != change.host:
+        #return HttpResponse('You are not allowed here')
+    if request.method == 'POST':
+        form=UpdateForm(request.POST, instance=change)
+        if form.is_valid():
+            form.save()
+            return redirect('pdf')
+    context= {'change' : change, 'form' : form}
+    return render(request, 'web/insert.html', context)
 
 
 
+@login_required(login_url='/login')
+@user_passes_test(lambda u: u.is_superuser)
 def expenses(request):
       
       s= cash_expenditure.objects.all()
@@ -369,7 +391,7 @@ def more(request, pk):
 
       return render(request, 'web/more.html', context)
 
-
+@login_required(login_url='/login')
 @csrf_exempt
 def mpesa(request):
     timestamp = timezone.localtime().strftime('%Y%m%d%H%M%S')
@@ -450,28 +472,28 @@ def mpesa_callback(request):
         print("Callback Error:", e)
 
     return JsonResponse({"ResultCode": 0, "ResultDesc": "Accepted"})
-
+@login_required(login_url='/login')
+@user_passes_test(lambda u: u.is_superuser)
 def payment_list(request):
     query = request.GET.get('q')
     payments = MpesaTransaction.objects.filter(status="Success")
-    total_amount = payments.aggregate(Sum('amount'))['amount__sum'] or 0
+    
 
-    check=MpesaTransaction.objects.all().order_by('phone_number')
+    check=MpesaTransaction.objects.all().order_by('full_name')
    
     if query:
-        check = check.annotate(
-            phone_number_str=Cast('phone_number', CharField()),
-            ).filter(
-             phone_number_str__icontains=query
-        )
-        check = check.filter(
-            phone_number_str__icontains=query
-        ) | check.filter(
-            amount__icontains=query
-        ) | check.filter(
-           status__icontains=query
+        payments= payments.filter(
+            full_name__icontains=query
+        ) | payments.filter(
+            phone_number__icontains=query
+        ) | payments.filter(
+            checkout_request_id__icontains=query
+        )| payments.filter(
+            created_at__date__icontains=query
         )
 
+
+    total_amount = payments.aggregate(Sum('amount'))['amount__sum'] or 0    
         
     
 
@@ -567,13 +589,10 @@ def upload_cash_expenditure(request):
         return redirect("members")  # change to your page
 
     return redirect("members")
-
+@login_required(login_url='/login')
 def contributions(request, pk):
     contributions = update.objects.filter(user_name=request.user)
-    #payment= update.objects.filter(owner=request.user)
-
-    context ={'contributions': contributions}
-    return render(request, 'web/contributions.html', context)
+    return render(request, 'web/contributions.html', {'contributions': contributions})
   
 
     

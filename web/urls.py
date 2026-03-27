@@ -34,12 +34,14 @@ path('home/', views.home, name='home'),
 path('about/', views.about, name='about'),
 path('activities/', views.activities, name='activities'),
 path('deleteRecord/<str:pk>/', views.deleteRecord, name='deleteRecord'),
+path('updateRecord/<str:pk>/', views.updateRecord, name='updateRecord'),
  path('expenses/', views.expenses, name='expenses'),
  path('more/<str:pk>/', views.more, name='more'),
  path('mpesa/', views.mpesa, name='mpesa'),
 path("mpesa/callback/", views.mpesa_callback, name="mpesa_callback"),
 path('payments/', views.payment_list, name='payment_list'),
 path('contributions/<str:pk>/', views.contributions, name='contributions'),
+ 
 
 
 

@@ -144,6 +144,8 @@ class MpesaTransaction(models.Model):
     result_code = models.IntegerField(blank=True, null=True)
     result_desc = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-created_at']   # newest transactions first
 
     def __str__(self):
         return f"{self.created_at.strftime('%Y-%m-%d')} - {self.full_name} - {self.phone_number} - {self.status}"
