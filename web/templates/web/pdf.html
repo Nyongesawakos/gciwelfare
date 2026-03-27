@@ -12,15 +12,21 @@
     >
     <button type="submit">Search</button>
 </form>
+<br>
 
-
+<div class="download-container">
 <form method="get" action="{% url 'download_contributions_excel' %}">
     <button type="submit" class="btn btn--pri" style="margin-bottom: 15px;">
         Download Excel
     </button>
 </form>
+</div>
+    <!--button onclick="myfunc('mn')" class="download-btn">
+        Download PDF
+    </button-->
 
-<div class="table-container">
+<div class="div" id="mn">
+    <div class="table-container">
 
 <div class="table-wrapper">
         <table class="students-table">
@@ -51,8 +57,9 @@
          <td>{{update.transaction.amount}}</td>
          <td>{{update.transaction.phone_number}}</td>
          <td>{{update.transaction.checkout_request_id }}</td>
-         <td><a style="color: #10b981;;" class="btn btn--main"  href="">Edit Info</a></td>
-         <td><a style="color: red;" class="btn btn--main" href="">Delete record</a></td>
+          <!--td><a style="color: #10b981;;" class="btn btn--main" href="{% url 'contributions' update.id %}">View more</a></td-->
+         <td><a style="color: #10b981;;" class="btn btn--main"  href="{% url 'updateRecord' update.id %}">Edit Info</a></td>
+         <td><a style="color: red;" class="btn btn--main" href="{% url 'deleteRecord'  update.id %}">Delete record</a></td>
       
         
         
@@ -73,9 +80,35 @@
 </table>
 </div>
 </div>
+</div>
 <style>
     
+.download-container{
+    text-align: center;
+    margin-top: 20px;
+}
 
+.download-btn{
+    background: linear-gradient(135deg, #f69320, #e07b10);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.download-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.download-btn:active{
+    transform: scale(0.98);
+}
 
 /* Main container */
 .table-container {
@@ -143,6 +176,91 @@
     color: #777;
 }
 
+/* ============================= */
+/* MOBILE RESPONSIVE STYLES */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    .table-container {
+        padding: 15px;
+        margin-bottom: 0px;
+    }
+
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .table-header h2 {
+        font-size: 18px;
+    }
+
+    .students-table th,
+    .students-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+}
+.table-wrapper {
+    overflow-x: auto;
+     -webkit-overflow-scrolling: touch;
+}
+body {
+    overflow-x: hidden;   /* 🔥 prevents whole page scroll */
+}
+.students-table {
+    min-width: 700px;   /* adjust depending on number of columns */
+}
+ /* excel */
+
+ /* Main button style */
+.btn--pri {
+    display: inline-block;
+    background: #10b981; /* green like your links */
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 1.2rem;
+    padding: 5x 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn--pri:hover {
+    background: #059669; /* slightly darker green on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.btn--pri:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Optional: smaller button for mobile */
+@media (max-width: 768px) {
+    .btn--pri {
+        font-size: 1.2rem;
+        padding: 8px 16px;
+    }
+}
+
 
 </style>
+
+<script type="text/javascript">
+    function myfunc(pa){
+        var b=document.body.innerHTML;
+        var d=document.getElementById(pa).innerHTML;
+        document.body.innerHTML=d;
+        window.print();
+    }
+</script>
+</div>
+
 {%endblock%}

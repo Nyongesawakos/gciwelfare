@@ -45,8 +45,8 @@
         </div>
       <a href="{% url 'user_list' %}" class="active">Dashboard</a>
         
-        <a href="">Excel Upload</a>
-        <a href="">Add User</a>
+        <!-- <a href="">Excel Upload</a> -->
+        <!-- <a href="">Add User</a> -->
         <a href="{% url 'members' %}">Members' list</a>
         <a href="{% url 'insert' %}">Add Record</a>
         <a href="{% url 'pdf' %}">Contributions</a>
@@ -172,32 +172,7 @@ setTimeout(() => {
     
     
 
-<!--<script>
-    function toggleNotifications() {
-    const dropdown = document.getElementById("notif-dropdown");
-    dropdown.style.display =
-        dropdown.style.display === "block" ? "none" : "block";
-}
 
-/* Close when clicking outside */
-document.addEventListener("click", function (e) {
-    const notif = document.querySelector(".notification");
-    if (!notif.contains(e.target)) {
-        document.getElementById("notif-dropdown").style.display = "none";
-    }
-});
-    function showSection(sectionId) {
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(section => {
-        section.classList.remove('active');
-    });
-
-    document.getElementById(sectionId).classList.add('active');
-}
-function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("active");
-}
-</script>-->
 <style> 
     /* ===== Base ===== */
 * {

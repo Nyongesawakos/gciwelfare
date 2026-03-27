@@ -4,17 +4,25 @@
 {% block content %}
 
 
-<div class="content">
-    <form method="get" action="{% url 'payment_list' %}" class="search-bar">
+    
+    <div class="content">
+ <form method="get" action="{% url 'payment_list' %}" class="search-bar">
     <input
         type="text"
         name="q"
-        placeholder="Search by name, reg no, email..."
+        placeholder="Search by name, phone, code..."
         value="{{ query|default:'' }}"
     >
     <button type="submit">Search</button>
 </form>
-   <div class="table-container">
+<div class="download-container">
+    <button onclick="myfunc('mn')" class="download-btn">
+        Download PDF
+    </button>
+</div>
+<div class="div" id="mn">
+
+ <div class="table-container">
 
 <div class="table-wrapper">
         <table class="students-table">
@@ -72,6 +80,32 @@
 <style>
     
 
+    .download-container{
+    text-align: center;
+    margin-top: 20px;
+}
+
+.download-btn{
+    background: linear-gradient(135deg, #f69320, #e07b10);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.download-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.download-btn:active{
+    transform: scale(0.98);
+}
 
 /* Main container */
 .content {
@@ -114,6 +148,7 @@
     box-shadow: none;
     display: flex;
     flex-direction: column;   /* 🔥 important */
+    page-break-inside: auto;
 }
 
 /* Header */
@@ -163,6 +198,9 @@
 .students-table tr:hover {
     background: #f9faff;
 }
+tr {
+    page-break-inside: avoid;
+}
 
 /* Empty state */
 .no-results {
@@ -196,6 +234,8 @@
     .students-table td {
         padding: 10px;
         font-size: 12px;
+        word-break: break-word;
+        white-space: normal;
     }
 
 }
@@ -208,9 +248,79 @@ body {
 }
 .students-table {
     min-width: 700px;   /* adjust depending on number of columns */
+     width: 100%;
+    table-layout: fixed;   /* 🔥 forces columns to fit */
+    word-wrap: break-word;
+}
+#mn {
+    width: 100%;
+}
+@media print {
+    .students-table th,
+    .students-table td {
+        font-size: 10px;   /* 🔥 smaller text = fits better */
+        padding: 6px;
+    }
+
+}
+.students-table th:nth-child(1),
+.students-table td:nth-child(1) {
+    width: 16%; /* Date */
+}
+
+.students-table th:nth-child(2),
+.students-table td:nth-child(2) {
+    width: 18%; /* Name */
+}
+
+.students-table th:nth-child(3),
+.students-table td:nth-child(3) {
+    width: 20%; /* Phone */
+}
+
+.students-table th:nth-child(4),
+.students-table td:nth-child(4) {
+    width: 14%; /* Amount */
+}
+
+.students-table th:nth-child(5),
+.students-table td:nth-child(5) {
+    width: 15%; /* Receipt */
+}
+
+.students-table th:nth-child(6),
+.students-table td:nth-child(6) {
+    width: 18%; /* Transaction ID */
+}
+
+.students-table th:nth-child(7),
+.students-table td:nth-child(7) {
+    width: 10%; /* Status */
 }
 
 </style>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function myfunc(pa){
+    var element = document.getElementById(pa);
+
+    var opt = {
+        margin:       0.5,
+        filename:     'payments.pdf',
+        image:        { type: 'jpeg', quality: 1 },
+        html2canvas:  { scale: 2 },   // improves quality
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    
+
+    html2pdf().set(opt).from(element).save();
+}
+</script>
+
 {%endblock%}
 
        

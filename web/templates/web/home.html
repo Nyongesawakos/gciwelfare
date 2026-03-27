@@ -16,7 +16,8 @@
             </li>
             {% for group in topics %}
             <li>
-              <a href="{% url 'home' %}?q={{group.name}}">{{group.name}}<span>🤍</span></a>
+              <!--a href="{% url 'home' %}?q={{group.name}}">{{group.name}}<span>🤍</span></a-->
+              <a href="#">{{group.name}}<span>👨‍👩‍👧‍👦</span></a>
             </li>
             {% endfor %}
           </ul>
@@ -56,7 +57,7 @@
            <div>
                        {% if contributions %}
     <a class="btn btn--primary" href="{% url 'contributions' contributions.0.id %}">
-        updates
+        Updates
     </a>
 {% endif %}
            </div>
@@ -129,7 +130,7 @@
             <div class="roomListRoom__content">
               <p>More details click on your profile</p>
               <i><a href="#">If you have any challenge, please do not hesitate to contact our welfare team 
-              via 0742364421</a>
+              via 0789592245</a>
               </i><p>
                ({{room.group.name}})
               </p>
