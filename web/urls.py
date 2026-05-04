@@ -41,6 +41,7 @@ path('updateRecord/<str:pk>/', views.updateRecord, name='updateRecord'),
 path("mpesa/callback/", views.mpesa_callback, name="mpesa_callback"),
 path('payments/', views.payment_list, name='payment_list'),
 path('contributions/<str:pk>/', views.contributions, name='contributions'),
+path('bulk-sms/', views.bulk_sms_view, name='bulk_sms'),
  
 
 

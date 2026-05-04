@@ -73,3 +73,14 @@ class MpesaForm(forms.Form):
     full_name = forms.CharField(max_length=100)
     phone_number = forms.CharField(max_length=15)
     amount = forms.IntegerField()    
+
+class BulkMessageForm(forms.Form):
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            "class": "form-control",
+            "placeholder": "Type your message here...",
+            "rows": 4
+        })
+    )
+
+    send_to_all = forms.BooleanField(required=False)

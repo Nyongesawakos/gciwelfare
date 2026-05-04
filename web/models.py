@@ -25,7 +25,7 @@ class room(models.Model):
     host=models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     group=models.ForeignKey(group, on_delete=models.SET_NULL, null=True) 
     Firstname = models.CharField(null=True, blank=True, max_length=200)
-    name=models.CharField(max_length=255)
+    Othername=models.CharField(max_length=255)
     lastName = models.CharField(null=True, blank=True, max_length=200)
     Email = models.EmailField(null=True, blank=True, max_length=200)
     phone = models.CharField(null=True, blank=True, max_length=200)
@@ -94,7 +94,7 @@ class room(models.Model):
         ordering = ['-updated', '-created']
 
     def __str__(self):
-     return self.name if self.name is not None else "Unnamed"
+     return self.Othername if self.Othername is not None else "Unnamed"
     
 class message(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE) 
@@ -259,6 +259,15 @@ class WhatsAppContact(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.phone})"
+
+class BulkMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    recipients_count = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
 
 

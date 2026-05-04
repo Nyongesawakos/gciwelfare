@@ -36,6 +36,9 @@ import json
 from django.http import JsonResponse
 from django_daraja.mpesa.core import MpesaClient
 from django.utils import timezone
+from .forms import BulkMessageForm
+from .models import BulkMessage
+from .utils import send_bulk_sms
 
 
 
@@ -78,14 +81,15 @@ def user_list(request):
     cash= cash_expenditure.objects.all().aggregate(total=Sum('Amount'))
     payments = MpesaTransaction.objects.filter(status="Success")
     total_amount = payments.aggregate(Sum('amount'))['amount__sum'] or 0
-    #cash_total = cash['total'] or 0
-    #difference = total_amount - cash_total
+    
+    cash_total = cash['total'] or 0
+    difference = total_amount - cash_total
 
 
 
 
     
-    return render(request,'web/user_list.html', {'users': users,'payments': payments, 'total_amount': total_amount, 'cash': cash['total'], 'lists' : lists, 'User_count': User_count, 'R_messages': R_messages, 'payment': payment,})
+    return render(request,'web/user_list.html', {'users': users,'payments': payments,'difference': difference, 'total_amount': total_amount, 'cash': cash['total'], 'lists' : lists, 'User_count': User_count, 'R_messages': R_messages, 'payment': payment,})
 @require_http_methods(["GET", "POST"])
 def loginPage(request):
     page= 'login'
@@ -134,7 +138,7 @@ def home(request):
    # tips = room.objects.filter(host=request.user) 
     tips = room.objects.filter(
         Q(group__name__icontains=q) |
-        Q(name__icontains=q) |
+        Q(Othername__icontains=q) |
         Q(lastName__icontains=q) 
         
         
@@ -215,7 +219,7 @@ def deleteRoom(request, pk):
     remove=room.objects.get(id=pk)
     if request.method == 'POST':
         remove.delete()
-        return redirect('createRoom')
+        return redirect('members')
     return render(request, 'web/delete.html', {'obj' :remove} )
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser)
@@ -297,7 +301,7 @@ def gci_groups(request):
      q = request.GET.get('q') if request.GET.get('q') != None  else ''
      tips = room.objects.filter(
         Q(group__name__icontains=q) |
-        Q(name__icontains=q) |
+        Q(Othername__icontains=q) |
         Q(lastName__icontains=q) 
         
         
@@ -395,58 +399,53 @@ def more(request, pk):
 @csrf_exempt
 def mpesa(request):
     timestamp = timezone.localtime().strftime('%Y%m%d%H%M%S')
+    form = MpesaForm(request.POST or None)
 
-    if request.method == "POST":
-        form = MpesaForm(request.POST)
-        if form.is_valid():
-            full_name = form.cleaned_data['full_name']
-            phone_number = form.cleaned_data['phone_number']
-            amount = form.cleaned_data['amount']
+    if request.method == "POST" and form.is_valid():
+        phone_number = form.cleaned_data['phone_number']
+        amount = form.cleaned_data['amount']
 
-            # Convert 07XXXXXXXX → 2547XXXXXXXX
-            if phone_number.startswith("0"):
-                phone_number = "254" + phone_number[1:]
+        # Use logged-in user name (cleaner)
+        full_name = request.user.get_full_name() or request.user.username
 
-            cl = MpesaClient()
+        # Convert 07XXXXXXXX → 2547XXXXXXXX
+        if phone_number.startswith("0"):
+            phone_number = "254" + phone_number[1:]
 
-            account_reference = 'GCI WELFARE'
-            transaction_desc = 'Welfare Contribution'
-            callback_url = 'https://biogenetic-supergenerous-rosann.ngrok-free.dev/mpesa/callback/'
+        cl = MpesaClient()
 
-            try:
-                print("Sending STK push...")
-                response = cl.stk_push(
-                    phone_number,
-                    amount,
-                    account_reference,
-                    transaction_desc,
-                    callback_url
-                )
+        try:
+            response = cl.stk_push(
+                phone_number=phone_number,
+                amount=amount,
+                account_reference='GCI WELFARE',
+                transaction_desc='Welfare Contribution',
+                callback_url='https://biogenetic-supergenerous-rosann.ngrok-free.dev/mpesa/callback/'
+            )
 
-                # ✅ Save as PENDING
-                MpesaTransaction.objects.create(
-                    full_name=full_name,
-                    phone_number=phone_number,
-                    amount=amount,
-                    checkout_request_id=response.checkout_request_id,
-                    merchant_request_id=response.merchant_request_id,
-                    status="pending" 
-                )
+            # ✅ Save transaction linked to user
+            MpesaTransaction.objects.create(
+                user=request.user,  # 🔑 IMPORTANT
+                full_name=full_name,
+                phone_number=phone_number,
+                amount=amount,
+                checkout_request_id=response.checkout_request_id,
+                merchant_request_id=response.merchant_request_id,
+                status="Pending"  # must match model choices
+            )
 
-                messages.success(request, "STK push sent. Please complete payment on your phone.")
-                return redirect("home")
+            messages.success(request, "STK push sent. Complete payment on your phone.")
+            return redirect("home")
 
-            except Exception as e:
-                print("MPESA ERROR:", e)
-                messages.error(request, "Payment request failed.")
-                return redirect("mpesa")
+        except Exception as e:
+            print("MPESA ERROR:", e)
+            messages.error(request, "Payment request failed. Try again.")
+            return redirect("mpesa")
 
-    else:
-        form = MpesaForm()
-
-    return render(request, "web/pay.html", {"form": form, "timestamp": timestamp})
-
-
+    return render(request, "web/pay.html", {
+        "form": form,
+        "timestamp": timestamp
+    })
 @csrf_exempt
 def mpesa_callback(request):
     data = json.loads(request.body)
@@ -591,9 +590,74 @@ def upload_cash_expenditure(request):
     return redirect("members")
 @login_required(login_url='/login')
 def contributions(request, pk):
-    contributions = update.objects.filter(user_name=request.user)
-    return render(request, 'web/contributions.html', {'contributions': contributions})
-  
+    contributions = MpesaTransaction.objects.filter(user=request.user, status="Success").order_by('-created_at')
+    total_amount = MpesaTransaction.objects.filter(user=request.user, status="Success").aggregate(Sum('amount'))['amount__sum'] or 0  
+    
+    return render(request, 'web/contributions.html', {
+        'contributions': contributions,
+        'total_amount': total_amount
+    })
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def bulk_sms_view(request):
+    form = BulkMessageForm()
+
+    if request.method == "POST":
+        form = BulkMessageForm(request.POST)
+
+        if form.is_valid():
+            message = form.cleaned_data['message']
+
+            users = MpesaTransaction.objects.filter(status="Success")
+
+            phone_numbers = [
+                user.phone_number for user in users if user.phone_number
+            ]
+
+            if not phone_numbers:
+                messages.error(request, "No valid phone numbers found.")
+                return redirect('bulk_sms')
+
+            # ✅ SEND SMS AND CAPTURE RESPONSE
+            response = send_bulk_sms(phone_numbers, message)
+
+            success_count = 0
+            failed_count = 0
+
+            # ✅ CHECK RESPONSE
+            if response:
+                recipients = response.get('SMSMessageData', {}).get('Recipients', [])
+
+                for r in recipients:
+                    if r.get('status') == "Success":
+                        success_count += 1
+                    else:
+                        failed_count += 1
+
+                messages.success(
+                    request,
+                    f"SMS Sent: {success_count} success, {failed_count} failed"
+                )
+            else:
+                messages.error(request, "Failed to send SMS. Check API.")
+
+            # ✅ SAVE LOG
+            BulkMessage.objects.create(
+                sender=request.user,
+                message=message,
+                recipients_count=len(phone_numbers)
+            )
+
+            return redirect('bulk_sms')
+
+    context = {
+        "form": form,
+        "count": MpesaTransaction.objects.filter(status="Success").count()
+    }
+
+
+    return render(request, "web/bulk_sms.html", context)
 
     
 
