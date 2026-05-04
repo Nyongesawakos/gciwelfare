@@ -1,281 +1,270 @@
-{%include 'web/main1.html'%}
-{%load static%}
+{% include 'web/main1.html' %}
+{% load static %}
 {% block content %}
 
-
-
 <div class="content">
-<form method="get" action="{% url 'members' %}" class="search-bar">
-    <input
-        type="text"
-        name="q"
-        placeholder="Search by name, hbc, email..."
-        value="{{ query|default:'' }}"
-    >
-    <button type="submit">Search</button>
-</form>
 
+    <!-- Search -->
+    <form method="get" action="{% url 'members' %}" class="search-bar">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search by name, HBC, email..."
+            value="{{ query|default:'' }}"
+        >
+        <button type="submit">🔍 Search</button>
+    </form>
 
-<div>
-    <!-- <button onclick="myfunc('mn')" class="btn btn--main">Download pdf</button> -->
+    <!-- Download -->
+    <div class="download-container">
+        <form method="get" action="{% url 'download_members_excel' %}">
+            <button type="submit" class="download-btn">
+                Download Excel
+            </button>
+        </form>
+    </div>
+
+    <!-- TITLE -->
+    <div id="mn">
+        <h2>Members Report</h2>
+        <br>
+
+        <div class="table-container">
+
+            <div class="table-wrapper">
+
+                <table class="students-table">
+
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Firstname</th>
+                            <th>Last Name</th>
+                            <th>Category</th>
+                            <th>HBC</th>
+                            <th>More Info</th>
+                            <th>Edit</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for room in member %}
+                        <tr>
+                            <td>{{ room.host }}</td>
+                            <td>{{ room.Firstname }}</td>
+                            <td>{{ room.lastName }}</td>
+                            <td>{{ room.group }}</td>
+                            <td>{{ room.HBC }}</td>
+
+                            <td>
+                                <a class="action view" href="{% url 'index' room.id %}">
+                                    View
+                                </a>
+                            </td>
+
+                            <td>
+                                <a class="action edit" href="{% url 'updateRoom' room.id %}">
+                                    Edit
+                                </a>
+                            </td>
+
+                            <td>
+                                <a class="action delete" href="{% url 'deleteRoom' room.id %}">
+                                    Remove
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="no-results">
+                                No members found
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
-<div class="div" id="mn">
-    
-    
-    <div class="table-container">
-
-<div class="table-wrapper">
-        <table class="students-table">
-            <thead>
-    <tr>
-        <th>Username</th>
-        <th>Firstname</th>
-        <th>lastName</th>
-        <th>Category</th>
-        <th>HBC</th>
-        <th>More info</th>
-        <th>Edit Info</th>
-        <th>Remove Member</th>
-        
-        
-    </tr>
-    </thead>
- <tbody>
-     {% for room in member %} 
-    <tr>
-         <td>{{room.host}}</td>
-        <td>{{room.Firstname}}</td>
-        <td>{{room.lastName}}</td>
-        <td>{{room.group}}</td>
-        <td>{{room.HBC}}</td>
-        <td><a style="color: #10b981;;" class="btn btn--main" href="{% url 'index'  room.id %}">View more</a></td>
-         <td><a style="color: #10b981;;" class="btn btn--main"  href="{% url 'updateRoom'  room.id %}">Edit Info</a></td>
-         <td><a style="color: red;" class="btn btn--main" href="{% url 'deleteRoom'  room.id %}">Remove Member</a></td>
-         
-      
-        
-        
-      <style>
-        a {
-    text-decoration: none;
-}
-
-      </style>
-    </tr>
-
-    {% empty %}
-    <tr>
-        <td colspan="4">No results found</td>
-    </tr>
-    {% endfor %}
-  
-    </tbody>
-          <tr><form method="get" action="{% url 'download_members_excel' %}">
-    <button type="submit" class="btn btn--pri" style="margin-bottom: 15px;">
-        Download Excel
-    </button>
-</form></tr>
-    
-</table>
-</div>
-</div>
-
-
-
-
-
-
+<!-- ================= CSS (MATCHING PAYMENT STYLE) ================= -->
 <style>
-    
 
-
-/* Main container */
-.content {
-    display: flex;
-    flex-direction: column;  /* 🔥 THIS FIXES IT */
+/* ROOT COLORS (SAME SYSTEM) */
+:root {
+    --primary-red: #e72326;
+    --primary-yellow: #f5d021;
+    --primary-blue: #1390cd;
+    --gray: #f5f7fa;
 }
+
+/* LAYOUT */
+.content {
+    padding: 20px;
+}
+
+/* SEARCH */
 .search-bar {
-    margin-top: 15px;
+    display: flex;
+    gap: 10px;
     margin-bottom: 20px;
-    display: block;
 }
 
 .search-bar input {
-    padding: 8px;
-    width: 250px;
+    padding: 10px;
+    width: 280px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
 }
 
 .search-bar button {
-    padding: 8px 12px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-@media (max-width: 768px) {
-    .search-bar {
-    max-width: 200%;
-    margin-bottom: 3px;
-    margin-top: -80px;
-    display: block;
-    margin-left: 24px;
-
-
-    }
-}
-.table-container {
-    width: 100%;
-    min-height: calc(100vh - 80px);
-    margin: 0;
-    background: #ffffff;
-    padding: 25px 30px;
-    border-radius: 0;
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;   /* 🔥 important */
-}
-
-/* Header */
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* DOWNLOAD */
+.download-container {
+    text-align: left;
     margin-bottom: 20px;
 }
 
-.table-header h2 {
-    margin: 0;
-    color: #333;
+.download-btn {
+    background: linear-gradient(135deg, var(--primary-blue), #1390cd);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
 }
 
+/* TITLE */
+#mn h2 {
+    text-align: left;
+    color: var(--primary-blue);
+}
 
+/* TABLE CONTAINER */
+.table-container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border-top: 6px solid var(--primary-yellow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
-
-
-
-
-
-/* Table wrapper (for horizontal scroll on mobile) */
+/* TABLE */
 .table-wrapper {
     overflow-x: auto;
 }
 
-/* Table */
 .students-table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 800px;
+}
+
+/* HEADER */
+.students-table thead {
+    background: var(--primary-blue);
 }
 
 .students-table th {
-    background: #f0f3ff;
+    color: white;
     padding: 14px;
     text-align: left;
-    font-size: 14px;
 }
 
+/* ROWS */
 .students-table td {
     padding: 14px;
     border-top: 1px solid #eee;
-    font-size: 14px;
+}
+
+.students-table tbody tr:nth-child(even) {
+    background: var(--gray);
 }
 
 .students-table tr:hover {
-    background: #f9faff;
+    background: rgba(19,144,205,0.1);
 }
 
-/* Empty state */
+/* ACTION BUTTONS */
+.action {
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    color: white;
+    display: inline-block;
+}
+
+.action.view { background: #10b981; }
+.action.edit { background: var(--primary-blue); }
+.action.delete { background: var(--primary-red); }
+
+/* EMPTY */
 .no-results {
     text-align: center;
     padding: 20px;
     color: #777;
 }
 
-/* ============================= */
-/* MOBILE RESPONSIVE STYLES */
-/* ============================= */
-
+/* MOBILE */
 @media (max-width: 768px) {
 
-    .table-container {
-        padding: 15px;
-        margin-bottom: 0px;
+    .search-bar {
+          margin-left: 20px;
+        flex-direction:inherit;
+        gap: 5px;
+        width: 50%;
     }
 
-    .table-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .table-header h2 {
-        font-size: 18px;
+    .search-bar input,
+    .search-bar button {
+          width: 30%;
+        padding: 10px;
+        margin: 5px 0;
     }
 
     .students-table th,
     .students-table td {
-        padding: 10px;
         font-size: 12px;
+        padding: 10px;
     }
 
-}
-.table-wrapper {
-    overflow-x: auto;
-     -webkit-overflow-scrolling: touch;
-}
-body {
-    overflow-x: hidden;   /* 🔥 prevents whole page scroll */
-}
-.students-table {
-    min-width: 700px;   /* adjust depending on number of columns */
-}
- /* excel */
-
- /* Main button style */
-.btn--pri {
-    display: inline-block;
-    background: #10b981; /* green like your links */
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 1.2rem;
-    padding: 2px 1px;
-    border: none;
-
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.btn--pri:hover {
-    background: #059669; /* slightly darker green on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-.btn--pri:active {
-    transform: translateY(0);
-    box-shadow: none;
-}
-
-/* Optional: smaller button for mobile */
-@media (max-width: 768px) {
-    .btn--pri {
-        font-size: 1.2rem;
-        padding: 8px 16px;
+    .action {
+        font-size: 11px;
+        padding: 5px 8px;
     }
 }
+
+/* PRINT */
+@media print {
+    .students-table th,
+    .students-table td {
+        font-size: 10px;
+        padding: 4px;
+    }
+}
+
 </style>
 
-</div>
-</div>
-
-
-<script type="text/javascript">
-    function myfunc(pa){
-        var b=document.body.innerHTML;
-        var d=document.getElementById(pa).innerHTML;
-        document.body.innerHTML=d;
-        window.print();
-    }
-</script>
-{%endblock%}
-
-       
-    
+{% endblock %}

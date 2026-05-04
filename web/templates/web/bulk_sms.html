@@ -1,0 +1,79 @@
+{% include 'web/main1.html' %}
+{% load static %}
+{% block content %}
+
+<div class="bulk-container">
+
+    <div class="bulk-header">
+        <h2>📩 Bulk Messaging Panel</h2>
+        <p>Send SMS to {{ count }} members</p>
+    </div>
+
+    <form method="POST" class="bulk-form">
+        {% csrf_token %}
+
+        <label>Message</label>
+        {{ form.message }}
+
+        <button type="submit" class="send-btn">
+            Send Message
+        </button>
+    </form>
+
+</div>
+
+<style>
+
+.bulk-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.bulk-header {
+    margin-bottom: 20px;
+}
+
+.bulk-header h2 {
+    margin: 0;
+    color: #1390cd;
+}
+
+.bulk-header p {
+    color: gray;
+}
+
+.bulk-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.send-btn {
+    background: #1390cd;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.send-btn:hover {
+    background: #0f7bb3;
+}
+
+</style>
+
+{% endblock %}

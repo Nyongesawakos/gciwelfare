@@ -46,12 +46,15 @@
       <a href="{% url 'user_list' %}" class="active">Dashboard</a>
         
         <!-- <a href="">Excel Upload</a> -->
-        <!-- <a href="">Add User</a> -->
+         <a href="{% url 'mpesa' %}">Pay</a>
         <a href="{% url 'members' %}">Members' list</a>
-        <a href="{% url 'insert' %}">Add Record</a>
-        <a href="{% url 'pdf' %}">Contributions</a>
+        <!--a href="{% url 'insert' %}">Add Record</a-->
+        <!--a href="{% url 'pdf' %}">Contributions</a-->
         <a href="{% url 'cashflow' %}">Update Outflow</a>
         <a href="{% url 'expenses' %}">Outflows</a>
+        <a href="{% url 'bulk_sms' %}" class="btn btn-primary">
+    Send Bulk SMS
+</a>
         <a href="{% url 'payment_list' %}">Payments</a>
         
         
@@ -63,9 +66,9 @@
 <div id="students-menu" class="dropdown-menu">
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button style="color: #16a085;" class="logout-btn">Logout</button>
+        <button style="color: #1390cd;" class="logout-btn">Logout</button>
     </form>
-    <button style="color: #16a085;" class="logout-btn">Register</button>
+    <button style="color: #1390cd;" class="logout-btn">Register</button>
 </div>
 
 </div>
@@ -327,7 +330,7 @@ body {
 
 .sidebar a:hover,
 .sidebar a.active {
-    background: #BA8E23;
+    background: #1390cd;;
 }
 
 /* Content */

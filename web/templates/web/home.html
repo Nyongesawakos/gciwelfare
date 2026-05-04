@@ -55,11 +55,9 @@
               <p>Get welfare updates here</p>
             </div>
            <div>
-                       {% if contributions %}
-    <a class="btn btn--primary" href="{% url 'contributions' contributions.0.id %}">
-        Updates
-    </a>
-{% endif %}
+   <a class="btn btn--primary" href="{% url 'contributions' 1 %}">
+    Updates
+</a>
            </div>
  
              {% if user.is_superuser %}

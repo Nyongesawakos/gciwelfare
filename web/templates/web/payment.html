@@ -1,329 +1,295 @@
-{%include 'web/main1.html'%}
-{%load static%}
+{% include 'web/main1.html' %}
+{% load static %}
 {% load tz %}
 {% block content %}
 
+<div class="content">
 
-    
-    <div class="content">
- <form method="get" action="{% url 'payment_list' %}" class="search-bar">
-    <input
-        type="text"
-        name="q"
-        placeholder="Search by name, phone, code..."
-        value="{{ query|default:'' }}"
-    >
-    <button type="submit">Search</button>
-</form>
-<div class="download-container">
-    <button onclick="myfunc('mn')" class="download-btn">
-        Download PDF
-    </button>
+    <!-- Search -->
+    <form method="get" action="{% url 'payment_list' %}" class="search-bar">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search by name, phone, code..."
+            value="{{ query|default:'' }}"
+        >
+        <button type="submit">🔍 Search</button>
+    </form>
+
+    <!-- Download Button -->
+    <div class="download-container">
+        <button onclick="myfunc('mn')" class="download-btn">
+            Download PDF
+        </button>
+    </div>
+
+    <!-- Report -->
+    <div id="mn">
+
+        <h2>Transactions Report</h2>
+<br>
+        <div class="table-container">
+
+            <!-- Total -->
+            <div class="total-row">
+                Total: Ksh {{ total_amount }}
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table class="students-table">
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Full Name</th>
+                            <th>Phone</th>
+                            <th>Amount</th>
+                            <th>Receipt</th>
+                            <th>Transaction ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for payment in payments|slice:":30" %}
+                        <tr>
+                            <td>{{ payment.created_at|localtime }}</td>
+                            <td>{{ payment.full_name }}</td>
+                            <td>{{ payment.phone_number }}</td>
+                            <td class="amount">Ksh {{ payment.amount }}</td>
+                            <td>{{ payment.mpesa_receipt_number|default:"-" }}</td>
+                            <td>{{ payment.checkout_request_id }}</td>
+                            <td>
+                                <span class="badge {{ payment.status|lower }}">
+                                    {{ payment.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="no-results">
+                                No results found
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
 </div>
-<div class="div" id="mn">
 
- <div class="table-container">
-
-<div class="table-wrapper">
-        <table class="students-table">
-            <thead>
-    <tr>
-   <th>Date</th>
-   <th>Full Name</th>
-   <th>Phone</th>
-    <th>Amount</th>
-    <th>Receipt</th>
-    <th>Transaction ID</th>
-    <th>Status</th>
-    
-        
-        
-    </tr>
-    
-
-    </thead>
- <tbody>
- {% for payment in payments %}
-<tr>
-   <td>{{payment.created_at|localtime}}</td>
-   <td>{{ payment.full_name }}</td>
-   <td>{{ payment.phone_number }}</td>
-    <td>{{ payment.amount}}</td>
-    <td>{{ payment.mpesa_receipt_number }}</td>
-    <td>{{ payment.checkout_request_id }}</td>
-    <td>{{ payment.status }}</td>
-
-    
-</tr>
- </tr>
-    {% empty %}
-    <tr>
-        <td colspan="4">No results found</td>
-    </tr>
-{% endfor %}
-    </tbody>
-    <tr>
-    <td colspan="3"><strong>Total</strong></td>
-    <td><strong>Ksh {{ total_amount }}</strong></td>
-</tr>
-    
-</table>
-</div>
-</div>
-</div>
-
-
-
-
-
-
+<!-- ================= CSS ================= -->
 <style>
-    
 
-    .download-container{
-    text-align: center;
-    margin-top: 20px;
+/* Brand Colors */
+:root {
+    --primary-red: #e72326;
+    --primary-yellow: #f5d021;
+    --primary-blue: #1390cd;
+    --gray: #f5f7fa;
 }
 
-.download-btn{
-    background: linear-gradient(135deg, #f69320, #e07b10);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-.download-btn:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-}
-
-.download-btn:active{
-    transform: scale(0.98);
-}
-
-/* Main container */
+/* Layout */
 .content {
-    display: flex;
-    flex-direction: column;  /* 🔥 THIS FIXES IT */
+    padding: 20px;
 }
+
+/* Search */
 .search-bar {
-    margin-top: 15px;
+    display: flex;
+    gap: 10px;
     margin-bottom: 20px;
-    display: block;
 }
 
 .search-bar input {
-    padding: 8px;
-    width: 250px;
+    padding: 10px;
+    width: 280px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
 }
 
 .search-bar button {
-    padding: 8px 12px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-@media (max-width: 768px) {
-    .search-bar {
-    max-width: 200%;
-    margin-bottom: 3px;
-    margin-top: -80px;
-    display: block;
-    margin-left: 24px;
-
-
-    }
-}
-.table-container {
-    width: 100%;
-    min-height: calc(100vh - 80px);
-    margin: 0;
-    background: #ffffff;
-    padding: 25px 30px;
-    border-radius: 0;
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;   /* 🔥 important */
-    page-break-inside: auto;
-}
-
-/* Header */
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Download Button */
+.download-container {
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.table-header h2 {
-    margin: 0;
-    color: #333;
+.download-btn {
+    background: linear-gradient(135deg, var(--primary-blue), #1390cd);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
 }
 
+/* Title */
+#mn h2 {
+    text-align: center;
+    color: var(--primary-blue);
+}
 
+/* Container */
+.table-container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border-top: 6px solid var(--primary-yellow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
+/* Total */
+.total-row {
+    font-weight: 600;
+    color: var(--primary-red);
+    margin-bottom: 15px;
+}
 
-
-
-
-
-/* Table wrapper (for horizontal scroll on mobile) */
+/* Table */
 .table-wrapper {
     overflow-x: auto;
 }
 
-/* Table */
 .students-table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 700px;
+}
+
+/* Header */
+.students-table thead {
+    background: var(--primary-blue);
 }
 
 .students-table th {
-    background: #f0f3ff;
+    color: white;
     padding: 14px;
     text-align: left;
-    font-size: 14px;
 }
 
+/* Rows */
 .students-table td {
     padding: 14px;
     border-top: 1px solid #eee;
-    font-size: 14px;
 }
 
+/* Zebra */
+.students-table tbody tr:nth-child(even) {
+    background: var(--gray);
+}
+
+/* Hover */
 .students-table tr:hover {
-    background: #f9faff;
-}
-tr {
-    page-break-inside: avoid;
+    background: rgba(19,144,205,0.1);
 }
 
-/* Empty state */
+/* Amount */
+.amount {
+    font-weight: bold;
+    color: var(--primary-red);
+}
+
+/* Badges */
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.badge.success { background: var(--primary-blue); }
+.badge.pending { background: var(--primary-yellow); color: black; }
+.badge.failed { background: var(--primary-red); }
+
+/* Empty */
 .no-results {
     text-align: center;
     padding: 20px;
     color: #777;
 }
 
-/* ============================= */
-/* MOBILE RESPONSIVE STYLES */
-/* ============================= */
-
+/* Mobile */
 @media (max-width: 768px) {
-
-    .table-container {
-        padding: 15px;
-        margin-bottom: 0px;
+    .search-bar {
+        margin-left: 20px;
+        flex-direction:inherit;
+        gap: 5px;
+        width: 50%;
     }
 
-    .table-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+    .search-bar input,
+    .search-bar button {
+        width: 30%;
+        padding: 10px;
+        margin: 5px 0;
     }
-
-    .table-header h2 {
-        font-size: 18px;
-    }
-
+}
     .students-table th,
     .students-table td {
-        padding: 10px;
         font-size: 12px;
-        word-break: break-word;
-        white-space: normal;
+        padding: 10px;
     }
 
-}
-.table-wrapper {
-    overflow-x: auto;
-     -webkit-overflow-scrolling: touch;
-}
-body {
-    overflow-x: hidden;   /* 🔥 prevents whole page scroll */
-}
-.students-table {
-    min-width: 700px;   /* adjust depending on number of columns */
-     width: 100%;
-    table-layout: fixed;   /* 🔥 forces columns to fit */
-    word-wrap: break-word;
-}
-#mn {
-    width: 100%;
-}
+
+/* Print */
 @media print {
     .students-table th,
     .students-table td {
-        font-size: 10px;   /* 🔥 smaller text = fits better */
-        padding: 6px;
+        font-size: 10px;
+        padding: 4px;
     }
-
 }
-.students-table th:nth-child(1),
-.students-table td:nth-child(1) {
-    width: 16%; /* Date */
+.download-container {
+    text-align: left;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
-
-.students-table th:nth-child(2),
-.students-table td:nth-child(2) {
-    width: 18%; /* Name */
-}
-
-.students-table th:nth-child(3),
-.students-table td:nth-child(3) {
-    width: 20%; /* Phone */
-}
-
-.students-table th:nth-child(4),
-.students-table td:nth-child(4) {
-    width: 14%; /* Amount */
-}
-
-.students-table th:nth-child(5),
-.students-table td:nth-child(5) {
-    width: 15%; /* Receipt */
-}
-
-.students-table th:nth-child(6),
-.students-table td:nth-child(6) {
-    width: 18%; /* Transaction ID */
-}
-
-.students-table th:nth-child(7),
-.students-table td:nth-child(7) {
-    width: 10%; /* Status */
+#mn h2 {
+    text-align: left;
+     margin-left: 20px;
+    color: var(--primary-blue);
 }
 
 </style>
 
-</div>
-</div>
-
+<!-- ================= JS ================= -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script>
-function myfunc(pa){
-    var element = document.getElementById(pa);
+function myfunc(id){
+    var element = document.getElementById(id);
 
     var opt = {
-        margin:       0.5,
-        filename:     'payments.pdf',
-        image:        { type: 'jpeg', quality: 1 },
-        html2canvas:  { scale: 2 },   // improves quality
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        margin: 0.5,
+        filename: 'payments.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
-    
 
     html2pdf().set(opt).from(element).save();
 }
 </script>
 
-{%endblock%}
-
-       
-    
-
-
+{% endblock %}

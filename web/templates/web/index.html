@@ -1,213 +1,207 @@
 {% extends 'main.html' %}
-{%load static%}
+{% load static %}
 {% block content %}
 
+<div class="profile-wrapper">
 
-<div class="profile-container">
-    
-    <div class="profile-header">
-        <h2>{{room.name}}'s Profile</h2>
-        <small>Member Information</small>
-    </div>
+    <div class="profile-card">
 
-    <div class="profile-info">
-        <div>
-            <span>HBC:</span>
-            <p>{{room.HBC}}</p>
+        <!-- HEADER -->
+        <div class="profile-header">
+            <h2>{{ room.host }}</h2>
+            <p>Member Profile</p>
         </div>
 
-        <div>
-            <span>Phone Number:</span>
-            <p>{{room.phone}}</p>
+        <!-- BODY -->
+        <div class="profile-body">
+
+            <div class="profile-grid">
+
+                <div class="profile-item">
+                    <span>HBC</span>
+                    <p>{{ room.HBC }}</p>
+                </div>
+
+                <div class="profile-item">
+                    <span>Phone</span>
+                    <p>{{ room.phone }}</p>
+                </div>
+
+                <div class="profile-item">
+                    <span>ID Number</span>
+                    <p>{{ room.id_number }}</p>
+                </div>
+
+                <div class="profile-item">
+                    <span>Parents</span>
+                    <p>{{ room.Parent }}</p>
+                </div>
+
+                <div class="profile-item">
+                    <span>Children</span>
+                    <p>{{ room.Child }}</p>
+                </div>
+
+                <div class="profile-item">
+                    <span>Spouse</span>
+                    <p>{{ room.Spouse }}</p>
+                </div>
+
+                <div class="profile-item full">
+                    <span>Date Joined</span>
+                    <p>{{ room.created }}</p>
+                </div>
+
+            </div>
+
         </div>
 
-        <div>
-            <span>ID Number:</span>
-            <p>{{room.id_number}}</p>
+        <!-- ACTIONS -->
+        <div class="profile-actions">
+            <a href="{% url 'updateRoom' room.id %}" class="btn btn-edit">Edit</a>
+            <!-- <a href="{% url 'members' %}" class="btn btn-back">Back</a> -->
         </div>
 
-        <div>
-            <span>Parents:</span>
-            <p>{{room.Parent}} </p>
-        </div>
-          <div>
-            <span>Children:</span>
-            <p>{{room.Child}}</p>
-        </div>
-          <div>
-            <span>Spouse:</span>
-            <p>{{room.Spouse}}</p>
-        </div>
-
-        <div>
-            <span>Date Joined:</span>
-            <p>{{room.created}}</p>
-        </div>
-    </div>
-
-    <div class="profile-actions">
-     
     </div>
 
 </div>
 
- 
-    
-
-
-      
-
-         
-        
-      
-       
-                
-        
-
-
- 
-
+<!-- ================= CSS ================= -->
 <style>
-    .profile-container {
-        max-width: 600px;
-        margin: 50px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    }
 
-    .profile-header {
-        text-align: center;
-        margin-bottom: 25px;
-    }
+/* ROOT COLORS */
+:root {
+    --primary-blue: #1390cd;
+    --primary-yellow: #f5d021;
+    --primary-red: #e72326;
 
-    .profile-header h2 {
-        margin: 0;
-        font-size: 24px;
-    }
-
-    .profile-info {
-        margin-top: 20px;
-    }
-
-    .profile-info div {
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .profile-info div span {
-        font-weight: 600;
-        color: #555;
-    }
-
-    .profile-actions {
-        margin-top: 25px;
-        text-align: center;
-    }
-
-    .btn {
-        padding: 10px 18px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 14px;
-        margin: 5px;
-        display: inline-block;
-    }
-
-    .btn-edit {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .btn-back {
-        background-color: #2196F3;
-        color: white;
-    }
-
-
-
-    /* Page background */
-body {
-    background-color: #f4f6f9;
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --text: #2c2c2c;
+    --muted: #6b7280;
 }
 
-/* Card container */
-.card {
-    width: 95%;
-    max-width: 900px;
-    margin: 40px auto;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+/* PAGE */
+.profile-wrapper {
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* CARD */
+.profile-card {
+    max-width: 850px;
+    margin: auto;
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+.profile-header {
+    background: linear-gradient(135deg, var(--primary-blue), #0d6fa3);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.profile-header h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.profile-header p {
+    margin-top: 5px;
+    opacity: 0.9;
+}
+
+/* BODY */
+.profile-body {
     padding: 25px;
 }
 
-/* Table styling */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-p{
-  color: #0d6efd;
+/* GRID */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
 }
 
-/* Header */
-.table thead tr {
-    background-color: #0d6efd;
+.profile-item {
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.profile-item span {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 5px;
+}
+
+.profile-item p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--primary-blue);
+}
+
+/* FULL WIDTH ITEM */
+.profile-item.full {
+    grid-column: span 2;
+}
+
+/* ACTIONS */
+.profile-actions {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
     color: white;
 }
 
-.table th {
-    padding: 14px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 14px;
+.btn-edit {
+    background: var(--primary-blue);
 }
 
-/* Table body */
-.table td {
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
+.btn-edit:hover {
+    background: #0d6fa3;
 }
 
-/* Hover effect */
-.table tbody tr:hover {
-    background-color: #f1f7ff;
-    transition: 0.3s;
+.btn-back {
+    background: var(--primary-red);
 }
 
-/* Warning row */
-.table-warning {
-    background-color: #fff8e1;
+.btn-back:hover {
+    background: #c91c1f;
 }
 
-/* Total row */
-.table-success {
-    background-color: #051634 !important;
-    color: white !important;
-    font-size: 15px;
-}
-
-/* Responsive table */
+/* MOBILE */
 @media (max-width: 768px) {
-    .card {
-        padding: 15px;
+    .profile-grid {
+        grid-template-columns: 1fr;
     }
 
-    .table th,
-    .table td {
-        padding: 8px;
-        font-size: 12px;
+    .profile-item.full {
+        grid-column: span 1;
+    }
+
+    .profile-header h2 {
+        font-size: 20px;
     }
 }
 
 </style>
-
 
 {% endblock %}
