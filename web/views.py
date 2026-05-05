@@ -243,8 +243,28 @@ def people(request, pk):
 def Panel(request):
     payment=update.objects.all() 
     detail=room.objects.all()
-    context ={'detail':detail, 'payment': payment}
-    return render(request, 'web/Panel.html', context)
+    
+    contributions = MpesaTransaction.objects.filter(status="Success")
+
+    group = request.GET.get('group')
+
+    selected_group = None
+
+    if group:
+        contributions = contributions.filter(profile__group__name__iexact=group)
+        selected_group = group
+    
+    total_count = contributions.count()
+
+    total_amount = sum(t.amount for t in contributions)
+
+    return render(request, 'web/Panel.html', {
+        'contributions': contributions,
+        'total_amount': total_amount,
+        'total_count': total_count,
+        'selected_group': selected_group
+    })
+   
 @login_required(login_url='/login')
 def single(request):
     q = request.GET.get('q') if request.GET.get('q') != None  else ''
@@ -262,7 +282,8 @@ def single(request):
 def members(request):
     query = request.GET.get('q')
     gci =update.objects.all()
-    member=room.objects.all().order_by('Firstname')
+    member=room.objects.all().order_by('-created')
+    users = User.objects.all().order_by('-date_joined')
    
     if query:
         member = member.filter(
@@ -272,8 +293,20 @@ def members(request):
         ) | member.filter(
             HBC__icontains=query
         )
-    context={'gci':gci, 'member':member, 'query':query}
+    context={'gci':gci, 'member':member, 'users':users, 'query':query}
     return render(request, 'web/members.html',  context)
+@login_required(login_url='/login')
+@user_passes_test(lambda u: u.is_superuser)
+def admi(request):
+    query = request.GET.get('q')
+    users = User.objects.all().order_by('-date_joined')
+    if query:
+        users = users.filter(
+            username__icontains=query
+        ) | users.filter(
+            email__icontains=query
+        ) 
+    return render(request, 'web/admin.html', {'users': users, 'query': query})
 @login_required(login_url='/login')
 def Message(request):
      R_messages=message.objects.all()
@@ -398,6 +431,7 @@ def more(request, pk):
 @login_required(login_url='/login')
 @csrf_exempt
 def mpesa(request):
+    profile = room.objects.get(host=request.user)
     timestamp = timezone.localtime().strftime('%Y%m%d%H%M%S')
     form = MpesaForm(request.POST or None)
 
@@ -426,6 +460,7 @@ def mpesa(request):
             # ✅ Save transaction linked to user
             MpesaTransaction.objects.create(
                 user=request.user,  # 🔑 IMPORTANT
+                profile=profile,
                 full_name=full_name,
                 phone_number=phone_number,
                 amount=amount,
@@ -490,6 +525,7 @@ def payment_list(request):
         )| payments.filter(
             created_at__date__icontains=query
         )
+        
 
 
     total_amount = payments.aggregate(Sum('amount'))['amount__sum'] or 0    
@@ -658,6 +694,35 @@ def bulk_sms_view(request):
 
 
     return render(request, "web/bulk_sms.html", context)
+
+def only_superuser(user):
+    return user.is_superuser
+
+
+@user_passes_test(only_superuser)
+def make_admin(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    user.is_staff = True
+    user.is_superuser = True
+    user.save()
+
+    messages.success(request, f"{user.username} is now an admin.")
+    return redirect('user_list')
+def remove_admin(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    # prevent removing yourself accidentally
+    if request.user.id == user.id:
+        messages.error(request, "You cannot remove your own admin rights.")
+        return redirect('admin')
+
+    user.is_superuser = False
+    user.is_staff = False
+    user.save()
+
+    messages.success(request, f"{user.username} is no longer an admin.")
+    return redirect('admi')
 
     
 
