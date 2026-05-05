@@ -46,16 +46,17 @@
       <a href="{% url 'user_list' %}" class="active">Dashboard</a>
         
         <!-- <a href="">Excel Upload</a> -->
-         <a href="{% url 'mpesa' %}">Pay</a>
+         <a href="{% url 'mpesa' %}">Lipa na Mpesa</a>
+         <a href="{% url 'payment_list' %}">Find Transaction</a>
         <a href="{% url 'members' %}">Members' list</a>
-        <!--a href="{% url 'insert' %}">Add Record</a-->
-        <!--a href="{% url 'pdf' %}">Contributions</a-->
+        
+        <a href="{% url 'Panel' %}">Filter Report</a>
         <a href="{% url 'cashflow' %}">Update Outflow</a>
         <a href="{% url 'expenses' %}">Outflows</a>
-        <a href="{% url 'bulk_sms' %}" class="btn btn-primary">
+        <a href="{% url 'bulk_sms' %}">
     Send Bulk SMS
 </a>
-        <a href="{% url 'payment_list' %}">Payments</a>
+        
         
         
 <div class="sidebar-dropdown">
@@ -66,9 +67,9 @@
 <div id="students-menu" class="dropdown-menu">
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button style="color: #1390cd;" class="logout-btn">Logout</button>
+        <a href="{% url 'logout' %}"  class="logout-btn">Logout</a>
     </form>
-    <button style="color: #1390cd;" class="logout-btn">Register</button>
+  <a href="{% url 'admi' %}">Add admin</a>
 </div>
 
 </div>
@@ -115,7 +116,7 @@ setTimeout(() => {
    <style>
     .dropdown-menu {
     display: none;
-    background: white;
+    background: #f39c12;
     padding: 10px;
     border-radius: 6px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);

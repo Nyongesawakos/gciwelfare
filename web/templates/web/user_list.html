@@ -2,37 +2,47 @@
 {% load static %}
 {% block content %}
 
+<!-- IMPORTANT FOR MOBILE -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <div class="dashboard">
 
     <!-- HEADER -->
     <div class="dashboard-header">
         <div>
-            <h1>Admin Dashboard </h1>
-            <h2></h2>
+            <h1>Admin Dashboard</h1>
         </div>
 
-        
+        <div>
+            {% if room.id %}
+            <a class="btn btn-primary"
+               href="{% url 'make_admin' room.id %}"
+               onclick="return confirm('Make this user admin?');">
+                Make Admin
+            </a>
+            {% endif %}
+        </div>
     </div>
 
     <!-- STATS -->
     <div class="stats-grid">
         <div class="stat-card">
-            <h3>Ksh.{{ total_amount}}</h3>
+            <h3>Ksh.{{ total_amount }}</h3>
             <p>Total Contributions</p>
         </div>
 
         <div class="stat-card">
-            <h3> Ksh.{{ cash}}</h3>
+            <h3>Ksh.{{ cash }}</h3>
             <p>Total Outflows</p>
         </div>
 
         <div class="stat-card">
-            <h3>Ksh.{{difference}}</h3>
-            <p>Balance</p>
+            <h3>Ksh.{{ difference }}</h3>
+            <p>Net Balance</p>
         </div>
 
         <div class="stat-card">
-            <h3>{{ User_count}}</h3>
+            <h3>{{ User_count }}</h3>
             <p>Members</p>
         </div>
     </div>
@@ -40,28 +50,26 @@
     <!-- MAIN GRID -->
     <div class="dashboard-grid">
 
-        <!-- PROFILE INFO -->
+        <!-- MEMBERS -->
         <div class="card">
             <h2>Recent Members</h2>
 
-           <div class="table-wrapper">
+            <div class="table-wrapper">
                 <table>
-                    <thead>
-                {% for room in lists|slice:":5" %}
-                <tr>
+                    <tbody>
+                        {% for room in lists|slice:":5" %}
+                        <tr>
                             <td>{{ room.Firstname }}</td>
                             <td>{{ room.lastName }}</td>
                             <td>{{ room.group }}</td>
-                            
-                            
-                           
-                            </tr>
-                {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- RECENT TRANSACTIONS -->
+        <!-- TRANSACTIONS -->
         <div class="card">
             <h2>Recent Transactions</h2>
 
@@ -73,20 +81,16 @@
                             <th>Name</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            
                         </tr>
                     </thead>
 
                     <tbody>
                         {% for payment in payments|slice:":5" %}
                         <tr>
-                            
                             <td>{{ payment.created_at }}</td>
                             <td>{{ payment.full_name|default:"-" }}</td>
                             <td class="amount">Ksh {{ payment.amount }}</td>
-                            
                             <td>
-                               
                                 <span class="badge {{ payment.status|lower }}">
                                     {{ payment.status }}
                                 </span>
@@ -117,10 +121,25 @@
     --card: #ffffff;
 }
 
-/* PAGE */
-.dashboard {
-    padding: 25px;
+/* RESET */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
     background: var(--bg);
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* MAIN CONTAINER */
+.dashboard {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
     min-height: 100vh;
 }
 
@@ -129,19 +148,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .dashboard-header h1 {
     margin: 0;
 }
 
-.dashboard-actions {
-    display: flex;
-    gap: 10px;
-}
-
-/* BUTTONS */
+/* BUTTON */
 .btn {
     padding: 10px 18px;
     border-radius: 8px;
@@ -154,15 +168,10 @@
     color: white;
 }
 
-.btn-outline {
-    border: 2px solid var(--blue);
-    color: var(--blue);
-}
-
 /* STATS */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     margin-bottom: 25px;
 }
@@ -190,7 +199,7 @@
 /* CARD */
 .card {
     background: var(--card);
-    padding: 20px;
+    padding: 6px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
@@ -199,31 +208,16 @@
     margin-bottom: 15px;
 }
 
-/* INFO */
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.info-grid span {
-    font-size: 12px;
-    color: gray;
-}
-
-.info-grid p {
-    margin: 0;
-    font-weight: 600;
-}
-
 /* TABLE */
 .table-wrapper {
+    width: 80%;
     overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 600px;
 }
 
 th {
@@ -254,8 +248,21 @@ td {
 .badge.pending { background: var(--yellow); color: black; }
 .badge.failed { background: var(--red); }
 
-/* MOBILE */
-@media (max-width: 768px) {
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
 
     .dashboard-header {
         flex-direction: column;
@@ -263,55 +270,24 @@ td {
         gap: 10px;
     }
 
-    .dashboard-grid {
+    .stats-grid {
         grid-template-columns: 1fr;
     }
 
-    .info-grid {
-        grid-template-columns: 1fr;
+    .dashboard {
+        padding: 15px;
     }
-}
-/* TABLE */
-.table-wrapper {
-    overflow-x: auto;
-}
 
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-}
+    .dashboard-header h1 {
+        font-size: 20px;
 
-/* HEADER */
-.students-table thead {
-    background: var(--primary-blue);
-}
+    }
 
-.students-table th {
-    color: white;
-    padding: 14px;
+}
+h2 {
+    color: var(--blue);
     text-align: left;
 }
-
-/* ROWS */
-.students-table td {
-    padding: 14px;
-    border-top: 1px solid #eee;
-}
-
-.students-table tbody tr:nth-child(even) {
-    background: var(--gray);
-}
-
-.students-table tr:hover {
-    background: rgba(19,144,205,0.1);
-}
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-}
-
 
 </style>
 
