@@ -268,6 +268,18 @@ class BulkMessage(models.Model):
 
     def __str__(self):
         return f"{self.sender} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+class WelfareContribution(models.Model):
+    member = models.ForeignKey(room, on_delete=models.CASCADE)
+    year = models.IntegerField()
+    month = models.IntegerField()  # 1–12
+
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    is_paid = models.BooleanField(default=False)
+    paid_on = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('member', 'year', 'month')
 
 
 

@@ -1,5 +1,6 @@
 from urllib import request
 import threading
+from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -39,12 +40,46 @@ from django.utils import timezone
 from .forms import BulkMessageForm
 from .models import BulkMessage
 from .utils import send_bulk_sms
+from web import models
+from web import models
+from datetime import date
+from django.utils import timezone
+from django.db.models.functions import ExtractMonth, ExtractYear
+
+MONTHLY_FEE = 2
+WELFARE_START_DATE = date(2024, 10, 1)
 
 
+def calculate_welfare_arrears(user):
 
+    payments = MpesaTransaction.objects.filter(
+        user=user,
+        status="Success"
+    )
 
+    # total months expected since start
+    today = timezone.now().date()
+    diff = relativedelta(today, WELFARE_START_DATE)
 
+    total_months = diff.years * 12 + diff.months + 1
 
+    # total amount paid
+    total_paid_amount = payments.aggregate(
+        total=Sum('amount')
+    )['total'] or 0
+
+    # convert to equivalent months paid
+    paid_months = total_paid_amount // MONTHLY_FEE
+
+    months_missing = max(total_months - int(paid_months), 0)
+
+    amount_due = months_missing * MONTHLY_FEE
+
+    return {
+        "months_missing": months_missing,
+        "amount_due": amount_due,
+        "paid_months": int(paid_months)
+    }
 @require_http_methods(["GET", "POST"])
 def cashflow(request): 
      form = cash_expenditureForm()
@@ -625,14 +660,32 @@ def upload_cash_expenditure(request):
 
     return redirect("members")
 @login_required(login_url='/login')
+@login_required
 def contributions(request, pk):
-    contributions = MpesaTransaction.objects.filter(user=request.user, status="Success").order_by('-created_at')
-    total_amount = MpesaTransaction.objects.filter(user=request.user, status="Success").aggregate(Sum('amount'))['amount__sum'] or 0  
-    
+    contributions = MpesaTransaction.objects.filter(
+        user=request.user,
+        status="Success"
+    ).order_by('-created_at')
+
+    total_paid = contributions.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    arrears = calculate_welfare_arrears(request.user)
+
     return render(request, 'web/contributions.html', {
         'contributions': contributions,
-        'total_amount': total_amount
+        'total_amount': total_paid,
+        'months_missing': arrears['months_missing'],
+        'amount_due': arrears['amount_due'],
+        'paid_months': arrears['paid_months']
     })
+#def contributions(request, pk):
+  #  contributions = MpesaTransaction.objects.filter(user=request.user, status="Success").order_by('-created_at')
+   # total_amount = MpesaTransaction.objects.filter(user=request.user, status="Success").aggregate(Sum('amount'))['amount__sum'] or 0  
+    
+    #return render(request, 'web/contributions.html', {
+    #    'contributions': contributions,
+        #'total_amount': total_amount
+   # })
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
