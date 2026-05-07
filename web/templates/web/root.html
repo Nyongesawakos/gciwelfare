@@ -106,80 +106,181 @@
 </body>
 </html>
 
-
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+
+/* ================= ROOT ================= */
+:root{
+    --primary-gold:#BA8E23;
+    --primary-dark:#051634;
+    --white:#ffffff;
+    --overlay:rgba(0,0,0,0.55);
 }
 
-body, html {
-  height: 100%;
-  font-family: Arial, sans-serif;
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.hero-section {
-  position: relative;
-  height: 100vh;
-  background: url("{% static '/images/welfare.jpg' %}") no-repeat center center/cover;
-  overflow: hidden;
+html, body{
+    width:100%; /* 🔥 removes scroll bar issue */
+    font-family:Arial,sans-serif;
+    background:#f4f6f8;
 }
 
-.background-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Faded overlay */
-  z-index: 1;
+/* ================= SUB HEADER ================= */
+.sub-header{
+    width:100%;
+    background:#051634;
+    backdrop-filter:blur(10px);
+    padding:14px 25px;
+    position:relative;
+    top: 0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    z-index:1000;
 }
 
-.carousel {
-  position: relative;
-  z-index: 2;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  text-align: center;
+.menu-toggle{
+    display:none;
+    font-size:30px;
+    background:none;
+    border:none;
+    color:white;
+    cursor:pointer;
 }
 
-.slide {
-  display: none;
-  font-size: 2.5rem;
-  padding: 20px;
-  animation: fade 1s ease-in-out;
+.sub-nav{
+    display:flex;
+    gap:12px;
+    list-style:none;
+    flex-wrap:wrap;
 }
 
-.slide.active {
-  display: block;
+.sub-nav li a{
+    color:white;
+    text-decoration:none;
+    padding:10px 14px;
+    border-radius:8px;
+    font-weight:600;
+    transition:0.3s ease;
 }
 
-button.prev, button.next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0,0,0,0.3);
-  color: white;
-  border: none;
-  font-size: 2rem;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 3;
+.sub-nav li a:hover{
+    background:var(--primary-gold);
 }
 
-button.prev { left: 20px; }
-button.next { right: 20px; }
-
-@keyframes fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* ================= HERO ================= */
+.hero-section{
+    position:relative;
+    width:100%;
+    min-height:100vh;
+    background:url("{% static '/images/welfare.jpg' %}") center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
+/* OVERLAY */
+.background-overlay{
+    position:absolute;
+    inset:0;
+    background:var(--overlay);
+}
 
+/* ================= CAROUSEL ================= */
+.carousel{
+    position:relative;
+    z-index:2;
+    width:90%;
+    max-width:1100px;
+    text-align:center;
+    color:white;
+    padding:20px;
+}
+
+/* SLIDES */
+.slide{
+    display:none;
+    font-size:clamp(1.5rem, 4vw, 4rem);
+    font-weight:700;
+    line-height:1.4;
+    padding:10px;
+}
+
+.slide.active{
+    display:block;
+}
+
+/* ================= BUTTONS ================= */
+button.prev,
+button.next{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50px;
+    height:50px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    font-size:1.5rem;
+    cursor:pointer;
+}
+
+button.prev{ left:10px; }
+button.next{ right:10px; }
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .sub-nav{
+        display:none;
+        flex-direction:column;
+        width:100%;
+        margin-top:10px;
+    }
+
+    .sub-nav.show{
+        display:flex;
+    }
+
+    .sub-nav li a{
+        width:100%;
+        display:block;
+        background:rgba(255,255,255,0.06);
+    }
+
+    .carousel{
+        width:95%;
+    }
+
+    button.prev,
+    button.next{
+        width:40px;
+        height:40px;
+        font-size:1.2rem;
+    }
+}
+
+/* ================= SMALL PHONES ================= */
+@media (max-width:480px){
+
+    .slide{
+        font-size:1.3rem;
+    }
+
+    .sub-header{
+        padding:10px;
+    }
+}
 </style>
 <script>
 const slides = document.querySelectorAll('.slide');

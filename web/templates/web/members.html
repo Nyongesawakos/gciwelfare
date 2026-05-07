@@ -99,174 +99,312 @@
 <!-- ================= CSS (MATCHING PAYMENT STYLE) ================= -->
 <style>
 
-/* ROOT COLORS (SAME SYSTEM) */
-:root {
-    --primary-red: #e72326;
-    --primary-yellow: #f5d021;
-    --primary-blue: #1390cd;
-    --gray: #f5f7fa;
+/* ================= ROOT COLORS ================= */
+:root{
+    --primary-red:#e72326;
+    --primary-yellow:#f5d021;
+    --primary-blue:#1390cd;
+    --gray:#f5f7fa;
+    --white:#ffffff;
 }
 
-/* LAYOUT */
-.content {
-    padding: 20px;
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* SEARCH */
-.search-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+    background:var(--gray);
+    font-family:Arial,sans-serif;
 }
 
-.search-bar input {
-    padding: 10px;
-    width: 280px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+/* ================= MAIN CONTENT ================= */
+.content{
+    width:100%;
+    min-height:100vh;
+    padding:25px 35px;
 }
 
-.search-bar input:focus {
-    outline: none;
-    border-color: var(--primary-blue);
+/* ================= SEARCH ================= */
+.search-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    max-width:600px;
+    margin-bottom:20px;
 }
 
-.search-bar button {
-    background: var(--primary-blue);
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
+.search-bar input{
+    flex:1;
+    padding:13px 15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+    background:white;
+    transition:0.3s ease;
 }
 
-/* DOWNLOAD */
-.download-container {
-    text-align: left;
-    margin-bottom: 20px;
+.search-bar input:focus{
+    outline:none;
+    border-color:var(--primary-blue);
+    box-shadow:0 0 0 3px rgba(19,144,205,0.15);
 }
 
-.download-btn {
-    background: linear-gradient(135deg, var(--primary-blue), #1390cd);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
+.search-bar button{
+    background:var(--primary-blue);
+    color:white;
+    border:none;
+    padding:13px 18px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s ease;
+    white-space:nowrap;
 }
 
-/* TITLE */
-#mn h2 {
-    text-align: left;
-    color: var(--primary-blue);
+.search-bar button:hover{
+    opacity:0.9;
 }
 
-/* TABLE CONTAINER */
-.table-container {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    border-top: 6px solid var(--primary-yellow);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+/* ================= DOWNLOAD ================= */
+.download-container{
+    width:100%;
+    margin-bottom:20px;
 }
 
-/* TABLE */
-.table-wrapper {
-    overflow-x: auto;
+.download-btn{
+    background:linear-gradient(135deg,var(--primary-blue),#0f7db4);
+    color:white;
+    border:none;
+    padding:13px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s ease;
 }
 
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
+.download-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* ================= TITLE ================= */
+#mn h2{
+    color:var(--primary-blue);
+    margin-bottom:20px;
+    font-size:30px;
+}
+
+/* ================= TABLE CONTAINER ================= */
+.table-container{
+    width:100%;
+    background:var(--white);
+    padding:25px;
+    border-radius:16px;
+    border-top:6px solid var(--primary-yellow);
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
+}
+
+/* ================= TABLE ================= */
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+}
+
+.students-table{
+    width:100%;
+    border-collapse:collapse;
 }
 
 /* HEADER */
-.students-table thead {
-    background: var(--primary-blue);
+.students-table thead{
+    background:var(--primary-blue);
 }
 
-.students-table th {
-    color: white;
-    padding: 14px;
-    text-align: left;
+.students-table th{
+    color:white;
+    padding:16px;
+    text-align:left;
+    font-size:14px;
+    white-space:nowrap;
 }
 
-/* ROWS */
-.students-table td {
-    padding: 14px;
-    border-top: 1px solid #eee;
+/* BODY */
+.students-table td{
+    padding:16px;
+    border-top:1px solid #eee;
+    white-space:nowrap;
+    font-size:14px;
 }
 
-.students-table tbody tr:nth-child(even) {
-    background: var(--gray);
+/* ZEBRA */
+.students-table tbody tr:nth-child(even){
+    background:var(--gray);
 }
 
-.students-table tr:hover {
-    background: rgba(19,144,205,0.1);
+/* HOVER */
+.students-table tbody tr{
+    transition:0.2s ease;
+}
+
+.students-table tbody tr:hover{
+    background:rgba(19,144,205,0.1);
 }
 
 /* ACTION BUTTONS */
-.action {
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-    color: white;
-    display: inline-block;
+.action{
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:13px;
+    color:white;
+    display:inline-block;
+    font-weight:600;
+    transition:0.3s ease;
 }
 
-.action.view { background: #10b981; }
-.action.edit { background: var(--primary-blue); }
-.action.delete { background: var(--primary-red); }
+.action:hover{
+    transform:translateY(-1px);
+}
+
+.action.view{
+    background:#10b981;
+}
+
+.action.edit{
+    background:var(--primary-blue);
+}
+
+.action.delete{
+    background:var(--primary-red);
+}
 
 /* EMPTY */
-.no-results {
-    text-align: center;
-    padding: 20px;
-    color: #777;
+.no-results{
+    text-align:center;
+    padding:25px;
+    color:#777;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
+/* ================= LARGE DESKTOP ================= */
+@media (min-width:1600px){
 
-    .search-bar {
-          margin-left: 20px;
-        flex-direction:inherit;
-        gap: 5px;
-        width: 50%;
+    .content{
+        padding:35px 60px;
+    }
+
+    .students-table th,
+    .students-table td{
+        padding:20px;
+        font-size:15px;
+    }
+
+    #mn h2{
+        font-size:36px;
+    }
+
+}
+
+/* ================= TABLET ================= */
+@media (max-width:1024px){
+
+    .content{
+        padding:20px;
+    }
+
+    .table-container{
+        padding:18px;
+    }
+
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .content{
+        padding:12px;
+    }
+
+    .search-bar{
+        flex-direction:column;
+        align-items:stretch;
+        max-width:100%;
     }
 
     .search-bar input,
-    .search-bar button {
-          width: 30%;
-        padding: 10px;
-        margin: 5px 0;
+    .search-bar button{
+        width:100%;
+    }
+
+    .download-btn{
+        width:100%;
+    }
+
+    .table-container{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    #mn h2{
+        font-size:22px;
     }
 
     .students-table th,
-    .students-table td {
-        font-size: 12px;
-        padding: 10px;
+    .students-table td{
+        font-size:12px;
+        padding:12px;
     }
 
-    .action {
-        font-size: 11px;
-        padding: 5px 8px;
+    .action{
+        font-size:11px;
+        padding:7px 10px;
     }
+
 }
 
-/* PRINT */
-@media print {
+/* ================= EXTRA SMALL DEVICES ================= */
+@media (max-width:480px){
+
     .students-table th,
-    .students-table td {
-        font-size: 10px;
-        padding: 4px;
+    .students-table td{
+        font-size:11px;
+        padding:10px;
     }
+
+}
+
+/* ================= PRINT ================= */
+@media print{
+
+    .search-bar,
+    .download-container,
+    .action{
+        display:none;
+    }
+
+    .content{
+        padding:0;
+        background:white;
+    }
+
+    .table-container{
+        box-shadow:none;
+        border:none;
+        padding:0;
+    }
+
+    .students-table th,
+    .students-table td{
+        font-size:10px;
+        padding:6px;
+    }
+
 }
 
 </style>
-
 {% endblock %}

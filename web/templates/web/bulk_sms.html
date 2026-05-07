@@ -24,56 +24,196 @@
 
 <style>
 
-.bulk-container {
-    max-width: 700px;
-    margin: 40px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+/* ================= ROOT COLORS ================= */
+:root{
+    --primary-blue:#1390cd;
+    --primary-blue-dark:#0f7bb3;
+    --primary-yellow:#f5d021;
+    --gray:#f5f7fa;
+    --white:#ffffff;
+    --text:#333;
 }
 
-.bulk-header {
-    margin-bottom: 20px;
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.bulk-header h2 {
-    margin: 0;
-    color: #1390cd;
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+    background:var(--gray);
+    font-family:Arial,sans-serif;
 }
 
-.bulk-header p {
-    color: gray;
+/* ================= MAIN CONTAINER ================= */
+.bulk-container{
+    width:100%;
+    max-width:1000px;
+    margin:40px auto;
+    background:var(--white);
+    padding:35px;
+    border-radius:18px;
+    border-top:6px solid var(--primary-yellow);
+    box-shadow:0 6px 22px rgba(0,0,0,0.06);
 }
 
-.bulk-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+/* ================= HEADER ================= */
+.bulk-header{
+    margin-bottom:25px;
 }
 
-textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 14px;
+.bulk-header h2{
+    color:var(--primary-blue);
+    font-size:32px;
+    margin-bottom:10px;
 }
 
-.send-btn {
-    background: #1390cd;
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
+.bulk-header p{
+    color:#666;
+    font-size:16px;
 }
 
-.send-btn:hover {
-    background: #0f7bb3;
+/* ================= FORM ================= */
+.bulk-form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    width:100%;
+}
+
+/* LABEL */
+.bulk-form label{
+    font-weight:600;
+    color:var(--text);
+    font-size:15px;
+}
+
+/* TEXTAREA */
+.bulk-form textarea,
+textarea{
+    width:100%;
+    min-height:220px;
+    padding:16px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-size:15px;
+    resize:vertical;
+    transition:0.3s ease;
+    background:white;
+    line-height:1.6;
+}
+
+.bulk-form textarea:focus,
+textarea:focus{
+    outline:none;
+    border-color:var(--primary-blue);
+    box-shadow:0 0 0 4px rgba(19,144,205,0.12);
+}
+
+/* SEND BUTTON */
+.send-btn{
+    background:linear-gradient(
+        135deg,
+        var(--primary-blue),
+        var(--primary-blue-dark)
+    );
+    color:white;
+    border:none;
+    padding:16px 22px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s ease;
+    width:fit-content;
+    min-width:220px;
+}
+
+.send-btn:hover{
+    transform:translateY(-2px);
+    opacity:0.95;
+}
+
+/* ================= LARGE DESKTOP ================= */
+@media (min-width:1600px){
+
+    .bulk-container{
+        max-width:1200px;
+        padding:45px;
+    }
+
+    .bulk-header h2{
+        font-size:38px;
+    }
+
+    .bulk-form textarea,
+    textarea{
+        font-size:16px;
+        min-height:260px;
+    }
+
+}
+
+/* ================= TABLET ================= */
+@media (max-width:1024px){
+
+    .bulk-container{
+        margin:25px;
+        padding:28px;
+    }
+
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .bulk-container{
+        margin:12px;
+        padding:18px;
+        border-radius:14px;
+    }
+
+    .bulk-header h2{
+        font-size:24px;
+        line-height:1.4;
+    }
+
+    .bulk-header p{
+        font-size:14px;
+    }
+
+    .bulk-form textarea,
+    textarea{
+        min-height:180px;
+        font-size:14px;
+        padding:14px;
+    }
+
+    .send-btn{
+        width:100%;
+        min-width:100%;
+        padding:15px;
+    }
+
+}
+
+/* ================= EXTRA SMALL DEVICES ================= */
+@media (max-width:480px){
+
+    .bulk-header h2{
+        font-size:20px;
+    }
+
+    .bulk-form textarea,
+    textarea{
+        font-size:13px;
+    }
+
 }
 
 </style>
-
 {% endblock %}

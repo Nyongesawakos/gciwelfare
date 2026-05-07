@@ -50,128 +50,381 @@
 
             </table>
         </div>
+        
+
+<div class="welfare-summary">
+
+    <h3>Welfare Summary</h3>
+
+    <div class="welfare-grid">
+
+        <div class="welfare-card">
+            <b>Paid Months</b>
+            <span>{{ paid_months }}</span>
+        </div>
+
+        <div class="welfare-card">
+            <b>Missing Months</b>
+            <span>{{ months_missing }}</span>
+        </div>
+
+        <div class="welfare-card">
+            <b>Total Arrears</b>
+            <span class="arrears">
+                Ksh {{ amount_due }}
+            </span>
+        </div>
+
+    </div>
+
+</div>
     </div>
 
 </div>
 
 <style>
 
-/* Brand Colors */
-:root {
-    --primary-red: #e72326;
-    --primary-yellow: #f5d021;
-    --primary-blue: #1390cd;
-    --dark: #000000;
-    --light: #e9e8b7;
+
+
+/* ================= ROOT ================= */
+:root{
+    --primary:#1390cd;
+    --danger:#e72326;
+    --warning:#f5d021;
+    --bg:#f4f6f8;
+    --text:#111827;
+    --white:#ffffff;
+    --border:#e5e7eb;
 }
 
-/* Layout */
-.content {
-    margin-top: 25px;
-    padding: 15px;
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* Header */
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+    font-family:"Segoe UI", Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
 }
 
-.table-header h2 {
-    margin: 0;
-    color: var(--primary-blue);
+/* ================= LAYOUT ================= */
+.content{
+    width:100%;
+    max-width:1400px;
+    margin:auto;
+    padding:25px;
 }
 
-/* Total box (use red + yellow accent) */
-.total-box {
-    background: var(--primary-blue);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: 600;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+/* ================= HEADER ================= */
+.table-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
 }
 
-/* Container */
-.table-container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    border-top: 5px solid var(--primary-yellow);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+.table-header h2{
+    font-size:32px;
+    color:var(--primary);
+    font-weight:700;
 }
 
-/* Table */
-.table-wrapper {
-    overflow-x: auto;
+/* ================= TOTAL BOX ================= */
+.total-box{
+    background:linear-gradient(135deg, var(--primary), #0d6efd);
+    color:white;
+    padding:14px 20px;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:600;
+    box-shadow:0 6px 18px rgba(0,0,0,0.1);
 }
 
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
+/* ================= CONTAINER ================= */
+.table-container{
+    width:100%;
+    background:var(--white);
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+    overflow:hidden;
 }
 
-/* Header row (blue theme) */
-.students-table thead {
-    background: var(--primary-blue);
+/* ================= TABLE WRAPPER ================= */
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border-radius:14px;
 }
 
-.students-table th {
-    padding: 14px;
-    text-align: left;
-    font-size: 14px;
-    color: white;
+/* ================= TABLE ================= */
+.students-table{
+    width:100%;
+    min-width:700px;
+    border-collapse:collapse;
 }
 
-.students-table td {
-    padding: 14px;
-    border-top: 1px solid #eee;
-    font-size: 14px;
-    color: var(--dark);
+/* ================= HEADER ================= */
+.students-table thead{
+    background:var(--primary);
 }
 
-/* Hover effect */
-.students-table tr:hover {
-    background: rgba(19, 144, 205, 0.08);
+.students-table th{
+    padding:16px;
+    text-align:left;
+    color:white;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    white-space:nowrap;
 }
 
-/* Amount */
-.amount {
-    font-weight: bold;
-    color: var(--primary-red);
+/* ================= BODY ================= */
+.students-table td{
+    padding:16px;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
+    white-space:nowrap;
 }
 
-/* Status badges (aligned to theme) */
-.badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: white;
+/* ================= HOVER ================= */
+.students-table tbody tr{
+    transition:0.2s ease;
 }
 
-.badge.success {
-    background: var(--primary-blue);
+.students-table tbody tr:hover{
+    background:#f0f9ff;
 }
 
-.badge.pending {
-    background: var(--primary-yellow);
-    color: black;
+/* ================= AMOUNT ================= */
+.amount{
+    color:var(--danger);
+    font-weight:700;
 }
 
-.badge.failed {
-    background: var(--primary-red);
+/* ================= BADGES ================= */
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:600;
+    text-transform:capitalize;
 }
 
-/* Empty */
-.no-results {
-    text-align: center;
-    padding: 20px;
-    color: #777;
+.badge.success{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge.pending{
+    background:#fef9c3;
+    color:#854d0e;
+}
+
+.badge.failed{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+/* ================= EMPTY ================= */
+.no-results{
+    text-align:center;
+    padding:25px;
+    color:#6b7280;
+}
+
+/* ================= WELFARE SUMMARY ================= */
+.welfare-summary{
+    margin-top:30px;
+}
+
+.welfare-summary h3{
+    margin-bottom:18px;
+    color:var(--primary);
+    font-size:24px;
+}
+
+/* ================= GRID ================= */
+.welfare-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:18px;
+}
+
+/* ================= CARDS ================= */
+.welfare-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    transition:0.2s ease;
+}
+
+.welfare-card:hover{
+    transform:translateY(-2px);
+}
+
+.welfare-card b{
+    display:block;
+    margin-bottom:10px;
+    font-size:14px;
+    color:#6b7280;
+}
+
+.welfare-card span{
+    font-size:24px;
+    font-weight:700;
+}
+
+.arrears{
+    color:var(--danger);
+}
+
+/* ================= LARGE SCREENS ================= */
+@media (min-width:1600px){
+
+    .content{
+        max-width:1600px;
+    }
+
+    .students-table th,
+    .students-table td{
+        padding:20px;
+        font-size:15px;
+    }
+
+}
+
+/* ================= TABLETS ================= */
+@media (max-width:992px){
+
+    .content{
+        padding:20px;
+    }
+
+    .table-container{
+        padding:18px;
+    }
+
+    .students-table{
+        min-width:650px;
+    }
+
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .content{
+        padding:12px;
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .table-header h2{
+        font-size:24px;
+    }
+
+    .total-box{
+        width:100%;
+        text-align:center;
+        font-size:16px;
+    }
+
+    .table-container{
+        padding:12px;
+        border-radius:14px;
+    }
+
+    .students-table th,
+    .students-table td{
+        padding:12px;
+        font-size:12px;
+    }
+
+    .badge{
+        font-size:11px;
+        padding:5px 10px;
+    }
+
+    .welfare-summary h3{
+        font-size:20px;
+    }
+
+    .welfare-card{
+        padding:16px;
+    }
+
+    .welfare-card span{
+        font-size:20px;
+    }
+
+}
+
+/* ================= SMALL PHONES ================= */
+@media (max-width:480px){
+
+    .content{
+        padding:10px;
+    }
+
+    .table-header h2{
+        font-size:20px;
+    }
+
+    .students-table th,
+    .students-table td{
+        font-size:11px;
+        padding:10px;
+    }
+
+    .total-box{
+        padding:12px;
+        font-size:15px;
+    }
+
+    .welfare-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+/* ================= PRINT ================= */
+@media print{
+
+    body{
+        background:white;
+    }
+
+    .content{
+        padding:0;
+    }
+
+    .table-container{
+        box-shadow:none;
+        border:none;
+    }
+
 }
 
 </style>
+
+
 
 {% endblock %}

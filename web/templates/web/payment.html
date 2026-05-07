@@ -87,189 +87,319 @@
 <!-- ================= CSS ================= -->
 <style>
 
-/* Brand Colors */
-:root {
-    --primary-red: #e72326;
-    --primary-yellow: #f5d021;
-    --primary-blue: #1390cd;
-    --gray: #f5f7fa;
+/* ================= ROOT COLORS ================= */
+:root{
+    --primary-red:#e72326;
+    --primary-yellow:#f5d021;
+    --primary-blue:#1390cd;
+    --gray:#f5f7fa;
+    --white:#ffffff;
 }
 
-/* Layout */
-.content {
-    padding: 20px;
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* Search */
-.search-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+    background:var(--gray);
+    font-family:Arial,sans-serif;
 }
 
-.search-bar input {
-    padding: 10px;
-    width: 280px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+/* ================= MAIN CONTENT ================= */
+.content{
+    width:100%;
+    min-height:100vh;
+    padding:25px 35px;
 }
 
-.search-bar input:focus {
-    outline: none;
-    border-color: var(--primary-blue);
+/* ================= SEARCH ================= */
+.search-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    max-width:600px;
+    margin-bottom:20px;
 }
 
-.search-bar button {
-    background: var(--primary-blue);
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
+.search-bar input{
+    flex:1;
+    padding:13px 15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+    background:white;
+    transition:0.3s ease;
 }
 
-/* Download Button */
-.download-container {
-    text-align: center;
-    margin-bottom: 20px;
+.search-bar input:focus{
+    outline:none;
+    border-color:var(--primary-blue);
+    box-shadow:0 0 0 3px rgba(19,144,205,0.15);
 }
 
-.download-btn {
-    background: linear-gradient(135deg, var(--primary-blue), #1390cd);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
+.search-bar button{
+    background:var(--primary-blue);
+    color:white;
+    border:none;
+    padding:13px 18px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s ease;
+    white-space:nowrap;
 }
 
-/* Title */
-#mn h2 {
-    text-align: center;
-    color: var(--primary-blue);
+.search-bar button:hover{
+    opacity:0.9;
 }
 
-/* Container */
-.table-container {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    border-top: 6px solid var(--primary-yellow);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+/* ================= DOWNLOAD BUTTON ================= */
+.download-container{
+    width:100%;
+    margin-bottom:20px;
 }
 
-/* Total */
-.total-row {
-    font-weight: 600;
-    color: var(--primary-red);
-    margin-bottom: 15px;
+.download-btn{
+    background:linear-gradient(135deg,var(--primary-blue),#0f7db4);
+    color:white;
+    border:none;
+    padding:13px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s ease;
 }
 
-/* Table */
-.table-wrapper {
-    overflow-x: auto;
+.download-btn:hover{
+    transform:translateY(-2px);
 }
 
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 700px;
+/* ================= TITLE ================= */
+#mn h2{
+    color:var(--primary-blue);
+    margin-bottom:20px;
+    font-size:30px;
 }
 
-/* Header */
-.students-table thead {
-    background: var(--primary-blue);
+/* ================= TABLE CONTAINER ================= */
+.table-container{
+    width:100%;
+    background:var(--white);
+    padding:25px;
+    border-radius:16px;
+    border-top:6px solid var(--primary-yellow);
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
 }
 
-.students-table th {
-    color: white;
-    padding: 14px;
-    text-align: left;
+/* ================= TOTAL ================= */
+.total-row{
+    font-size:18px;
+    font-weight:700;
+    color:var(--primary-red);
+    margin-bottom:20px;
 }
 
-/* Rows */
-.students-table td {
-    padding: 14px;
-    border-top: 1px solid #eee;
+/* ================= TABLE ================= */
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
 }
 
-/* Zebra */
-.students-table tbody tr:nth-child(even) {
-    background: var(--gray);
+.students-table{
+    width:100%;
+    border-collapse:collapse;
 }
 
-/* Hover */
-.students-table tr:hover {
-    background: rgba(19,144,205,0.1);
+/* HEADER */
+.students-table thead{
+    background:var(--primary-blue);
 }
 
-/* Amount */
-.amount {
-    font-weight: bold;
-    color: var(--primary-red);
+.students-table th{
+    color:white;
+    padding:16px;
+    text-align:left;
+    font-size:14px;
+    white-space:nowrap;
 }
 
-/* Badges */
-.badge {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: white;
+/* BODY */
+.students-table td{
+    padding:16px;
+    border-top:1px solid #eee;
+    white-space:nowrap;
+    font-size:14px;
 }
 
-.badge.success { background: var(--primary-blue); }
-.badge.pending { background: var(--primary-yellow); color: black; }
-.badge.failed { background: var(--primary-red); }
-
-/* Empty */
-.no-results {
-    text-align: center;
-    padding: 20px;
-    color: #777;
+/* ZEBRA */
+.students-table tbody tr:nth-child(even){
+    background:var(--gray);
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    .search-bar {
-        margin-left: 20px;
-        flex-direction:inherit;
-        gap: 5px;
-        width: 50%;
+/* HOVER */
+.students-table tbody tr{
+    transition:0.2s ease;
+}
+
+.students-table tbody tr:hover{
+    background:rgba(19,144,205,0.1);
+}
+
+/* AMOUNT */
+.amount{
+    font-weight:bold;
+    color:var(--primary-red);
+}
+
+/* BADGES */
+.badge{
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    color:white;
+    font-weight:600;
+    display:inline-block;
+}
+
+.badge.success{
+    background:var(--primary-blue);
+}
+
+.badge.pending{
+    background:var(--primary-yellow);
+    color:black;
+}
+
+.badge.failed{
+    background:var(--primary-red);
+}
+
+/* EMPTY */
+.no-results{
+    text-align:center;
+    padding:25px;
+    color:#777;
+}
+
+/* ================= LARGE DESKTOP ================= */
+@media (min-width:1600px){
+
+    .content{
+        padding:35px 60px;
+    }
+
+    .students-table th,
+    .students-table td{
+        padding:20px;
+        font-size:15px;
+    }
+
+    #mn h2{
+        font-size:36px;
+    }
+
+}
+
+/* ================= TABLET ================= */
+@media (max-width:1024px){
+
+    .content{
+        padding:20px;
+    }
+
+    .table-container{
+        padding:18px;
+    }
+
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .content{
+        padding:12px;
+    }
+
+    .search-bar{
+        flex-direction:column;
+        align-items:stretch;
+        max-width:100%;
     }
 
     .search-bar input,
-    .search-bar button {
-        width: 30%;
-        padding: 10px;
-        margin: 5px 0;
-    }
-}
-    .students-table th,
-    .students-table td {
-        font-size: 12px;
-        padding: 10px;
+    .search-bar button{
+        width:100%;
     }
 
-
-/* Print */
-@media print {
-    .students-table th,
-    .students-table td {
-        font-size: 10px;
-        padding: 4px;
+    .download-btn{
+        width:100%;
     }
+
+    .table-container{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    #mn h2{
+        font-size:22px;
+    }
+
+    .students-table th,
+    .students-table td{
+        font-size:12px;
+        padding:12px;
+    }
+
+    .badge{
+        font-size:10px;
+        padding:5px 8px;
+    }
+
 }
-.download-container {
-    text-align: left;
-    margin-bottom: 20px;
-    margin-left: 20px;
+
+/* ================= EXTRA SMALL DEVICES ================= */
+@media (max-width:480px){
+
+    .students-table th,
+    .students-table td{
+        font-size:11px;
+        padding:10px;
+    }
+
 }
-#mn h2 {
-    text-align: left;
-     margin-left: 20px;
-    color: var(--primary-blue);
+
+/* ================= PRINT ================= */
+@media print{
+
+    .search-bar,
+    .download-container{
+        display:none;
+    }
+
+    .content{
+        padding:0;
+        background:white;
+    }
+
+    .table-container{
+        box-shadow:none;
+        border:none;
+        padding:0;
+    }
+
+    .students-table th,
+    .students-table td{
+        font-size:10px;
+        padding:6px;
+    }
+
 }
 
 </style>

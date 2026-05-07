@@ -105,6 +105,24 @@
         font-size: 12px;   /* keep text readable */
     }
 }
+
+/* ================= FOOTER ================= */
+footer{
+    margin-top:40px;
+    background:#051634;
+    color:white;
+    padding:25px;
+    text-align:center;
+    font-size:14px;
+}
+
+/* ================= TABLET ================= */
+@media(max-width:1100px){
+
+    .container{
+        grid-template-columns:1fr;
+    }
+  }
         </style>          
              {% for room in tips %}
              {% if room.host == request.user %}

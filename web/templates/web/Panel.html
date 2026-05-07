@@ -5,7 +5,7 @@
 <div class="content">
 <form method="get" class="filter-bar">
     <select name="group" onchange="this.form.submit()">
-        <option value="">All Groups</option>
+        <option value="">GCI Groups</option>
         <option value="swap" {% if request.GET.group == "swap" %}selected{% endif %}>swap</option>
         <option value="couple" {% if request.GET.group == "couple" %}selected{% endif %}>couple</option>
         <option value="parent" {% if request.GET.group == "parent" %}selected{% endif %}>parent</option>
@@ -72,139 +72,288 @@
     </div>
 
 </div>
-
 <style>
 
-/* Brand Colors */
-:root {
-    --primary-red: #e72326;
-    --primary-yellow: #f5d021;
-    --primary-blue: #1390cd;
-    --dark: #000000;
-    --light: #e9e8b7;
+/* ================= ROOT COLORS ================= */
+:root{
+    --primary-red:#e72326;
+    --primary-yellow:#f5d021;
+    --primary-blue:#1390cd;
+    --dark:#000000;
+    --light:#f5f7fa;
+    --white:#ffffff;
 }
 
-/* Layout */
-.content {
-    margin-top: 25px;
-    padding: 15px;
-}
-/* FILTER BAR */
-.filter-bar {
-    margin-bottom: 15px;
+/* ================= RESET ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.filter-bar select {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    cursor: pointer;
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+    background:var(--light);
+    font-family:Arial,sans-serif;
 }
 
-.filter-bar select:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-}
-/* Header */
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+/* ================= PAGE CONTENT ================= */
+.content{
+    width:100%;
+    min-height:100vh;
+    padding:25px 35px;
 }
 
-.table-header h2 {
-    margin: 0;
-    color: var(--primary-blue);
+/* ================= FILTER BAR ================= */
+.filter-bar{
+    margin-bottom:20px;
+    width:100%;
 }
 
-/* Total box (use red + yellow accent) */
-.total-box {
-    background: var(--primary-blue);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-weight: 600;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+.filter-bar select{
+    padding:12px 16px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:15px;
+    cursor:pointer;
+    min-width:220px;
+    background:white;
+    transition:0.3s ease;
 }
 
-/* Container */
-.table-container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    border-top: 5px solid var(--primary-yellow);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+.filter-bar select:focus{
+    outline:none;
+    border-color:var(--primary-blue);
+    box-shadow:0 0 0 3px rgba(19,144,205,0.12);
 }
 
-/* Table */
-.table-wrapper {
-    overflow-x: auto;
+/* ================= HEADER ================= */
+.table-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
 }
 
-.students-table {
-    width: 80%;
-    border-collapse: collapse;
+.table-header h2{
+    color:var(--primary-blue);
+    font-size:30px;
+    font-weight:700;
 }
 
-/* Header row (blue theme) */
-.students-table thead {
-    background: var(--primary-blue);
+/* ================= TOTAL BOX ================= */
+.total-box{
+    background:var(--primary-blue);
+    color:white;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:600;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    font-size:15px;
 }
 
-.students-table th {
-    padding: 14px;
-    text-align: left;
-    font-size: 14px;
-    color: white;
+/* ================= TABLE CONTAINER ================= */
+.table-container{
+    width:100%;
+    background:var(--white);
+    padding:25px;
+    border-radius:16px;
+    border-top:6px solid var(--primary-yellow);
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
 }
 
-.students-table td {
-    padding: 14px;
-    border-top: 1px solid #eee;
-    font-size: 14px;
-    color: var(--dark);
+/* ================= TABLE ================= */
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
 }
 
-/* Hover effect */
-.students-table tr:hover {
-    background: rgba(19, 144, 205, 0.08);
+.students-table{
+    width:100%;
+    border-collapse:collapse;
 }
 
-/* Amount */
-.amount {
-    font-weight: bold;
-    color: var(--primary-red);
+/* ================= TABLE HEADER ================= */
+.students-table thead{
+    background:var(--primary-blue);
 }
 
-/* Status badges (aligned to theme) */
-.badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: white;
+.students-table th{
+    padding:16px;
+    text-align:left;
+    font-size:14px;
+    color:white;
+    white-space:nowrap;
 }
 
-.badge.success {
-    background: var(--primary-blue);
+/* ================= TABLE BODY ================= */
+.students-table td{
+    padding:16px;
+    border-top:1px solid #eee;
+    font-size:14px;
+    color:var(--dark);
+    white-space:nowrap;
 }
 
-.badge.pending {
-    background: var(--primary-yellow);
-    color: black;
+/* ================= ROW EFFECTS ================= */
+.students-table tbody tr{
+    transition:0.2s ease;
 }
 
-.badge.failed {
-    background: var(--primary-red);
+.students-table tbody tr:hover{
+    background:rgba(19,144,205,0.08);
 }
 
-/* Empty */
-.no-results {
-    text-align: center;
-    padding: 20px;
-    color: #777;
+/* ================= AMOUNT ================= */
+.amount{
+    font-weight:bold;
+    color:var(--primary-red);
+}
+
+/* ================= BADGES ================= */
+.badge{
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+    color:white;
+    display:inline-block;
+}
+
+.badge.success{
+    background:var(--primary-blue);
+}
+
+.badge.pending{
+    background:var(--primary-yellow);
+    color:black;
+}
+
+.badge.failed{
+    background:var(--primary-red);
+}
+
+/* ================= EMPTY ================= */
+.no-results{
+    text-align:center;
+    padding:25px;
+    color:#777;
+}
+
+/* ================= LARGE DESKTOP ================= */
+@media (min-width:1600px){
+
+    .content{
+        padding:35px 60px;
+    }
+
+    .students-table th,
+    .students-table td{
+        padding:20px;
+        font-size:15px;
+    }
+
+    .table-header h2{
+        font-size:36px;
+    }
+
+}
+
+/* ================= TABLET ================= */
+@media (max-width:1024px){
+
+    .content{
+        padding:20px;
+    }
+
+    .table-container{
+        padding:18px;
+    }
+
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .content{
+        padding:12px;
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .table-header h2{
+        font-size:22px;
+    }
+
+    .filter-bar select{
+        width:100%;
+        min-width:100%;
+    }
+
+    .total-box{
+        width:100%;
+    }
+
+    .table-container{
+        padding:12px;
+        border-radius:12px;
+    }
+
+    .students-table th,
+    .students-table td{
+        font-size:12px;
+        padding:12px;
+    }
+
+    .badge{
+        font-size:10px;
+        padding:5px 8px;
+    }
+
+}
+
+/* ================= EXTRA SMALL DEVICES ================= */
+@media (max-width:480px){
+
+    .students-table th,
+    .students-table td{
+        font-size:11px;
+        padding:10px;
+    }
+
+}
+
+/* ================= PRINT ================= */
+@media print{
+
+    .filter-bar{
+        display:none;
+    }
+
+    .content{
+        padding:0;
+        background:white;
+    }
+
+    .table-container{
+        box-shadow:none;
+        border:none;
+        padding:0;
+    }
+
+    .students-table th,
+    .students-table td{
+        font-size:10px;
+        padding:6px;
+    }
+
 }
 
 </style>
