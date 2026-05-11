@@ -17,7 +17,7 @@ from .models import user, message,Msg
 from django.contrib.auth import authenticate, login, logout,update_session_auth_hash
 from .models import tips
 from .models import room, group,update,cash_expenditure
-from .forms import RoomForm, CustomUserCreationForm, MsgForm, message,MessageForm
+from .forms import RoomForm, CustomUserCreationForm, MsgForm, message,MessageForm, MpesaTransactionForm
 from .forms import UpdateForm, cash_expenditureForm
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
@@ -173,8 +173,8 @@ def home(request):
    # tips = room.objects.filter(host=request.user) 
     tips = room.objects.filter(
         Q(group__name__icontains=q) |
-        Q(Othername__icontains=q) |
-        Q(lastName__icontains=q) 
+        Q(FullName__icontains=q) |
+        Q(HBC__icontains=q) 
         
         
                                      
@@ -322,7 +322,7 @@ def members(request):
    
     if query:
         member = member.filter(
-            Firstname__icontains=query
+            FullName__icontains=query
         ) | member.filter(
             Email__icontains=query
         ) | member.filter(
@@ -777,6 +777,26 @@ def remove_admin(request, user_id):
     messages.success(request, f"{user.username} is no longer an admin.")
     return redirect('admi')
 
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def manual_transaction(request):
+
+    form = MpesaTransactionForm()
+
+    if request.method == 'POST':
+
+        form = MpesaTransactionForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'web/manual_transaction.html', context)
     
 
 

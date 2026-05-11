@@ -45,6 +45,7 @@ path('make-admin/<int:user_id>/', views.make_admin, name='make_admin'),
 path('remove-admin/<int:user_id>/', views.remove_admin, name='remove_admin'),
 path('bulk-sms/', views.bulk_sms_view, name='bulk_sms'),
 path('admi/', views.admi, name='admi'),
+path('manual-transaction/', views.manual_transaction, name='manual_transaction'),
  
 
 

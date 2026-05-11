@@ -24,9 +24,9 @@ class group(models.Model):
 class room(models.Model): 
     host=models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     group=models.ForeignKey(group, on_delete=models.SET_NULL, null=True) 
-    Firstname = models.CharField(null=True, blank=True, max_length=200)
-    Othername=models.CharField(max_length=255)
-    lastName = models.CharField(null=True, blank=True, max_length=200)
+    #Firstname = models.CharField(null=True, blank=True, max_length=200)
+    FullName=models.CharField(max_length=255)
+    #lastName = models.CharField(null=True, blank=True, max_length=200)
     Email = models.EmailField(null=True, blank=True, max_length=200)
     phone = models.CharField(null=True, blank=True, max_length=200)
     id_number= models.CharField(null=True, blank=True, max_length=255) 
@@ -94,7 +94,7 @@ class room(models.Model):
         ordering = ['-updated', '-created']
 
     def __str__(self):
-     return self.Othername if self.Othername is not None else "Unnamed"
+     return self.FullName if self.FullName is not None else "Unnamed"
     
 class message(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE) 
