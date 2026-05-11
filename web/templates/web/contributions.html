@@ -6,12 +6,40 @@
 
     <!-- Header -->
     <div class="table-header">
-        <h2>Transaction History</h2>
+       <h2>Welfare Summary</h2>
         <div class="total-box">
             Total: <strong>Ksh {{ total_amount }}</strong>
         </div>
     </div>
+<div class="welfare-summary">
 
+    
+
+    <div class="welfare-grid">
+
+        <div class="welfare-card">
+            <b>Paid Months</b>
+            <span>{{ paid_months }}</span>
+        </div>
+
+        <div class="welfare-card">
+            <b>Missing Months</b>
+            <span>{{ months_missing }}</span>
+        </div>
+
+        <div class="welfare-card">
+            <b>Total Arrears</b>
+            <span class="arrears">
+                Ksh {{ amount_due }}
+            </span>
+        </div>
+
+    </div>
+ <!-- Header -->
+    
+        <h3>Transaction History</h3>
+  
+</div>
     <!-- Table -->
     <div class="table-container">
         <div class="table-wrapper">
@@ -52,32 +80,7 @@
         </div>
         
 
-<div class="welfare-summary">
 
-    <h3>Welfare Summary</h3>
-
-    <div class="welfare-grid">
-
-        <div class="welfare-card">
-            <b>Paid Months</b>
-            <span>{{ paid_months }}</span>
-        </div>
-
-        <div class="welfare-card">
-            <b>Missing Months</b>
-            <span>{{ months_missing }}</span>
-        </div>
-
-        <div class="welfare-card">
-            <b>Total Arrears</b>
-            <span class="arrears">
-                Ksh {{ amount_due }}
-            </span>
-        </div>
-
-    </div>
-
-</div>
     </div>
 
 </div>
@@ -107,7 +110,6 @@
 html,
 body{
     width:100%;
-    overflow-x:hidden;
     font-family:"Segoe UI", Arial, sans-serif;
     background:var(--bg);
     color:var(--text);

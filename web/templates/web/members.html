@@ -38,8 +38,8 @@
                     <thead>
                         <tr>
                             <th>Username</th>
-                            <th>Firstname</th>
-                            <th>Last Name</th>
+                            <th>FullName</th>
+                            <th>Email</th>
                             <th>Category</th>
                             <th>HBC</th>
                             <th>More Info</th>
@@ -52,8 +52,8 @@
                         {% for room in member %}
                         <tr>
                             <td>{{ room.host }}</td>
-                            <td>{{ room.Firstname }}</td>
-                            <td>{{ room.lastName }}</td>
+                            <td>{{ room.FullName }}</td>
+                            <td>{{ room.Email }}</td>
                             <td>{{ room.group }}</td>
                             <td>{{ room.HBC }}</td>
 

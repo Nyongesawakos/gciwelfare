@@ -1,119 +1,19 @@
 {% include 'main.html' %}
-{%load static%}
+{% load static %}
 
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    .sub-header {
-      background-color: #BA8E23;
-      color: white;
-      padding: 10px 20px;
-    }
-
-    .menu-toggle {
-      display: none;
-      font-size: 24px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-
-    .sub-nav {
-      display: flex;
-      gap: 20px;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sub-nav li a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 12px;
-      display: block;
-    }
-
-    .sub-nav li a:hover {
-      background-color: #575757;
-      border-radius: 4px;
-    }
-
-    /* Mobile view */
-    @media (max-width: 768px) {
-      .sub-nav {
-        display: none;
-        flex-direction: column;
-        margin-top: 10px;
-      }
-
-      .sub-nav.show {
-        display: flex;
-      }
-
-      .menu-toggle {
-        display: block;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="sub-header">
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    <ul class="sub-nav" id="subNav">
-      <li><a href="{% url 'root' %}">Home</a></li>
-      <li><a href="{% url 'home' %}">Go to welfare</a></li>
-      <li><a href="{% url 'about' %}">About Us</a></li>
-      <li><a href="{% url 'activities' %}">Activities</a></li>
-      
-    </ul>
-  </div>
-
-  <script>
-    function toggleMenu() {
-      document.getElementById('subNav').classList.toggle('show');
-    }
-  </script>
-
-</body>
-</html>
-
-<body>
-    
-  <div class="hero-section">
-    <div class="background-overlay"></div>
-    
-    <div class="carousel">
-      <div class="slide active">Welcome to <b style="color: #BA8E23;">GCIWELFARE</b><br>We are happy to have you on board</div>
-      <div class="slide">You can Contact us Through<br>Our social media platforms</div>
-      <div class="slide">This is our Welfare Contact <br>0789592245</div>
-      
-      <button class="prev">&#10094;</button>
-      <button class="next">&#10095;</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+{% block content %}
 
 <style>
 
 /* ================= ROOT ================= */
 :root{
-    --primary-gold:#BA8E23;
-    --primary-dark:#051634;
+    --primary:#051634;
+    --gold:#BA8E23;
     --white:#ffffff;
-    --overlay:rgba(0,0,0,0.55);
+    --light:#f5f7fb;
+    --text:#1f2937;
+    --overlay:rgba(5,22,52,0.72);
+    --shadow:0 10px 30px rgba(0,0,0,0.12);
 }
 
 /* ================= RESET ================= */
@@ -123,54 +23,78 @@
     box-sizing:border-box;
 }
 
-html, body{
-    width:100%; /* 🔥 removes scroll bar issue */
-    font-family:Arial,sans-serif;
-    background:#f4f6f8;
+html{
+    scroll-behavior:smooth;
 }
 
-/* ================= SUB HEADER ================= */
+body{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:var(--light);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+/* ================= NAVBAR ================= */
 .sub-header{
     width:100%;
-    background:#051634;
+    background:rgba(5,22,52,0.96);
     backdrop-filter:blur(10px);
-    padding:14px 25px;
-    position:relative;
-    top: 0;
+    position:sticky;
+    top:0;
+    z-index:999;
+    box-shadow:0 2px 15px rgba(0,0,0,0.1);
+}
+
+.nav-container{
+    max-width:1400px;
+    margin:auto;
+    padding:15px 25px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    flex-wrap:wrap;
-    z-index:1000;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    color:var(--white);
+    font-size:1.6rem;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:var(--gold);
 }
 
 .menu-toggle{
     display:none;
-    font-size:30px;
     background:none;
     border:none;
     color:white;
+    font-size:28px;
     cursor:pointer;
 }
 
 .sub-nav{
     display:flex;
+    align-items:center;
     gap:12px;
     list-style:none;
-    flex-wrap:wrap;
 }
 
 .sub-nav li a{
     color:white;
     text-decoration:none;
-    padding:10px 14px;
-    border-radius:8px;
+    padding:10px 16px;
+    border-radius:10px;
+    font-size:15px;
     font-weight:600;
     transition:0.3s ease;
 }
 
 .sub-nav li a:hover{
-    background:var(--primary-gold);
+    background:var(--gold);
+    color:#111;
 }
 
 /* ================= HERO ================= */
@@ -178,64 +102,175 @@ html, body{
     position:relative;
     width:100%;
     min-height:100vh;
-    background:url("{% static '/images/welfare.jpg' %}") center/cover no-repeat;
+    background:url("{% static 'images/welfare.jpg' %}") center/cover no-repeat;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
+    padding:40px 20px;
 }
 
-/* OVERLAY */
 .background-overlay{
     position:absolute;
     inset:0;
     background:var(--overlay);
 }
 
+/* ================= HERO CONTENT ================= */
+.hero-content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:1200px;
+    text-align:center;
+    color:white;
+}
+
 /* ================= CAROUSEL ================= */
 .carousel{
     position:relative;
-    z-index:2;
-    width:90%;
-    max-width:1100px;
-    text-align:center;
-    color:white;
-    padding:20px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    backdrop-filter:blur(12px);
+    border-radius:28px;
+    padding:70px 40px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
 }
 
-/* SLIDES */
+/* ================= SLIDES ================= */
 .slide{
     display:none;
-    font-size:clamp(1.5rem, 4vw, 4rem);
-    font-weight:700;
-    line-height:1.4;
-    padding:10px;
+    animation:fade 0.5s ease;
 }
 
 .slide.active{
     display:block;
 }
 
-/* ================= BUTTONS ================= */
-button.prev,
-button.next{
+.slide h1{
+    font-size:clamp(2rem,5vw,5rem);
+    margin-bottom:20px;
+    line-height:1.2;
+    font-weight:800;
+}
+
+.slide p{
+    font-size:clamp(1rem,2vw,1.3rem);
+    line-height:1.8;
+    max-width:850px;
+    margin:auto;
+    color:#f3f4f6;
+}
+
+/* ================= CTA BUTTON ================= */
+.hero-btn{
+    margin-top:35px;
+    display:inline-block;
+    background:linear-gradient(135deg,var(--gold),#d4a72d);
+    color:#111;
+    text-decoration:none;
+    padding:16px 32px;
+    border-radius:14px;
+    font-size:17px;
+    font-weight:700;
+    transition:0.3s ease;
+    box-shadow:0 8px 20px rgba(186,142,35,0.35);
+}
+
+.hero-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* ================= CAROUSEL BUTTONS ================= */
+.prev,
+.next{
     position:absolute;
     top:50%;
     transform:translateY(-50%);
-    width:50px;
-    height:50px;
+    width:55px;
+    height:55px;
     border:none;
     border-radius:50%;
-    background:rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.12);
     color:white;
-    font-size:1.5rem;
+    font-size:24px;
     cursor:pointer;
+    transition:0.3s ease;
 }
 
-button.prev{ left:10px; }
-button.next{ right:10px; }
+.prev:hover,
+.next:hover{
+    background:var(--gold);
+    color:#111;
+}
+
+.prev{
+    left:20px;
+}
+
+.next{
+    right:20px;
+}
+
+/* ================= DOTS ================= */
+.carousel-dots{
+    margin-top:30px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.4);
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+.dot.active{
+    background:var(--gold);
+    transform:scale(1.2);
+}
+
+/* ================= FOOTER ================= */
+.footer{
+    background:#051634;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+    font-size:15px;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ================= TABLET ================= */
+@media(max-width:992px){
+
+    .carousel{
+        padding:60px 25px;
+    }
+
+    .prev,
+    .next{
+        width:48px;
+        height:48px;
+    }
+}
 
 /* ================= MOBILE ================= */
-@media (max-width:768px){
+@media(max-width:768px){
 
     .menu-toggle{
         display:block;
@@ -245,71 +280,254 @@ button.next{ right:10px; }
         display:none;
         flex-direction:column;
         width:100%;
-        margin-top:10px;
+        margin-top:15px;
+        background:rgba(255,255,255,0.03);
+        border-radius:14px;
+        padding:12px;
     }
 
     .sub-nav.show{
         display:flex;
     }
 
+    .sub-nav li{
+        width:100%;
+    }
+
     .sub-nav li a{
         width:100%;
         display:block;
-        background:rgba(255,255,255,0.06);
+    }
+
+    .nav-container{
+        flex-wrap:wrap;
     }
 
     .carousel{
-        width:95%;
+        padding:70px 20px;
+        border-radius:20px;
     }
 
-    button.prev,
-    button.next{
-        width:40px;
-        height:40px;
+    .slide h1{
+        font-size:2rem;
+    }
+
+    .slide p{
+        font-size:1rem;
+    }
+
+    .hero-btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .prev,
+    .next{
+        width:42px;
+        height:42px;
+        font-size:18px;
+    }
+}
+
+/* ================= SMALL DEVICES ================= */
+@media(max-width:480px){
+
+    .hero-section{
+        padding:20px 12px;
+    }
+
+    .carousel{
+        padding:60px 15px;
+    }
+
+    .slide h1{
+        font-size:1.6rem;
+    }
+
+    .slide p{
+        font-size:0.95rem;
+        line-height:1.6;
+    }
+
+    .logo{
         font-size:1.2rem;
     }
 }
+/* Hide by default (desktop) */
+.logo{
+    display:none;
+}
 
-/* ================= SMALL PHONES ================= */
-@media (max-width:480px){
+/* Show on small screens */
+@media (max-width:768px){
 
-    .slide{
-        font-size:1.3rem;
+    .logo{
+        display:block;
+        color:white;
+        font-size:22px;
+        font-weight:800;
     }
 
-    .sub-header{
-        padding:10px;
+    .logo span{
+        color:#BA8E23;
     }
 }
 </style>
-<script>
-const slides = document.querySelectorAll('.slide');
-let current = 0;
 
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.classList.remove('active');
-    if (i === index) slide.classList.add('active');
-  });
+<!-- ================= NAVBAR ================= -->
+<div class="sub-header">
+
+    <div class="nav-container">
+
+        <div class="logo">
+            GCI<span>WELFARE</span>
+        </div>
+
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+        <ul class="sub-nav" id="subNav">
+            <li><a href="{% url 'root' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">Welfare Portal</a></li>
+            <li><a href="{% url 'about' %}">About Us</a></li>
+            <li><a href="{% url 'activities' %}">Activities</a></li>
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero-section">
+
+    <div class="background-overlay"></div>
+
+    <div class="hero-content">
+
+        <div class="carousel">
+
+            <!-- SLIDE 1 -->
+            <div class="slide active">
+                <h1>
+                    Welcome To <span style="color:#BA8E23;">GCIWELFARE</span>
+                </h1>
+
+                <p>
+                    A modern welfare management platform designed to keep members connected,
+                    informed, and empowered through contributions, updates, and community support.
+                </p>
+
+                <a href="{% url 'home' %}" class="hero-btn">
+                    Enter Welfare Portal
+                </a>
+            </div>
+
+            <!-- SLIDE 2 -->
+            <div class="slide">
+                <h1>Stay Connected</h1>
+
+                <p>
+                    Receive important welfare updates, announcements,
+                    and contribution details directly from the management team.
+                </p>
+
+                <a href="{% url 'activities' %}" class="hero-btn">
+                    View Activities
+                </a>
+            </div>
+
+            <!-- SLIDE 3 -->
+            <div class="slide">
+                <h1>Need Assistance?</h1>
+
+                <p>
+                    Contact the welfare support team anytime through our official
+                    communication channels for quick assistance and guidance.
+                </p>
+
+                <a href="tel:0789592245" class="hero-btn">
+                    Call 0789592245
+                </a>
+            </div>
+
+            <!-- CONTROLS -->
+            <button class="prev">&#10094;</button>
+            <button class="next">&#10095;</button>
+
+            <!-- DOTS -->
+            <div class="carousel-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    © 2026 GCI Welfare Management. All Rights Reserved.
+</footer>
+
+<script>
+
+function toggleMenu() {
+    document.getElementById('subNav').classList.toggle('show');
 }
 
-document.querySelector('.prev').addEventListener('click', () => {
-  current = (current - 1 + slides.length) % slides.length;
-  showSlide(current);
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+
+let current = 0;
+
+function showSlide(index){
+
+    slides.forEach((slide,i)=>{
+        slide.classList.remove('active');
+        dots[i].classList.remove('active');
+
+        if(i === index){
+            slide.classList.add('active');
+            dots[i].classList.add('active');
+        }
+    });
+}
+
+document.querySelector('.next').addEventListener('click', ()=>{
+
+    current = (current + 1) % slides.length;
+    showSlide(current);
+
 });
 
-document.querySelector('.next').addEventListener('click', () => {
-  current = (current + 1) % slides.length;
-  showSlide(current);
+document.querySelector('.prev').addEventListener('click', ()=>{
+
+    current = (current - 1 + slides.length) % slides.length;
+    showSlide(current);
+
 });
 
-// Auto-rotate every 5 seconds
-setInterval(() => {
-  current = (current + 1) % slides.length;
-  showSlide(current);
-}, 5000);
+dots.forEach((dot,index)=>{
+
+    dot.addEventListener('click', ()=>{
+
+        current = index;
+        showSlide(current);
+
+    });
+
+});
+
+/* AUTO SLIDE */
+setInterval(()=>{
+
+    current = (current + 1) % slides.length;
+    showSlide(current);
+
+},5000);
 
 </script>
-<footer style="background-color:#051634; color:white; padding:40px 20px; font-family:sans-serif;">
-<p style="text-align: center;"> 2026 GCI Welfare Management. All rights reserved.</p>
 
+{% endblock %}

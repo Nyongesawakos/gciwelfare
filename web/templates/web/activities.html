@@ -1,277 +1,447 @@
 {% include 'main.html' %}
-{%load static%}
+{% load static %}
 
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .sub-header {
-      background-color: #BA8E23;
-      color: white;
-      padding: 10px 20px;
-    }
+<title>Membership Benefits | GCI Welfare</title>
 
-    .menu-toggle {
-      display: none;
-      font-size: 24px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
+<style>
 
-    .sub-nav {
-      display: flex;
-      gap: 20px;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+/* ================= ROOT ================= */
+:root{
+    --primary:#051634;
+    --gold:#BA8E23;
+    --light:#f4f6f8;
+    --white:#ffffff;
+    --text:#1f2937;
+    --border:#e5e7eb;
+    --shadow:0 8px 24px rgba(0,0,0,0.08);
+}
 
-    .sub-nav li a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 12px;
-      display: block;
-    }
-
-    .sub-nav li a:hover {
-      background-color: #575757;
-      border-radius: 4px;
-    }
-
-    /* Mobile view */
-    @media (max-width: 768px) {
-      .sub-nav {
-        display: none;
-        flex-direction: column;
-        margin-top: 10px;
-      }
-
-      .sub-nav.show {
-        display: flex;
-      }
-
-      .menu-toggle {
-        display: block;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="sub-header">
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    <ul class="sub-nav" id="subNav">
-       <li><a href="{% url 'root' %}">Home</a></li>
-      <li><a href="{% url 'home' %}">Go to welfare</a></li>
-      <li><a href="{% url 'about' %}">About Us</a></li>
-      <li><a href="{% url 'activities' %}">Activities</a></li>
-      
-    </ul>
-  </div>
-
-  <script>
-    function toggleMenu() {
-      document.getElementById('subNav').classList.toggle('show');
-    }
-  </script>
-
-</body>
-</html>
-
-<body>
-    
- <p class="title">The benefits for Membership</p>
-
-<div class="card">
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>Description of benefit</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>Wedding of a member (Cash or gift).</td>
-                    <td>5,000. If both members 7,500</td>
-                </tr>
-
-                <tr>
-                    <td>Newborn</td>
-                    <td>3000</td>
-                </tr>
-
-                <tr>
-                    <td>Death of a member</td>
-                    <td>30000</td>
-                </tr>
-
-                <tr>
-                    <td>Death of a spouse</td>
-                    <td>30,000</td>
-                </tr>
-
-                <tr>
-                    <td>Death of a child</td>
-                    <td>25,000</td>
-                </tr>
-
-                <tr>
-                    <td>Death of a parent / parent-in-law</td>
-                    <td>20,000</td>
-                </tr>
-
-                <tr>
-                    <td>Hospital visitation / ailment of a member</td>
-                    <td>5% of bill. Max 15,000</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-      <style>
-
-
-
-        /* ===== PAGE BACKGROUND ===== */
-body{
+/* ================= RESET ================= */
+*{
     margin:0;
-    font-family:Arial, sans-serif;
-    background:#f4f6f8;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* ===== TITLE ===== */
-.title{
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:var(--light);
+    color:var(--text);
+}
+
+/* ================= NAVBAR ================= */
+.sub-header{
+    width:100%;
+    background:rgba(5,22,52,0.96);
+    backdrop-filter:blur(10px);
+    padding:16px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 3px 12px rgba(0,0,0,0.08);
+}
+
+.logo{
+    color:white;
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:var(--gold);
+}
+
+.menu-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.sub-nav{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    list-style:none;
+}
+
+.sub-nav li a{
+    text-decoration:none;
+    color:white;
+    font-weight:600;
+    padding:10px 16px;
+    border-radius:8px;
+    transition:0.3s ease;
+}
+
+.sub-nav li a:hover{
+    background:var(--gold);
+    transform:translateY(-2px);
+}
+
+/* ================= PAGE HERO ================= */
+.hero{
+    width:100%;
+    padding:70px 20px 40px;
     text-align:center;
-    color:#BA8E23;
-    font-weight:bold;
-    margin:20px 0;
+    background:linear-gradient(rgba(5,22,52,0.85), rgba(5,22,52,0.85)),
+    url("{% static 'images/welfare.jpg' %}") center/cover no-repeat;
+    color:white;
 }
 
-/* ===== CARD (CENTERED + TRANSPARENT) ===== */
+.hero h1{
+    font-size:clamp(2rem, 5vw, 4rem);
+    margin-bottom:15px;
+    font-weight:800;
+}
+
+.hero p{
+    max-width:800px;
+    margin:auto;
+    font-size:clamp(1rem, 2vw, 1.2rem);
+    line-height:1.8;
+    opacity:0.95;
+}
+
+/* ================= MAIN CONTENT ================= */
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+/* ================= CARD ================= */
 .card{
-    width:90%;
-    max-width:1000px;
-    margin:20px auto;              /* ✅ centers it */
-    background:rgba(255,255,255,0.75); /* ✅ transparency */
-    backdrop-filter:blur(8px);
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    background:rgba(255,255,255,0.95);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+    overflow:hidden;
 }
 
-/* ===== TABLE WRAPPER ===== */
+/* ================= SECTION TITLE ================= */
+.section-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.section-title h2{
+    color:var(--primary);
+    font-size:clamp(1.6rem, 4vw, 2.5rem);
+    margin-bottom:10px;
+}
+
+.section-title p{
+    color:#6b7280;
+    font-size:15px;
+}
+
+/* ================= TABLE ================= */
 .table-wrapper{
     width:100%;
     overflow-x:auto;
+    border-radius:16px;
 }
 
-/* ===== TABLE ===== */
 table{
     width:100%;
     border-collapse:collapse;
-    text-align:left;
+    min-width:700px;
+    background:white;
 }
 
-/* HEADER */
+/* TABLE HEADER */
+thead{
+    background:var(--primary);
+}
+
 th{
-    background:#1390cd;
     color:white;
-    padding:12px;
+    text-align:left;
+    padding:18px;
     font-size:14px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
 }
 
-/* CELLS */
+/* TABLE BODY */
 td{
-    padding:12px;
-    border-bottom:1px solid #eee;
+    padding:18px;
+    border-bottom:1px solid var(--border);
+    font-size:15px;
+    line-height:1.6;
+}
+
+/* ROW EFFECT */
+tbody tr{
+    transition:0.25s ease;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
+
+/* AMOUNT COLUMN */
+.amount{
+    color:var(--gold);
+    font-weight:700;
+    white-space:nowrap;
+}
+
+/* ================= FOOTER ================= */
+.footer{
+    background:var(--primary);
+    color:white;
+    text-align:center;
+    padding:28px 20px;
+    margin-top:40px;
     font-size:14px;
-    color:#333;
 }
 
-/* ROW HOVER */
-tr:hover{
-    background:rgba(19,144,205,0.08);
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width:768px){
+/* ================= TABLET ================= */
+@media (max-width:900px){
 
     .card{
-        width:95%;
-        padding:15px;
-    }
-        .sub-nav{
-        display:none;
-        flex-direction:column;
-        width:100%;
-        margin-top:10px;
+        padding:22px;
     }
 
-    th, td{
+    th,
+    td{
+        padding:15px;
+    }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+
+    .sub-header{
+        flex-wrap:wrap;
+        padding:14px 18px;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .sub-nav{
+        display:none;
+        width:100%;
+        flex-direction:column;
+        margin-top:15px;
+    }
+
+    .sub-nav.show{
+        display:flex;
+    }
+
+    .sub-nav li{
+        width:100%;
+    }
+
+    .sub-nav li a{
+        width:100%;
+        display:block;
+        background:rgba(255,255,255,0.06);
+    }
+
+    .hero{
+        padding:60px 16px 35px;
+    }
+
+    .container{
+        padding:25px 14px;
+    }
+
+    .card{
+        padding:16px;
+        border-radius:18px;
+    }
+
+    table{
+        min-width:600px;
+    }
+
+    th,
+    td{
         font-size:13px;
+        padding:12px;
+    }
+}
+
+/* ================= SMALL DEVICES ================= */
+@media (max-width:480px){
+
+    .logo{
+        font-size:20px;
+    }
+
+    .hero h1{
+        line-height:1.3;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    th,
+    td{
+        font-size:12px;
         padding:10px;
     }
 }
+/* Hide by default (desktop) */
+.logo{
+    display:none;
+}
 
-@media (max-width:480px){
-    th, td{
-        font-size:12px;
+/* Show on small screens */
+@media (max-width:768px){
+
+    .logo{
+        display:block;
+        color:white;
+        font-size:22px;
+        font-weight:800;
+    }
+
+    .logo span{
+        color:#BA8E23;
     }
 }
-.sub-header{
-    width:100%;
-    background:#051634;
-    backdrop-filter:blur(10px);
-    padding:14px 40px;
-    position:relative;
-    top:0px; /* 👈 pushes it BELOW the first header */
-    left:0;
-    z-index:1000;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 2px 12px rgba(0,0,0,0.12);
-}
+
 </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="sub-header">
+
+    <div class="logo">
+        GCI<span>Welfare</span>
+    </div>
+
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    <ul class="sub-nav" id="subNav">
+        <li><a href="{% url 'root' %}">Home</a></li>
+        <li><a href="{% url 'home' %}">Welfare Portal</a></li>
+        <li><a href="{% url 'about' %}">About Us</a></li>
+        <li><a href="{% url 'activities' %}">Activities</a></li>
+    </ul>
+
+</div>
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero">
+
+    <h1>Membership Benefits</h1>
+
+    <p>
+        GCI Welfare supports members during important life events through
+        financial assistance, care, and community support.
+    </p>
+
+</section>
+
+<!-- ================= CONTENT ================= -->
+<div class="container">
+
+    <div class="card">
+
+        <div class="section-title">
+            <h2>Benefits Schedule</h2>
+            <p>Support and assistance offered to registered members.</p>
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Description of Benefit</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Wedding of a member (Cash or gift)</td>
+                        <td class="amount">Ksh 5,000 — If both members: Ksh 7,500</td>
+                    </tr>
+
+                    <tr>
+                        <td>Newborn Support</td>
+                        <td class="amount">Ksh 3,000</td>
+                    </tr>
+
+                    <tr>
+                        <td>Death of a Member</td>
+                        <td class="amount">Ksh 30,000</td>
+                    </tr>
+
+                    <tr>
+                        <td>Death of a Spouse</td>
+                        <td class="amount">Ksh 30,000</td>
+                    </tr>
+
+                    <tr>
+                        <td>Death of a Child</td>
+                        <td class="amount">Ksh 25,000</td>
+                    </tr>
+
+                    <tr>
+                        <td>Death of Parent / Parent-in-law</td>
+                        <td class="amount">Ksh 20,000</td>
+                    </tr>
+
+                    <tr>
+                        <td>Hospital Visitation / Ailment of a Member</td>
+                        <td class="amount">5% of Bill — Maximum Ksh 15,000</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    <p>© 2026 GCI Welfare Management. All Rights Reserved.</p>
+</footer>
+
+<!-- ================= SCRIPT ================= -->
 <script>
-const slides = document.querySelectorAll('.slide');
-let current = 0;
 
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.classList.remove('active');
-    if (i === index) slide.classList.add('active');
-  });
+function toggleMenu(){
+    document.getElementById('subNav').classList.toggle('show');
 }
-
-document.querySelector('.prev').addEventListener('click', () => {
-  current = (current - 1 + slides.length) % slides.length;
-  showSlide(current);
-});
-
-document.querySelector('.next').addEventListener('click', () => {
-  current = (current + 1) % slides.length;
-  showSlide(current);
-});
-
-// Auto-rotate every 5 seconds
-setInterval(() => {
-  current = (current + 1) % slides.length;
-  showSlide(current);
-}, 14000);
 
 </script>
-<footer style="background-color:#002147; color:white; padding:40px 20px; font-family:sans-serif;">
-<p style="text-align: center;"> 2026 GCI Welfare Management. All rights reserved.</p>
+
+</body>
+</html>
