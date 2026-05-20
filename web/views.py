@@ -45,8 +45,14 @@ from web import models
 from datetime import date
 from django.utils import timezone
 from django.db.models.functions import ExtractMonth, ExtractYear
+from datetime import date
+from django.db.models import Sum
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 
 MONTHLY_FEE = 2
+COUPLE_FEE = 4
+
 WELFARE_START_DATE = date(2024, 10, 1)
 
 
@@ -57,28 +63,51 @@ def calculate_welfare_arrears(user):
         status="Success"
     )
 
-    # total months expected since start
+    # Get user's room/profile
+    transaction = MpesaTransaction.objects.filter(user=user).first()
+
+    monthly_fee = MONTHLY_FEE
+
+    if transaction and transaction.profile:
+        
+        # OPTION 1
+        # if transaction.profile.relationship_type == "Couple":
+
+        # OPTION 2
+        if transaction.profile.group and transaction.profile.group.name == "Couple":
+            error = "Couple fee applied based on group membership."
+            
+        
+
+            monthly_fee = COUPLE_FEE
+        else:
+            monthly_fee = MONTHLY_FEE
+
+    # Total months expected
     today = timezone.now().date()
     diff = relativedelta(today, WELFARE_START_DATE)
 
     total_months = diff.years * 12 + diff.months + 1
 
-    # total amount paid
+    # Total amount paid
     total_paid_amount = payments.aggregate(
         total=Sum('amount')
     )['total'] or 0
 
-    # convert to equivalent months paid
-    paid_months = total_paid_amount // MONTHLY_FEE
+    # Months covered
+    paid_months = total_paid_amount // monthly_fee
 
+    # Missing months
     months_missing = max(total_months - int(paid_months), 0)
 
-    amount_due = months_missing * MONTHLY_FEE
+    # Amount due
+    amount_due = months_missing * monthly_fee
 
     return {
+        "monthly_fee": monthly_fee,
         "months_missing": months_missing,
         "amount_due": amount_due,
-        "paid_months": int(paid_months)
+        "paid_months": int(paid_months),
     }
 @require_http_methods(["GET", "POST"])
 def cashflow(request): 
