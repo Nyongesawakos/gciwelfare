@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-f_d6j(*!po2e2few@*tv@7gvl7(+%6bi-3sh(qw%=b093d52s8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [''HOST': 'Nyongesawakos.mysql.pythonanywhere-services.com',']
 CSRF_TRUSTED_ORIGINS = ['https://biogenetic-supergenerous-rosann.ngrok-free.dev']
 
 
