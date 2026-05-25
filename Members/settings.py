@@ -5,6 +5,9 @@ import os
 #from django.utils import timezone
 #timezone.localtime()
 
+#afriaca's talking
+AFRICASTALKING_USERNAME = "sandbox"   # or your live username
+AFRICASTALKING_API_KEY = "atsk_0a4fd63e8d6738b3eb9f919d8116cd5b57c692afa26759bb807c99e5f4478113bf378259"
 
 
 
