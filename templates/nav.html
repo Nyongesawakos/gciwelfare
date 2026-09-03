@@ -12,7 +12,17 @@
   <div class="dropdown-menu">
    
    
-    <a href="{% url 'login' %}">GCI loading</a>
+<a href="{% url 'login' %}" onclick="showLoader(event, this.href)">
+    Login
+</a>
+
+<!-- Loading Modal -->
+<div id="loaderModal" class="modal">
+    <div class="modal-content">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+</div>
    
   </div>
 </nav>

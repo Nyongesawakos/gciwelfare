@@ -1,132 +1,2365 @@
 
+{% load static %}
+
 <!DOCTYPE html>
-{%load static%}
-{%include 'nav.html'%}
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{% static 'style/style.css' %}" />
+
+<head>
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    >
+
+    <meta charset="UTF-8">
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#051634"
+    >
+
+    <link
+        rel="shortcut icon"
+        href="{% static 'images/logo.png' %}"
+        type="image/x-icon"
+    >
+
+    <link
+        rel="stylesheet"
+        type="text/css"
+        href="{% static 'style/style.css' %}"
+    >
+
     <title>GCI WELFARE</title>
-  </head>
-  <body>
-    <header class="header header--loggedIn">
-      <div class="container">
-        <a href="/" class="header__logo">
-          <img src="{% static 'images/logo.png'%}" />
-          <h1>GCI WELFARE</h1>
-        </a>
-        <form class="header__search" method="get" action="{% url 'home' %}">
-          <label>
-            <svg
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
+
+
+<style>
+
+/* =========================================================
+   GCI WELFARE GLOBAL THEME
+========================================================= */
+
+:root {
+
+    --primary: #051634;
+    --primary-light: #0b2858;
+    --primary-dark: #020b1c;
+
+    --gold: #BA8E23;
+    --gold-light: #d4aa45;
+    --gold-dark: #8f6d18;
+
+    --white: #ffffff;
+
+    --light: #f5f7fb;
+    --light-blue: #eef3f9;
+
+    --text: #1f2937;
+    --muted: #6b7280;
+
+    --border: #dfe5ed;
+
+    --success: #15803d;
+    --danger: #b91c1c;
+    --warning: #b45309;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,0.12);
+
+    --shadow-lg:
+        0 18px 45px rgba(5,22,52,0.18);
+
+    --radius: 14px;
+}
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f7fb 0%,
+            #eef2f7 50%,
+            #f8fafc 100%
+        );
+
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    overflow-x: hidden;
+
+    overflow-y: scroll;
+}
+
+
+a {
+    transition:
+        all .25s ease;
+}
+
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.gci-header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    width: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary),
+            #0a2349
+        );
+
+    border-bottom:
+        2px solid
+        rgba(186,142,35,.75);
+
+    box-shadow:
+        0 5px 25px
+        rgba(0,0,0,.20);
+}
+
+
+.gci-header::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -2px;
+
+    width: 100%;
+
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: .8;
+}
+
+
+/* =========================================================
+   HEADER CONTAINER
+========================================================= */
+
+.gci-header-container {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    min-height: 78px;
+
+    margin: auto;
+
+    padding:
+        10px 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.gci-logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: white;
+
+    text-decoration: none;
+
+    min-width: max-content;
+
+    flex-shrink: 0;
+}
+
+
+.gci-logo img {
+
+    width: 48px;
+
+    height: 48px;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+    background: white;
+
+    padding: 4px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.20);
+}
+
+
+.gci-logo-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.gci-logo-text h1 {
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.gci-logo-text span {
+
+    color:
+        var(--gold-light);
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.gci-search {
+
+    flex: 1;
+
+    max-width: 520px;
+
+    min-width: 120px;
+}
+
+
+.gci-search label {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+}
+
+
+.gci-search svg {
+
+    position: absolute;
+
+    left: 15px;
+
+    width: 18px;
+
+    height: 18px;
+
+    fill:
+        #94a3b8;
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+
+.gci-search input {
+
+    width: 100%;
+
+    height: 43px;
+
+    padding:
+        0 16px 0 45px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    color: white;
+
+    background:
+        rgba(255,255,255,.09);
+
+    backdrop-filter:
+        blur(8px);
+
+    transition:
+        .25s ease;
+}
+
+
+.gci-search input::placeholder {
+
+    color:
+        rgba(255,255,255,.60);
+}
+
+
+.gci-search input:focus {
+
+    border-color:
+        var(--gold);
+
+    background:
+        rgba(255,255,255,.13);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(186,142,35,.15);
+}
+
+
+/* =========================================================
+   USER AREA
+========================================================= */
+
+.gci-user-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   USER PROFILE
+========================================================= */
+
+.gci-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding:
+        6px 9px;
+
+    border-radius: 12px;
+
+    color: white;
+
+    text-decoration: none;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    min-width: 0;
+}
+
+
+.gci-user:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    border-color:
+        rgba(186,142,35,.5);
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.gci-avatar {
+
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    border:
+        2px solid
+        var(--gold);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold),
+            var(--gold-dark)
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.gci-avatar img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   USER INFORMATION
+========================================================= */
+
+.gci-user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+    min-width: 0;
+
+    max-width: 130px;
+}
+
+
+.gci-user-info small {
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-size: 9px;
+
+    white-space: nowrap;
+}
+
+
+.gci-user-info strong {
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    max-width: 130px;
+}
+
+
+/* =========================================================
+   USER LINKS
+========================================================= */
+
+.gci-user-links {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    flex-shrink: 0;
+}
+
+
+.gci-user-links a {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    color:
+        rgba(255,255,255,.85);
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    padding:
+        8px 9px;
+
+    border-radius: 7px;
+
+    white-space: nowrap;
+
+    border:
+        1px solid transparent;
+}
+
+
+.gci-user-links a:hover {
+
+    color: white;
+
+    background:
+        rgba(186,142,35,.18);
+
+    border-color:
+        rgba(186,142,35,.35);
+}
+
+
+/* =========================================================
+   CHANGE PASSWORD
+========================================================= */
+
+.gci-user-links .password-change {
+
+    color:
+        var(--gold-light);
+
+    background:
+        rgba(186,142,35,.10);
+
+    border:
+        1px solid
+        rgba(186,142,35,.25);
+}
+
+
+.gci-user-links .password-change:hover {
+
+    color: white;
+
+    background:
+        rgba(186,142,35,.25);
+
+    border-color:
+        var(--gold);
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.gci-user-links .logout {
+
+    color:
+        #fca5a5;
+
+    background:
+        rgba(220,38,38,.10);
+
+    border:
+        1px solid
+        rgba(248,113,113,.20);
+}
+
+
+.gci-user-links .logout:hover {
+
+    color: white;
+
+    background:
+        rgba(220,38,38,.30);
+
+    border-color:
+        rgba(248,113,113,.45);
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.gci-user-links .login {
+
+    color:
+        var(--gold-light);
+
+    background:
+        rgba(186,142,35,.10);
+
+    border:
+        1px solid
+        rgba(186,142,35,.25);
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.gci-main {
+
+    min-height:
+        calc(100vh - 78px);
+
+    width: 100%;
+
+    padding:
+        25px 15px 50px;
+}
+
+
+.gci-content {
+
+    width: 100%;
+
+    max-width: 1500px;
+
+    margin: auto;
+}
+
+
+/* =========================================================
+   DJANGO MESSAGES
+========================================================= */
+
+.messages {
+
+    position: fixed;
+
+    top: 95px;
+
+    right: 25px;
+
+    z-index: 9999;
+
+    width:
+        min(400px, calc(100% - 30px));
+}
+
+
+.alert {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding:
+        14px 18px;
+
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.18);
+
+    border-left:
+        4px solid
+        rgba(255,255,255,.7);
+
+    animation:
+        slideIn .35s ease;
+}
+
+
+.alert::before {
+
+    font-size: 17px;
+}
+
+
+.alert.success {
+
+    background:
+        linear-gradient(
+            135deg,
+            #166534,
+            #15803d
+        );
+}
+
+
+.alert.success::before {
+    content: "✓";
+}
+
+
+.alert.error {
+
+    background:
+        linear-gradient(
+            135deg,
+            #991b1b,
+            #dc2626
+        );
+}
+
+
+.alert.error::before {
+    content: "!";
+}
+
+
+.alert.warning {
+
+    background:
+        linear-gradient(
+            135deg,
+            #92400e,
+            #b45309
+        );
+}
+
+
+.alert.warning::before {
+    content: "⚠";
+}
+
+
+.alert.info {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #0b3970
+        );
+}
+
+
+.alert.info::before {
+    content: "i";
+}
+
+
+@keyframes slideIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateX(30px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.search-results {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin:
+        25px auto;
+}
+
+
+.search-results-header {
+
+    margin-bottom: 20px;
+
+    padding-bottom: 12px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.search-results-header h2 {
+
+    margin: 0;
+
+    color:
+        var(--primary);
+
+    font-size: 22px;
+}
+
+
+.search-results-header p {
+
+    margin:
+        5px 0 0;
+
+    color:
+        var(--muted);
+
+    font-size: 13px;
+}
+
+
+.search-section {
+
+    margin-bottom: 25px;
+}
+
+
+.search-section h3 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    color:
+        var(--primary);
+
+    font-size: 16px;
+}
+
+
+.search-result-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 13px;
+
+    margin-bottom: 8px;
+
+    background: white;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0,0,0,.05);
+
+    transition:
+        all .2s ease;
+}
+
+
+.search-result-card:hover {
+
+    border-color:
+        var(--gold);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 15px
+        rgba(0,0,0,.08);
+}
+
+
+.result-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    min-width: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+}
+
+
+.contribution-icon {
+
+    background:
+        var(--success);
+}
+
+
+.transaction-icon {
+
+    background:
+        var(--primary);
+}
+
+
+.result-details {
+
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.result-details strong {
+
+    color:
+        var(--primary);
+
+    font-size: 13px;
+}
+
+
+.result-details span {
+
+    color:
+        var(--text);
+
+    font-size: 12px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.result-details small {
+
+    color:
+        var(--muted);
+
+    font-size: 10px;
+}
+
+
+.result-amount {
+
+    color:
+        var(--success);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.no-search-results {
+
+    padding:
+        40px 20px;
+
+    text-align: center;
+
+    background: white;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius);
+}
+
+
+.no-search-results i {
+
+    font-size: 35px;
+
+    color:
+        var(--muted);
+
+    margin-bottom: 10px;
+}
+
+
+.no-search-results h3 {
+
+    margin:
+        5px 0;
+
+    color:
+        var(--primary);
+}
+
+
+.no-search-results p {
+
+    margin:
+        5px 0;
+
+    color:
+        var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.gci-footer {
+
+    margin-top: 30px;
+
+    padding:
+        30px 20px;
+
+    color:
+        rgba(255,255,255,.75);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
+
+    border-top:
+        2px solid
+        rgba(186,142,35,.55);
+
+    text-align: center;
+}
+
+
+.gci-footer-brand {
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.gci-footer-brand span {
+
+    color:
+        var(--gold-light);
+}
+
+
+.gci-footer p {
+
+    margin:
+        8px 0 0;
+
+    font-size: 12px;
+}
+
+
+.gci-footer-line {
+
+    width: 80px;
+
+    height: 2px;
+
+    margin:
+        15px auto;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn--primary {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold),
+            var(--gold-dark)
+        ) !important;
+
+    color: white !important;
+
+    border: none !important;
+
+    box-shadow:
+        0 5px 15px
+        rgba(186,142,35,.25);
+}
+
+
+.btn--primary:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-light),
+            var(--gold)
+        ) !important;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(186,142,35,.35);
+}
+
+
+.btn--main {
+
+    background:
+        var(--primary) !important;
+
+    color: white !important;
+
+    border:
+        1px solid
+        rgba(186,142,35,.4) !important;
+}
+
+
+.btn--main:hover {
+
+    background:
+        var(--primary-light) !important;
+
+    border-color:
+        var(--gold) !important;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .gci-header-container {
+
+        padding:
+            10px 15px;
+
+        gap: 10px;
+    }
+
+
+    .gci-logo {
+
+        gap: 8px;
+    }
+
+
+    .gci-logo img {
+
+        width: 42px;
+
+        height: 42px;
+    }
+
+
+    .gci-logo-text h1 {
+
+        font-size: 16px;
+    }
+
+
+    .gci-user-info {
+
+        max-width: 100px;
+    }
+
+
+    .gci-user-info strong {
+
+        max-width: 100px;
+    }
+
+
+    .gci-user-links a {
+
+        padding:
+            7px;
+
+        font-size: 9px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE / SAMSUNG GALAXY S8
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .gci-header-container {
+
+        min-height: auto;
+
+        padding:
+            8px 10px;
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 7px;
+    }
+
+
+    /* =====================================================
+       LOGO
+    ===================================================== */
+
+    .gci-logo {
+
+        flex:
+            1 1 auto;
+
+        min-width: 0;
+
+        max-width: 42%;
+
+        gap: 6px;
+    }
+
+
+    .gci-logo img {
+
+        width: 36px;
+
+        height: 36px;
+
+        padding: 3px;
+    }
+
+
+    .gci-logo-text {
+
+        min-width: 0;
+    }
+
+
+    .gci-logo-text h1 {
+
+        font-size: 12px;
+
+        letter-spacing: .5px;
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+    }
+
+
+    .gci-logo-text span {
+
+        display: none;
+    }
+
+
+    /* =====================================================
+       USER AREA
+    ===================================================== */
+
+    .gci-user-area {
+
+        flex:
+            1 1 auto;
+
+        justify-content: flex-end;
+
+        min-width: 0;
+
+        gap: 3px;
+    }
+
+
+    /* =====================================================
+       USER PROFILE
+    ===================================================== */
+
+    .gci-user {
+
+        padding:
+            3px;
+
+        gap: 5px;
+
+        background:
+            transparent;
+
+        border: none;
+
+        min-width: 0;
+
+        max-width: 120px;
+    }
+
+
+    .gci-user:hover {
+
+        background:
+            rgba(255,255,255,.08);
+
+        border: none;
+    }
+
+
+    .gci-avatar {
+
+        width: 34px;
+
+        height: 34px;
+
+        min-width: 34px;
+    }
+
+
+    /* =====================================================
+       USERNAME STAYS VISIBLE
+    ===================================================== */
+
+    .gci-user-info {
+
+        display: flex;
+
+        min-width: 0;
+
+        max-width: 72px;
+    }
+
+
+    .gci-user-info small {
+
+        display: none;
+    }
+
+
+    .gci-user-info strong {
+
+        display: block;
+
+        color: white;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        max-width: 72px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       USER LINKS
+    ===================================================== */
+
+    .gci-user-links {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 3px;
+
+        flex-shrink: 0;
+    }
+
+
+    .gci-user-links a {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        min-width: 34px;
+
+        height: 32px;
+
+        padding:
+            5px 6px;
+
+        gap: 4px;
+
+        font-size: 9px;
+
+        border-radius: 6px;
+
+        white-space: nowrap;
+    }
+
+
+    /* =====================================================
+       CHANGE PASSWORD
+    ===================================================== */
+
+    .gci-user-links .password-change {
+
+        display: inline-flex !important;
+
+        color:
+            #f4d27a !important;
+
+        background:
+            rgba(186,142,35,.18) !important;
+
+        border:
+            1px solid
+            rgba(186,142,35,.45) !important;
+
+        visibility: visible !important;
+
+        opacity: 1 !important;
+    }
+
+
+    .gci-user-links .password-change i {
+
+        display: inline-block !important;
+
+        color:
+            #f4d27a !important;
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    .gci-user-links .logout {
+
+        display: inline-flex !important;
+
+        color:
+            #ffb4b4 !important;
+
+        background:
+            rgba(220,38,38,.18) !important;
+
+        border:
+            1px solid
+            rgba(248,113,113,.35) !important;
+    }
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    .gci-search {
+
+        order: 3;
+
+        flex:
+            0 0 100%;
+
+        width: 100%;
+
+        max-width: none;
+
+        margin-top: 2px;
+    }
+
+
+    .gci-search input {
+
+        height: 38px;
+
+        font-size: 11px;
+
+        padding:
+            0 12px 0 40px;
+    }
+
+
+    .gci-search svg {
+
+        left: 13px;
+
+        width: 15px;
+
+        height: 15px;
+    }
+
+
+    /* =====================================================
+       MAIN
+    ===================================================== */
+
+    .gci-main {
+
+        padding:
+            15px 8px 35px;
+    }
+
+
+    /* =====================================================
+       MESSAGES
+    ===================================================== */
+
+    .messages {
+
+        top: 105px;
+
+        right: 10px;
+
+        width:
+            calc(100% - 20px);
+    }
+
+
+    /* =====================================================
+       SEARCH RESULTS
+    ===================================================== */
+
+    .search-results {
+
+        margin:
+            15px auto;
+    }
+
+
+    .search-results-header h2 {
+
+        font-size: 18px;
+    }
+
+
+    .search-result-card {
+
+        padding: 10px;
+
+        gap: 8px;
+    }
+
+
+    .result-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+        min-width: 34px;
+    }
+
+
+    .result-details strong {
+
+        font-size: 12px;
+    }
+
+
+    .result-details span {
+
+        font-size: 11px;
+    }
+
+
+    .result-amount {
+
+        font-size: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   GALAXY S8 / 380PX AND BELOW
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .gci-header-container {
+
+        padding:
+            7px 8px;
+
+        gap: 5px;
+    }
+
+
+    /* =====================================================
+       LOGO
+    ===================================================== */
+
+    .gci-logo {
+
+        max-width: 38%;
+
+        gap: 4px;
+    }
+
+
+    .gci-logo img {
+
+        width: 33px;
+
+        height: 33px;
+    }
+
+
+    .gci-logo-text h1 {
+
+        font-size: 10px;
+
+        letter-spacing: .3px;
+    }
+
+
+    /* =====================================================
+       USER AREA
+    ===================================================== */
+
+    .gci-user-area {
+
+        max-width: 62%;
+
+        gap: 2px;
+    }
+
+
+    .gci-user {
+
+        max-width: 90px;
+
+        padding: 2px;
+
+        gap: 3px;
+    }
+
+
+    .gci-avatar {
+
+        width: 30px;
+
+        height: 30px;
+
+        min-width: 30px;
+    }
+
+
+    /* =====================================================
+       USERNAME
+    ===================================================== */
+
+    .gci-user-info {
+
+        display: flex;
+
+        max-width: 50px;
+    }
+
+
+    .gci-user-info strong {
+
+        display: block;
+
+        max-width: 50px;
+
+        font-size: 9px;
+
+        color: white;
+    }
+
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .gci-user-links {
+
+        gap: 2px;
+    }
+
+
+    .gci-user-links a {
+
+        width: 30px;
+
+        min-width: 30px;
+
+        height: 30px;
+
+        padding: 5px;
+
+        font-size: 0 !important;
+    }
+
+
+    /* =====================================================
+       CHANGE PASSWORD ICON
+    ===================================================== */
+
+    .gci-user-links .password-change {
+
+        display: inline-flex !important;
+
+        width: 30px;
+
+        min-width: 30px;
+
+        height: 30px;
+
+        padding: 5px;
+
+        font-size: 0 !important;
+    }
+
+
+    .gci-user-links .password-change span {
+
+        display: none !important;
+    }
+
+
+    .gci-user-links .password-change i {
+
+        display: inline-block !important;
+
+        font-size: 13px !important;
+
+        color:
+            #f4d27a !important;
+    }
+
+
+    /* =====================================================
+       LOGOUT ICON
+    ===================================================== */
+
+    .gci-user-links .logout {
+
+        display: inline-flex !important;
+
+        width: 30px;
+
+        min-width: 30px;
+
+        height: 30px;
+
+        padding: 5px;
+
+        font-size: 0 !important;
+    }
+
+
+    .gci-user-links .logout::before {
+
+        content:
+            "\f08b";
+
+        font-family:
+            FontAwesome;
+
+        font-size: 13px;
+
+        color:
+            #ffb4b4;
+    }
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    .gci-search input {
+
+        height: 36px;
+
+        font-size: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 330px) {
+
+    .gci-logo {
+
+        max-width: 34%;
+    }
+
+
+    .gci-logo-text h1 {
+
+        font-size: 9px;
+    }
+
+
+    .gci-user-area {
+
+        max-width: 66%;
+    }
+
+
+    .gci-user {
+
+        max-width: 78px;
+    }
+
+
+    .gci-user-info {
+
+        max-width: 42px;
+    }
+
+
+    .gci-user-info strong {
+
+        max-width: 42px;
+
+        font-size: 8px;
+    }
+
+
+    .gci-avatar {
+
+        width: 28px;
+
+        height: 28px;
+
+        min-width: 28px;
+    }
+
+
+    .gci-user-links a {
+
+        width: 28px;
+
+        min-width: 28px;
+
+        height: 28px;
+    }
+
+
+    .gci-user-links .password-change {
+
+        width: 28px;
+
+        min-width: 28px;
+
+        height: 28px;
+    }
+
+
+    .gci-user-links .password-change i {
+
+        font-size: 12px !important;
+    }
+
+
+    .gci-user-links .logout::before {
+
+        font-size: 12px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="gci-header">
+
+    <div class="gci-header-container">
+
+
+        <!-- =================================================
+             LOGO
+        ================================================== -->
+
+        <a
+            href="/"
+            class="gci-logo"
+            aria-label="GCI Welfare Home"
+        >
+
+            <img
+                src="{% static 'images/logo.png' %}"
+                alt="GCI Welfare Logo"
             >
-              <title>search</title>
-              <path
-                d="M32 30.586l-10.845-10.845c1.771-2.092 2.845-4.791 2.845-7.741 0-6.617-5.383-12-12-12s-12 5.383-12 12c0 6.617 5.383 12 12 12 2.949 0 5.649-1.074 7.741-2.845l10.845 10.845 1.414-1.414zM12 22c-5.514 0-10-4.486-10-10s4.486-10 10-10c5.514 0 10 4.486 10 10s-4.486 10-10 10z"
-              ></path>
-            </svg>
-            <input type="text" name="q" placeholder="Search Here"/>
-          </label>
+
+            <div class="gci-logo-text">
+
+                <h1>
+                    GCI WELFARE
+                </h1>
+
+                <span>
+                    Welfare Management System
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- =================================================
+             SEARCH
+             ONLY FOR INDIVIDUAL CONTRIBUTIONS / TRANSACTIONS
+        ================================================== -->
+
+        <form
+            class="gci-search"
+            method="get"
+            action="{% url 'home' %}"
+            role="search"
+        >
+
+            <label>
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 32 32"
+                    aria-hidden="true"
+                >
+
+                    <path
+                        d="M32 30.586L21.155 19.741C22.926 17.649 24 14.95 24 12
+                        24 5.383 18.617 0 12 0S0 5.383 0 12s5.383 12
+                        12 12c2.949 0 5.649-1.074 7.741-2.845l10.845 10.845L32
+                        30.586zM12 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10
+                        4.486 10 10-4.486 10-10 10z"
+                    />
+
+                </svg>
+
+
+                <input
+                    type="search"
+                    name="q"
+                    value="{{ request.GET.q|default:'' }}"
+                    placeholder="Search your contributions or transactions..."
+                    autocomplete="off"
+                    aria-label="Search your contributions or transactions"
+                >
+
+            </label>
+
         </form>
-        <nav class="header__menu">
-          <!-- Not Logged In -->
-          <!-- <a href="/login.html">
-            <img src="./assets/avatar.svg" />
-            <p>Login</p>
-          </a> -->
 
-          <!-- Logged In -->
-          {% if request.user.is_authenticated %}
-          <div class="header__user">
-            <a href="{% url 'createRoom' %}">
-              <div class="avatar avatar--medium active">
-                <img src="{% static 'images/avatar.svg'%}" />
-              </div>
-              <p>Hello<span>{{request.user}}</span>
-                <br><br>
-                <span><a href="{% url 'logout' %}">Logout</a></span>
-                {% else %}
-                <span><a href="{% url 'login' %}">login/register</a></span>
-              </p>
-            </a>
+
+        <!-- =================================================
+             USER AREA
+        ================================================== -->
+
+        <div class="gci-user-area">
+
+            {% if request.user.is_authenticated %}
+
+
+                <!-- =================================================
+                     USER PROFILE
+                ================================================== -->
+
+                <a
+                    href="#"
+                    class="gci-user"
+                    title="{{ request.user.username }}"
+                    aria-label="User profile"
+                >
+
+                    <div class="gci-avatar">
+
+                        <img
+                            src="{% static 'images/avatar.svg' %}"
+                            alt="User Avatar"
+                        >
+
+                    </div>
+
+
+                    <div class="gci-user-info">
+
+                        <small>
+                            Welcome back
+                        </small>
+
+                        <strong title="{{ request.user.username }}">
+
+                            {{ request.user.username|slice:":6" }}{% if request.user.username|length > 6 %}..{% endif %}
+
+                        </strong>
+
+                    </div>
+
+                </a>
+
+
+                <!-- =================================================
+                     USER LINKS
+                ================================================== -->
+
+                <div class="gci-user-links">
+
+
+                    <!-- CHANGE PASSWORD -->
+
+                    <a
+                        href="{% url 'password_change' %}"
+                        class="password-change"
+                        aria-label="Change Password"
+                        title="Change Password"
+                    >
+
+                        <i class="fa fa-key" aria-hidden="true"></i>
+
+                        <span>
+                            Change Password
+                        </span>
+
+                    </a>
+
+
+                    <!-- LOGOUT -->
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="logout"
+                        aria-label="Logout"
+                        title="Logout"
+                    >
+
+                        <i
+                            class="fa fa-sign-out"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            Logout
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- =================================================
+                     LOGIN
+                ================================================== -->
+
+                <div class="gci-user-links">
+
+                    <a
+                        href="{% url 'login' %}"
+                        class="login"
+                        aria-label="Login or Register"
+                    >
+
+                        <i
+                            class="fa fa-sign-in"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            Login / Register
+                        </span>
+
+                    </a>
+
+                </div>
+
+
             {% endif %}
-            
-          </div>
-    
-      <div class="dropdown-menu">
-        <a href="settings.html" class="dropdown-link"
-          ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-            <title>tools</title>
-            <path
-              d="M27.465 32c-1.211 0-2.35-0.471-3.207-1.328l-9.392-9.391c-2.369 0.898-4.898 0.951-7.355 0.15-3.274-1.074-5.869-3.67-6.943-6.942-0.879-2.682-0.734-5.45 0.419-8.004 0.135-0.299 0.408-0.512 0.731-0.572 0.32-0.051 0.654 0.045 0.887 0.277l5.394 5.395 3.586-3.586-5.394-5.395c-0.232-0.232-0.336-0.564-0.276-0.887s0.272-0.596 0.572-0.732c2.552-1.152 5.318-1.295 8.001-0.418 3.274 1.074 5.869 3.67 6.943 6.942 0.806 2.457 0.752 4.987-0.15 7.358l9.392 9.391c0.844 0.842 1.328 2.012 1.328 3.207-0 2.5-2.034 4.535-4.535 4.535zM15.101 19.102c0.26 0 0.516 0.102 0.707 0.293l9.864 9.863c0.479 0.479 1.116 0.742 1.793 0.742 1.398 0 2.535-1.137 2.535-2.535 0-0.668-0.27-1.322-0.742-1.793l-9.864-9.863c-0.294-0.295-0.376-0.74-0.204-1.119 0.943-2.090 1.061-4.357 0.341-6.555-0.863-2.631-3.034-4.801-5.665-5.666-1.713-0.561-3.468-0.609-5.145-0.164l4.986 4.988c0.391 0.391 0.391 1.023 0 1.414l-5 5c-0.188 0.188-0.441 0.293-0.707 0.293s-0.52-0.105-0.707-0.293l-4.987-4.988c-0.45 1.682-0.397 3.436 0.164 5.146 0.863 2.631 3.034 4.801 5.665 5.666 2.2 0.721 4.466 0.604 6.555-0.342 0.132-0.059 0.271-0.088 0.411-0.088z"
-            ></path>
-          </svg>
-          </a
-        >
-        <a href="{% url 'login' %}" class="dropdown-link"
-          ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-            <title></title>
-            <path
-              d="M3 0h22c0.553 0 1 0 1 0.553l-0 3.447h-2v-2h-20v28h20v-2h2l0 3.447c0 0.553-0.447 0.553-1 0.553h-22c-0.553 0-1-0.447-1-1v-30c0-0.553 0.447-1 1-1z"
-            ></path>
-            <path
-              d="M21.879 21.293l1.414 1.414 6.707-6.707-6.707-6.707-1.414 1.414 4.293 4.293h-14.172v2h14.172l-4.293 4.293z"
-            ></path>
-          </svg>
-          Logout</a
-        >
-        <a href="{% url 'login' %}">Login</a>
-       
-      </div>
-    </nav>
+
+        </div>
+
     </div>
-    </header>
-    <script src="{ static 'style/script.js'}"></script>
-    
-    
-          
 
-          
-  
-   <header class="header header--loggedIn">
-      {% include 'nav.html' %}
-      {% if messages %}
-      <ul class="messages">
-          {% for message in messages %}
-       <script>alert("{{message}}") </script>   
-          {% endfor %}
-      </ul>
-      {% endif %}
-      {% block content %}
-
-      {% endblock %}
-    
-
-      
-      
-  
-
-          <!-- Logged In -->
-
-         
+</header>
 
 
 
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="gci-main">
+
+    <div class="gci-content">
+
+
+        <!-- =================================================
+             DJANGO MESSAGES
+        ================================================== -->
+
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="alert {{ message.tags }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        {% block content %}
+
+        {% endblock %}
+
+
+    </div>
+
+</main>
 
 
 
+<!-- =========================================================
+     FOOTER
+========================================================= -->
 
-    
+<footer class="gci-footer">
 
-    
+    <div class="gci-footer-brand">
 
-  
-    
+        GCI <span>WELFARE</span>
+
+    </div>
+
+
+    <div class="gci-footer-line"></div>
+
+
+    <p>
+        2026 GCI Welfare Management.
+        All rights reserved.
+    </p>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script
+    src="{% static 'style/script.js' %}"
+></script>
+
+
+<script>
+
+/*
+ * Automatically hide Django messages
+ * after 9 seconds.
+ */
+
+setTimeout(
+    function () {
+
+        document
+            .querySelectorAll(".alert")
+            .forEach(
+                function (element) {
+
+                    element.style.transition =
+                        "opacity .5s ease, transform .5s ease";
+
+                    element.style.opacity = "0";
+
+                    element.style.transform =
+                        "translateX(20px)";
+
+                    setTimeout(
+                        function () {
+
+                            element.remove();
+
+                        },
+                        500
+                    );
+
+                }
+            );
+
+    },
+    9000
+);
+
+</script>
+
+
+</body>
+
+</html>
 
