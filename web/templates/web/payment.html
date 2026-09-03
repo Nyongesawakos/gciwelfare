@@ -1,426 +1,2196 @@
+
 {% include 'web/main1.html' %}
+
 {% load static %}
 {% load tz %}
+
 {% block content %}
 
-<div class="content">
-
-    <!-- Search -->
-    <form method="get" action="{% url 'payment_list' %}" class="search-bar">
-        <input
-            type="text"
-            name="q"
-            placeholder="Search by name, phone, code..."
-            value="{{ query|default:'' }}"
-        >
-        <button type="submit">🔍 Search</button>
-    </form>
-
-    <!-- Download Button -->
-    <div class="download-container">
-        <button onclick="myfunc('mn')" class="download-btn">
-            Download PDF
-        </button>
-    </div>
-
-    <!-- Report -->
-    <div id="mn">
-
-        <h2>Transactions Report</h2>
-<br>
-
-        <div class="table-container">
-
-            <!-- Total -->
-            <div class="total-row">
-                Total: Ksh {{ total_amount }}
-            </div>
-
-            <!-- Table -->
-            <div class="table-wrapper">
-                <table class="students-table">
-
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Full Name</th>
-                            <th>Phone</th>
-                            <th>Amount</th>
-                            <th>Receipt</th>
-                            <th>Transaction ID</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for payment in payments|slice:":30" %}
-                        <tr>
-                            <td>{{ payment.created_at|localtime }}</td>
-                            <td>{{ payment.full_name }}</td>
-                            <td>{{ payment.phone_number }}</td>
-                            <td class="amount">Ksh {{ payment.amount }}</td>
-                            <td>{{ payment.mpesa_receipt_number|default:"-" }}</td>
-                            <td>{{ payment.checkout_request_id }}</td>
-                            <td>
-                                <span class="badge {{ payment.status|lower }}">
-                                    {{ payment.status }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="7" class="no-results">
-                                No results found
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-
-                </table>
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-<!-- ================= CSS ================= -->
 <style>
 
-/* ================= ROOT COLORS ================= */
-:root{
-    --primary-red:#e72326;
-    --primary-yellow:#f5d021;
-    --primary-blue:#1390cd;
-    --gray:#f5f7fa;
-    --white:#ffffff;
+/* =====================================================
+   TRANSACTIONS — MODERN DASHBOARD
+===================================================== */
+
+.transactions-page {
+
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 15px 0 60px;
+
+    animation: pageFade .5s ease;
 }
 
-/* ================= RESET ================= */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
 
-html,
-body{
-    width:100%;
-    overflow-x:hidden;
-    background:var(--gray);
-    font-family:Arial,sans-serif;
-}
+@keyframes pageFade {
 
-/* ================= MAIN CONTENT ================= */
-.content{
-    width:100%;
-    min-height:100vh;
-    padding:25px 35px;
-}
-
-/* ================= SEARCH ================= */
-.search-bar{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    width:100%;
-    max-width:600px;
-    margin-bottom:20px;
-}
-
-.search-bar input{
-    flex:1;
-    padding:13px 15px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-    background:white;
-    transition:0.3s ease;
-}
-
-.search-bar input:focus{
-    outline:none;
-    border-color:var(--primary-blue);
-    box-shadow:0 0 0 3px rgba(19,144,205,0.15);
-}
-
-.search-bar button{
-    background:var(--primary-blue);
-    color:white;
-    border:none;
-    padding:13px 18px;
-    border-radius:10px;
-    font-weight:600;
-    cursor:pointer;
-    transition:0.3s ease;
-    white-space:nowrap;
-}
-
-.search-bar button:hover{
-    opacity:0.9;
-}
-
-/* ================= DOWNLOAD BUTTON ================= */
-.download-container{
-    width:100%;
-    margin-bottom:20px;
-}
-
-.download-btn{
-    background:linear-gradient(135deg,var(--primary-blue),#0f7db4);
-    color:white;
-    border:none;
-    padding:13px 24px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:600;
-    transition:0.3s ease;
-}
-
-.download-btn:hover{
-    transform:translateY(-2px);
-}
-
-/* ================= TITLE ================= */
-#mn h2{
-    color:var(--primary-blue);
-    margin-bottom:20px;
-    font-size:30px;
-}
-
-/* ================= TABLE CONTAINER ================= */
-.table-container{
-    width:100%;
-    background:var(--white);
-    padding:25px;
-    border-radius:16px;
-    border-top:6px solid var(--primary-yellow);
-    box-shadow:0 5px 18px rgba(0,0,0,0.06);
-}
-
-/* ================= TOTAL ================= */
-.total-row{
-    font-size:18px;
-    font-weight:700;
-    color:var(--primary-red);
-    margin-bottom:20px;
-}
-
-/* ================= TABLE ================= */
-.table-wrapper{
-    width:100%;
-    overflow-x:auto;
-}
-
-.students-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-/* HEADER */
-.students-table thead{
-    background:var(--primary-blue);
-}
-
-.students-table th{
-    color:white;
-    padding:16px;
-    text-align:left;
-    font-size:14px;
-    white-space:nowrap;
-}
-
-/* BODY */
-.students-table td{
-    padding:16px;
-    border-top:1px solid #eee;
-    white-space:nowrap;
-    font-size:14px;
-}
-
-/* ZEBRA */
-.students-table tbody tr:nth-child(even){
-    background:var(--gray);
-}
-
-/* HOVER */
-.students-table tbody tr{
-    transition:0.2s ease;
-}
-
-.students-table tbody tr:hover{
-    background:rgba(19,144,205,0.1);
-}
-
-/* AMOUNT */
-.amount{
-    font-weight:bold;
-    color:var(--primary-red);
-}
-
-/* BADGES */
-.badge{
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:12px;
-    color:white;
-    font-weight:600;
-    display:inline-block;
-}
-
-.badge.success{
-    background:var(--primary-blue);
-}
-
-.badge.pending{
-    background:var(--primary-yellow);
-    color:black;
-}
-
-.badge.failed{
-    background:var(--primary-red);
-}
-
-/* EMPTY */
-.no-results{
-    text-align:center;
-    padding:25px;
-    color:#777;
-}
-
-/* ================= LARGE DESKTOP ================= */
-@media (min-width:1600px){
-
-    .content{
-        padding:35px 60px;
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
 
-    .students-table th,
-    .students-table td{
-        padding:20px;
-        font-size:15px;
-    }
-
-    #mn h2{
-        font-size:36px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 
 }
 
-/* ================= TABLET ================= */
-@media (max-width:1024px){
 
-    .content{
-        padding:20px;
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.transactions-header {
+
+    position: relative;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    min-height: 150px;
+
+    padding: 30px 34px;
+
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background:
+
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(255,255,255,.18),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 10% 100%,
+            rgba(16,185,129,.18),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #1390cd 0%,
+            #0f78aa 55%,
+            #075985 100%
+        );
+
+    box-shadow:
+        0 15px 40px
+        rgba(19,144,205,.22);
+}
+
+
+/* Decorative circles */
+
+.transactions-header::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -60px;
+    top: -80px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+}
+
+
+.transactions-header::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    right: 110px;
+    bottom: -55px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.06);
+
+}
+
+
+.transactions-title {
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+.transactions-title h1 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 29px;
+
+    font-weight: 800;
+
+    letter-spacing: -.5px;
+
+}
+
+
+.transactions-title h1 i {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.16);
+
+    backdrop-filter:
+        blur(10px);
+
+    font-size: 19px;
+
+}
+
+
+.transactions-title p {
+
+    margin: 9px 0 0 58px;
+
+    color:
+        rgba(255,255,255,.82);
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   SEARCH PANEL
+===================================================== */
+
+.search-bar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    padding: 13px;
+
+    border-radius: 17px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.98),
+            #f8fbfd
+        );
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.045);
+
+}
+
+
+/* =====================================================
+   TEXT SEARCH
+===================================================== */
+
+.search-input-wrapper {
+
+    position: relative;
+
+    flex: 1;
+
+}
+
+
+.search-input-wrapper i {
+
+    position: absolute;
+
+    left: 17px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #1390cd;
+
+    font-size: 14px;
+
+    pointer-events: none;
+
+}
+
+
+.search-bar input[type="text"] {
+
+    width: 100%;
+
+    height: 46px;
+
+    padding:
+        0 16px 0 45px;
+
+    border:
+        1px solid
+        #dbe2e8;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: white;
+
+    color: #111827;
+
+    font-size: 13px;
+
+    transition: .25s ease;
+
+}
+
+
+.search-bar input[type="text"]::placeholder {
+
+    color: #9ca3af;
+
+}
+
+
+.search-bar input[type="text"]:focus {
+
+    border-color:
+        #1390cd;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(19,144,205,.10);
+
+}
+
+
+/* =====================================================
+   DATE SEARCH
+===================================================== */
+
+.date-input-wrapper {
+
+    position: relative;
+
+    width: 200px;
+
+    flex-shrink: 0;
+
+}
+
+
+.date-input-wrapper i {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #1390cd;
+
+    font-size: 13px;
+
+    pointer-events: none;
+
+    z-index: 2;
+
+}
+
+
+.date-input-wrapper input {
+
+    width: 100%;
+
+    height: 46px;
+
+    padding:
+        0 12px 0 42px;
+
+    border:
+        1px solid
+        #dbe2e8;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: white;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-family: inherit;
+
+    transition: .25s ease;
+
+}
+
+
+.date-input-wrapper input:focus {
+
+    border-color:
+        #1390cd;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(19,144,205,.10);
+
+}
+
+
+.date-input-wrapper input:hover {
+
+    border-color:
+        #1390cd;
+
+}
+
+
+/* =====================================================
+   SEARCH BUTTON
+===================================================== */
+
+.search-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    height: 46px;
+
+    padding:
+        0 22px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0f78aa
+        );
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+
+    box-shadow:
+        0 6px 16px
+        rgba(19,144,205,.18);
+
+}
+
+
+.search-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 22px
+        rgba(19,144,205,.25);
+
+}
+
+
+/* =====================================================
+   CLEAR BUTTON
+===================================================== */
+
+.clear-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    height: 46px;
+
+    padding:
+        0 17px;
+
+    border-radius: 12px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #f3f4f6,
+            #e5e7eb
+        );
+
+    color: #6b7280;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: .25s ease;
+
+    white-space: nowrap;
+
+}
+
+
+.clear-btn:hover {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ef4444,
+            #dc2626
+        );
+
+    color: white;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(239,68,68,.18);
+
+}
+
+
+/* =====================================================
+   REPORT CARD
+===================================================== */
+
+.report-card {
+
+    position: relative;
+
+    background: white;
+
+    border-radius: 20px;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.055);
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   REPORT HEADER
+===================================================== */
+
+.report-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding:
+        23px 26px;
+
+    border-bottom:
+        1px solid
+        #edf0f3;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fbfcfd
+        );
+
+}
+
+
+.report-header h2 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.report-header h2 i {
+
+    color: #1390cd;
+
+    font-size: 16px;
+
+}
+
+
+.report-header p {
+
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   DOWNLOAD
+===================================================== */
+
+.download-container {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-bottom: 15px;
+
+}
+
+
+.download-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    padding:
+        11px 18px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #10b981,
+            #059669
+        );
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+
+    box-shadow:
+        0 6px 18px
+        rgba(16,185,129,.18);
+
+}
+
+
+.download-btn i {
+
+    font-size: 14px;
+
+}
+
+
+.download-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(16,185,129,.25);
+
+}
+
+
+/* =====================================================
+   TOTAL CONTRIBUTIONS
+===================================================== */
+
+.total-row {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        17px 26px;
+
+    background:
+
+        linear-gradient(
+            105deg,
+            #eff9ff,
+            #f8fcff,
+            #ffffff
+        );
+
+    border-bottom:
+        1px solid
+        #e5e7eb;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.total-label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+}
+
+
+.total-label i {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(19,144,205,.10);
+
+    color: #1390cd;
+
+}
+
+
+.total-row strong {
+
+    color: #1390cd;
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+}
+
+
+/* =====================================================
+   FILTER INFO
+===================================================== */
+
+.filter-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        10px 26px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f8fafc,
+            #ffffff
+        );
+
+    border-bottom:
+        1px solid
+        #edf0f3;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+}
+
+
+.filter-info i {
+
+    color: #1390cd;
+
+}
+
+
+.filter-info strong {
+
+    color: #374151;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.students-table {
+
+    width: 100%;
+
+    min-width: 750px;
+
+    border-collapse: collapse;
+
+}
+
+
+.students-table th {
+
+    padding:
+        14px 18px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #f8fafc,
+            #f4f7fa
+        );
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid
+        #e5e7eb;
+
+}
+
+
+.students-table th i {
+
+    margin-right: 5px;
+
+    color: #1390cd;
+
+}
+
+
+.students-table td {
+
+    padding:
+        14px 18px;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    border-bottom:
+        1px solid
+        #f0f2f5;
+
+    vertical-align: middle;
+
+}
+
+
+.students-table tbody tr {
+
+    position: relative;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+
+.students-table tbody tr:hover {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #f5fbff,
+            #ffffff
+        );
+
+}
+
+
+.students-table tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.transaction-date {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+}
+
+
+.transaction-date .date {
+
+    color: #374151;
+
+    font-weight: 600;
+
+}
+
+
+.transaction-date .time {
+
+    color: #9ca3af;
+
+    font-size: 10px;
+
+}
+
+
+/* =====================================================
+   NAME
+===================================================== */
+
+.member-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-weight: 600;
+
+}
+
+
+.member-avatar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0f78aa
+        );
+
+    color: white;
+
+    font-size: 11px;
+
+    box-shadow:
+        0 4px 10px
+        rgba(19,144,205,.16);
+
+}
+
+
+/* =====================================================
+   PHONE
+===================================================== */
+
+.phone-number {
+
+    color: #6b7280;
+
+    white-space: nowrap;
+
+}
+
+
+.phone-number i {
+
+    color: #10b981;
+
+    margin-right: 5px;
+
+}
+
+
+/* =====================================================
+   AMOUNT
+===================================================== */
+
+.students-table .amount {
+
+    white-space: nowrap;
+
+}
+
+
+.amount-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        6px 10px;
+
+    border-radius: 8px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #eff9ff,
+            #e0f2fe
+        );
+
+    color: #1390cd;
+
+    font-weight: 800;
+
+    font-size: 11px;
+
+}
+
+
+.amount-badge i {
+
+    font-size: 9px;
+
+}
+
+
+/* =====================================================
+   RECEIPT
+===================================================== */
+
+.receipt-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 9px;
+
+    border-radius: 7px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    color: #6b7280;
+
+    font-family: monospace;
+
+    font-size: 10px;
+
+}
+
+
+.receipt-badge i {
+
+    color: #1390cd;
+
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.no-results {
+
+    text-align: center !important;
+
+    padding:
+        55px 20px !important;
+
+    color:
+        #9ca3af !important;
+
+}
+
+
+.empty-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 60px;
+    height: 60px;
+
+    margin:
+        0 auto 15px;
+
+    border-radius: 18px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #eff9ff,
+            #f8fafc
+        );
+
+    color: #1390cd;
+
+    font-size: 23px;
+
+}
+
+
+.empty-title {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #374151;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+
+.empty-text {
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.table-wrapper::-webkit-scrollbar {
+
+    height: 7px;
+
+}
+
+
+.table-wrapper::-webkit-scrollbar-track {
+
+    background: #f1f5f9;
+
+}
+
+
+.table-wrapper::-webkit-scrollbar-thumb {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #1390cd,
+            #10b981
+        );
+
+    border-radius: 10px;
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .search-bar {
+
+        flex-wrap: wrap;
+
     }
 
-    .table-container{
-        padding:18px;
+
+    .search-input-wrapper {
+
+        min-width: 100%;
+
+    }
+
+
+    .date-input-wrapper {
+
+        flex: 1;
+
+        width: auto;
+
     }
 
 }
 
-/* ================= MOBILE ================= */
-@media (max-width:768px){
 
-    .content{
-        padding:12px;
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .transactions-page {
+
+        padding:
+            5px 0 30px;
+
     }
 
-    .search-bar{
-        flex-direction:column;
-        align-items:stretch;
-        max-width:100%;
+
+    .transactions-header {
+
+        min-height: 130px;
+
+        padding:
+            22px 20px;
+
+        border-radius: 17px;
+
+        align-items: flex-start;
+
     }
 
-    .search-bar input,
-    .search-bar button{
-        width:100%;
+
+    .transactions-title h1 {
+
+        font-size: 22px;
+
     }
 
-    .download-btn{
-        width:100%;
+
+    .transactions-title h1 i {
+
+        width: 40px;
+        height: 40px;
+
+        font-size: 16px;
+
     }
 
-    .table-container{
-        padding:12px;
-        border-radius:12px;
+
+    .transactions-title p {
+
+        margin-left: 50px;
+
+        font-size: 11px;
+
+        line-height: 1.5;
+
     }
 
-    #mn h2{
-        font-size:22px;
+
+    /* SEARCH */
+
+    .search-bar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 10px;
+
+        border-radius: 14px;
+
     }
 
-    .students-table th,
-    .students-table td{
-        font-size:12px;
-        padding:12px;
+
+    .search-input-wrapper {
+
+        width: 100%;
+
+        min-width: 100%;
+
     }
 
-    .badge{
-        font-size:10px;
-        padding:5px 8px;
+
+    .date-input-wrapper {
+
+        width: 100%;
+
+        min-width: 100%;
+
+    }
+
+
+    .search-btn {
+
+        width: 100%;
+
+    }
+
+
+    .clear-btn {
+
+        width: 100%;
+
+    }
+
+
+    /* DOWNLOAD */
+
+    .download-container {
+
+        justify-content: stretch;
+
+    }
+
+
+    .download-btn {
+
+        width: 100%;
+
+    }
+
+
+    /* REPORT */
+
+    .report-card {
+
+        border-radius: 16px;
+
+    }
+
+
+    .report-header {
+
+        padding:
+            18px;
+
+    }
+
+
+    .total-row {
+
+        padding:
+            15px 18px;
+
+    }
+
+
+    .total-row strong {
+
+        font-size: 18px;
+
+    }
+
+
+    .filter-info {
+
+        padding:
+            10px 18px;
+
     }
 
 }
 
-/* ================= EXTRA SMALL DEVICES ================= */
-@media (max-width:480px){
 
-    .students-table th,
-    .students-table td{
-        font-size:11px;
-        padding:10px;
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .transactions-title h1 {
+
+        font-size: 20px;
+
+    }
+
+
+    .transactions-title p {
+
+        margin-left: 0;
+
+        margin-top: 8px;
+
+    }
+
+
+    .transactions-header {
+
+        min-height: auto;
+
+    }
+
+
+    .report-header h2 {
+
+        font-size: 16px;
+
+    }
+
+
+    .report-header p {
+
+        font-size: 10px;
+
+    }
+
+
+    .total-row {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+    }
+
+
+    .total-row strong {
+
+        font-size: 20px;
+
     }
 
 }
 
-/* ================= PRINT ================= */
-@media print{
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
 
     .search-bar,
-    .download-container{
-        display:none;
+    .download-container {
+
+        display: none;
+
     }
 
-    .content{
-        padding:0;
-        background:white;
+
+    .transactions-page {
+
+        padding: 0;
+
     }
 
-    .table-container{
-        box-shadow:none;
-        border:none;
-        padding:0;
+
+    .transactions-header {
+
+        box-shadow: none;
+
     }
+
+
+    .report-card {
+
+        box-shadow: none;
+
+        border: none;
+
+    }
+
 
     .students-table th,
-    .students-table td{
-        font-size:10px;
-        padding:6px;
+    .students-table td {
+
+        font-size: 10px;
+
+        padding: 6px;
+
     }
 
 }
 
 </style>
 
-<!-- ================= JS ================= -->
+
+<div class="transactions-page">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="transactions-header">
+
+        <div class="transactions-title">
+
+            <h1>
+
+                <i class="fas fa-exchange-alt"></i>
+
+                Transactions
+
+            </h1>
+
+
+            <p>
+
+                View and manage monthly welfare contribution transactions.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SEARCH PANEL
+    ================================================= -->
+
+    <form
+
+        method="get"
+
+        action="{% url 'payment_list' %}"
+
+        class="search-bar"
+
+    >
+
+
+        <!-- TEXT SEARCH -->
+
+        <div class="search-input-wrapper">
+
+            <i class="fas fa-search"></i>
+
+            <input
+
+                type="text"
+
+                name="q"
+
+                placeholder="Search by name, phone, receipt code..."
+
+                value="{{ query|default:'' }}"
+
+                autocomplete="off"
+
+            >
+
+        </div>
+
+
+
+        <!-- DATE SEARCH -->
+
+        <div class="date-input-wrapper">
+
+            <i class="fas fa-calendar-alt"></i>
+
+            <input
+
+                type="date"
+
+                name="date"
+
+                value="{{ selected_date|default:'' }}"
+
+                title="Search transactions by date"
+
+            >
+
+        </div>
+
+
+
+        <!-- SEARCH -->
+
+        <button
+
+            type="submit"
+
+            class="search-btn"
+
+        >
+
+            <i class="fas fa-search"></i>
+
+            Search
+
+        </button>
+
+
+
+        <!-- CLEAR -->
+
+        {% if query or selected_date %}
+
+        <a
+
+            href="{% url 'payment_list' %}"
+
+            class="clear-btn"
+
+        >
+
+            <i class="fas fa-times"></i>
+
+            Clear
+
+        </a>
+
+        {% endif %}
+
+
+    </form>
+
+
+
+    <!-- =================================================
+         PDF DOWNLOAD
+    ================================================= -->
+
+    <div class="download-container">
+
+    <button
+        onclick="downloadPDF()"
+        class="download-btn"
+        type="button"
+    >
+        <i class="fas fa-file-pdf"></i>
+        Download PDF
+    </button>
+
+</div>
+
+
+
+    <!-- =================================================
+         REPORT
+    ================================================= -->
+
+    <div
+
+        id="mn"
+
+        class="report-card"
+
+    >
+
+
+        <!-- REPORT HEADER -->
+
+        <div class="report-header">
+
+            <div>
+
+                <h2>
+
+                    <i class="fas fa-chart-line"></i>
+
+                    Transactions Report
+
+                </h2>
+
+
+                <p>
+
+                  Welfare contribution transactions
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TOTAL
+        ================================================= -->
+
+        <div class="total-row">
+
+
+            <div class="total-label">
+
+                <i class="fas fa-wallet"></i>
+
+                <span>
+
+                    Total Contributions
+
+                </span>
+
+            </div>
+
+
+            <strong>
+
+                Ksh {{ total_amount }}
+
+            </strong>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACTIVE FILTER
+        ================================================= -->
+
+        {% if selected_date or query %}
+
+        <div class="filter-info">
+
+            <i class="fas fa-filter"></i>
+
+            <span>
+
+                Showing results
+
+                {% if query %}
+
+                    for
+
+                    <strong>
+
+                        "{{ query }}"
+
+                    </strong>
+
+                {% endif %}
+
+
+                {% if selected_date %}
+
+                    {% if query %}
+
+                        on
+
+                    {% else %}
+
+                        for
+
+                    {% endif %}
+
+                    <strong>
+
+                        {{ selected_date }}
+
+                    </strong>
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+
+        <!-- =================================================
+             TABLE
+        ================================================= -->
+
+        <div class="table-wrapper">
+
+            <table class="students-table">
+
+
+                <thead>
+
+                    <tr>
+
+
+                        <th>
+
+                            <i class="fas fa-calendar-alt"></i>
+
+                            Date
+
+                        </th>
+
+
+                        <th>
+
+                            <i class="fas fa-user"></i>
+
+                            Full Name
+
+                        </th>
+
+
+                        <th>
+
+                            <i class="fas fa-phone"></i>
+
+                            Phone
+
+                        </th>
+
+
+                        <th>
+
+                            <i class="fas fa-money-bill-wave"></i>
+
+                            Amount
+
+                        </th>
+
+
+                        <th>
+
+                            <i class="fas fa-receipt"></i>
+
+                            Receipt
+
+                        </th>
+
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    {% for payment in payments|slice:":30" %}
+
+                    <tr>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            <div class="transaction-date">
+
+
+                                <span class="date">
+
+                                    {{ payment.created_at|localtime|date:"M d, Y" }}
+
+                                </span>
+
+
+                                <span class="time">
+
+                                    <i class="far fa-clock"></i>
+
+                                    {{ payment.created_at|localtime|date:"H:i" }}
+
+                                </span>
+
+
+                            </div>
+
+                        </td>
+
+
+
+                        <!-- NAME -->
+
+                        <td>
+
+                            <div class="member-name">
+
+
+                                <span class="member-avatar">
+
+                                    <i class="fas fa-user"></i>
+
+                                </span>
+
+
+                                {{ payment.full_name|default:"-" }}
+
+
+                            </div>
+
+                        </td>
+
+
+
+                        <!-- PHONE -->
+
+                        <td>
+
+                            <span class="phone-number">
+
+
+                                <i class="fas fa-phone-alt"></i>
+
+
+                                {{ payment.phone_number|default:"-" }}
+
+
+                            </span>
+
+                        </td>
+
+
+
+                        <!-- AMOUNT -->
+
+                        <td class="amount">
+
+
+                            <span class="amount-badge">
+
+
+                                <i class="fas fa-arrow-down"></i>
+
+
+                                Ksh {{ payment.amount }}
+
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <!-- RECEIPT -->
+
+                        <td>
+
+
+                            <span class="receipt-badge">
+
+
+                                <i class="fas fa-receipt"></i>
+
+
+                                {{ payment.mpesa_receipt_number|default:"-" }}
+
+
+                            </span>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+
+                    <tr>
+
+                        <td
+
+                            colspan="5"
+
+                            class="no-results"
+
+                        >
+
+
+                            <div class="empty-icon">
+
+                                <i class="fas fa-receipt"></i>
+
+                            </div>
+
+
+                            <span class="empty-title">
+
+                                No transactions found
+
+                            </span>
+
+
+                            <span class="empty-text">
+
+                                There are no transactions matching your search.
+
+                            </span>
+
+
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+<!-- =====================================================
+     HTML2PDF
+===================================================== -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-function myfunc(id){
-    var element = document.getElementById(id);
 
-    var opt = {
-        margin: 0.5,
-        filename: 'payments.pdf',
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+function downloadPDF() {
+
+    const element = document.getElementById('mn');
+
+    if (!element) {
+
+        alert("Unable to find the transactions report.");
+
+        return;
+
+    }
+
+    // Get selected date and search query
+    const selectedDate = "{{ selected_date|default:'' }}";
+    const query = "{{ query|default:'' }}";
+
+    let filename = "transactions_report";
+
+    if (selectedDate) {
+        filename += "_" + selectedDate;
+    }
+
+    if (query) {
+        filename += "_" + query.replace(/[^a-zA-Z0-9]/g, "_");
+    }
+
+    filename += ".pdf";
+
+
+    const options = {
+
+        margin: 8,
+
+        filename: filename,
+
+        image: {
+            type: 'jpeg',
+            quality: 0.98
+        },
+
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            logging: false
+        },
+
+        jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'landscape'
+        }
+
     };
 
-    html2pdf().set(opt).from(element).save();
-}
-</script>
 
-{% endblock %}
+    // Temporarily remove things that should not be in PDF
+    const searchBar = document.querySelector('.search-bar');
+    const downloadContainer = document.querySelector('.download-container');
+
+
+    if (searchBar) {
+        searchBar.style.display = 'none';
+    }
+
+    if (downloadContainer) {
+        downloadContainer.style.display = 'none';
+    }
+
+
+    html2pdf()
+
+        .set(options)
+
+        .from(element)
+
+        .save()
+
+        .then(function () {
+
+            // Restore hidden elements
+            if (searchBar) {
+                searchBar.style.display = '';
+            }
+
+            if (downloadContainer) {
+                downloadContainer.style.display = '';
+            }
+
+        })
+
+        .catch(function (error) {
+
+            console.error("PDF generation error:", error);
+
+            alert("Unable to generate the PDF.");
+
+            // Restore elements even if PDF fails
+            if (searchBar) {
+                searchBar.style.display = '';
+            }
+
+            if (downloadContainer) {
+                downloadContainer.style.display = '';
+            }
+
+        });
+
+}
+
+</script>

@@ -1,55 +1,455 @@
-<!DOCTYPE html>
 {% extends 'main.html' %}
-{%load static%}
+{% load static %}
 
-   {% block content %}
-    <main class="create-room layout">
-      <div class="container">
+{% block content %}
+
+<style>
+/* =====================================================
+   PAGE
+===================================================== */
+
+.create-room {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+    padding: 30px 15px 50px;
+}
+
+.create-room .container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* =====================================================
+   BOX
+===================================================== */
+
+.layout__box {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.layout__boxHeader {
+    background: #2f80ed;
+    padding: 18px 24px;
+}
+
+.layout__boxTitle {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.layout__boxTitle a {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transition: 0.2s ease;
+}
+
+.layout__boxTitle a:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.layout__boxTitle svg {
+    width: 22px;
+    height: 22px;
+    fill: #ffffff;
+}
+
+.layout__boxTitle h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.topics-page {
+    padding: 25px;
+}
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.header__search {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.header__search label {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+
+    background: #f7f9fc;
+    border: 1px solid #dfe5ec;
+    border-radius: 8px;
+
+    transition: all 0.2s ease;
+}
+
+.header__search label:focus-within {
+    border-color: #2f80ed;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
+}
+
+.header__search svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    fill: #7a8797;
+}
+
+.header__search input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+
+    font-size: 15px;
+    color: #333;
+}
+
+.header__search input::placeholder {
+    color: #8a96a3;
+}
+
+/* =====================================================
+   TOPICS LIST
+===================================================== */
+
+.topics__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.topics__list li {
+    margin: 0;
+}
+
+.topics__list a {
+    min-height: 52px;
+    padding: 12px 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    color: #334155;
+    background: #f8fafc;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 8px;
+
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+
+    transition: all 0.2s ease;
+}
+
+.topics__list a:hover {
+    color: #2f80ed;
+    background: #f0f6ff;
+    border-color: #2f80ed;
+    transform: translateY(-1px);
+}
+
+.topics__list a.active {
+    color: #ffffff;
+    background: #2f80ed;
+    border-color: #2f80ed;
+}
+
+/* =====================================================
+   COUNT
+===================================================== */
+
+.topics__list span {
+    min-width: 30px;
+    height: 25px;
+
+    padding: 0 8px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e9eef5;
+    color: #526174;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.topics__list a.active span {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .create-room {
+        padding: 20px 12px 40px;
+    }
+
+    .topics-page {
+        padding: 20px;
+    }
+
+    .topics__list {
+        grid-template-columns: 1fr;
+    }
+
+    .layout__boxTitle h3 {
+        font-size: 19px;
+    }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .create-room {
+        padding: 10px 8px 30px;
+    }
+
+    .layout__box {
+        border-radius: 8px;
+    }
+
+    .layout__boxHeader {
+        padding: 14px 15px;
+    }
+
+    .layout__boxTitle {
+        gap: 10px;
+    }
+
+    .layout__boxTitle a {
+        width: 36px;
+        height: 36px;
+    }
+
+    .layout__boxTitle svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .layout__boxTitle h3 {
+        font-size: 17px;
+    }
+
+    .topics-page {
+        padding: 15px;
+    }
+
+    .header__search label {
+        min-height: 48px;
+        padding: 0 12px;
+    }
+
+    .header__search input {
+        font-size: 14px;
+    }
+
+    .topics__list a {
+        min-height: 48px;
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
+
+/* =====================================================
+   VERY SMALL SCREENS
+===================================================== */
+
+@media (max-width: 360px) {
+
+    .topics-page {
+        padding: 12px;
+    }
+
+    .layout__boxHeader {
+        padding: 12px;
+    }
+
+    .topics__list a {
+        font-size: 13px;
+    }
+}
+</style>
+
+
+<main class="create-room layout">
+
+    <div class="container">
+
         <div class="layout__box">
-          <div class="layout__boxHeader">
-            <div class="layout__boxTitle">
-              <a href="{% url 'home' %}">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                  <title>arrow-left</title>
-                  <path
-                    d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z"
-                  ></path>
-                </svg>
-              </a>
-              <h3>Home</h3>
+
+            <!-- ================= HEADER ================= -->
+
+            <div class="layout__boxHeader">
+
+                <div class="layout__boxTitle">
+
+                    <a href="{% url 'home' %}" aria-label="Back to home">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M13.723 2.286L0 16l13.719 13.714 1.616-1.611L4.375 17.143H32v-2.286H4.375L15.34 3.893l-1.617-1.607z"
+                            />
+                        </svg>
+
+                    </a>
+
+                    <h3>Groups</h3>
+
+                </div>
+
             </div>
-          </div>
 
-          <div class="topics-page layout__body">
-            <form class="header__search"  method="get" action="{% url 'home' %}">
-              <label>
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                  <title>search</title>
-                  <path
-                    d="M32 30.586l-10.845-10.845c1.771-2.092 2.845-4.791 2.845-7.741 0-6.617-5.383-12-12-12s-12 5.383-12 12c0 6.617 5.383 12 12 12 2.949 0 5.649-1.074 7.741-2.845l10.845 10.845 1.414-1.414zM12 22c-5.514 0-10-4.486-10-10s4.486-10 10-10c5.514 0 10 4.486 10 10s-4.486 10-10 10z"
-                  ></path>
-                </svg>
-                <input type="text" name="q" placeholder="Search for groups" />
-              </label>
-            </form>
 
-            <ul class="topics__list">
-              <li>
-                 <a href="{% url 'home' %}"class="active">All <span>{{room_count}}</span></a>
-              </li>
-             {% for topic in topics %}
-            <li>
-              <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}<span>{{topic.room_set.all.count}}</span></a>
-            </li>
-            {% endfor %}
-             
-            </ul>
-          </div>
+            <!-- ================= BODY ================= -->
+
+            <div class="topics-page layout__body">
+
+                <!-- SEARCH -->
+
+                <form
+                    class="header__search"
+                    method="get"
+                    action="{% url 'home' %}"
+                >
+
+                    <label>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M32 30.586L21.155 19.741A11.94 11.94 0 0024 12C24 5.383 18.617 0 12 0S0 5.383 0 12s5.383 12 12 12c2.949 0 5.649-1.074 7.741-2.845l10.845 10.845L32 30.586zM12 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"
+                            />
+                        </svg>
+
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder="Search for groups..."
+                            value="{{ request.GET.q|default:'' }}"
+                            autocomplete="off"
+                        >
+
+                    </label>
+
+                </form>
+
+
+                <!-- TOPICS -->
+
+                <ul class="topics__list">
+
+                    <!-- ALL -->
+
+                    <li>
+                        <a
+                            href="{% url 'home' %}"
+                            class="{% if not request.GET.q %}active{% endif %}"
+                        >
+                            <span style="all: unset;">
+                                All Groups
+                            </span>
+
+                            <span>
+                                {{ room_count }}
+                            </span>
+                        </a>
+                    </li>
+
+
+                    <!-- TOPICS -->
+
+                    {% for topic in topics %}
+
+                    <li>
+
+                        <a
+                            href="{% url 'home' %}?q={{ topic.name|urlencode }}"
+                            class="{% if request.GET.q == topic.name %}active{% endif %}"
+                        >
+
+                            <span style="all: unset;">
+                                {{ topic.name }}
+                            </span>
+
+                            <span>
+                                {{ topic.room_set.all.count }}
+                            </span>
+
+                        </a>
+
+                    </li>
+
+                    {% empty %}
+
+                    <li>
+                        <a href="#" style="cursor: default;">
+                            <span style="all: unset;">
+                                No groups available
+                            </span>
+                        </a>
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
         </div>
-      </div>
-    </main>
 
-    <script src="script.js"></script>
-  </body>
-</html>
-{%endblock%}
+    </div>
+
+</main>
+
+{% endblock %}

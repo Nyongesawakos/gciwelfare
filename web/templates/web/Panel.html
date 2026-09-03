@@ -1,361 +1,1997 @@
-{% include 'web/main1.html'%}
+{% include 'web/main1.html' %}
+
 {% load static %}
+
 {% block content %}
 
-<div class="content">
-<form method="get" class="filter-bar">
-    <select name="group" onchange="this.form.submit()">
-        <option value="">GCI Groups</option>
-        <option value="swap" {% if request.GET.group == "swap" %}selected{% endif %}>swap</option>
-        <option value="couple" {% if request.GET.group == "couple" %}selected{% endif %}>couple</option>
-        <option value="parent" {% if request.GET.group == "parent" %}selected{% endif %}>parent</option>
-    </select>
-</form>
-    <!-- Header -->
-    <div class="table-header">
-        <h2>
-    
-    {% if selected_group %}
-        {{ selected_group }}s Report
-    {% endif %}
-</h2>
-        <div class="total-box">
-            Total: <strong>Ksh {{ total_amount }}</strong>
-        </div>
-         <div class="total-box">
-      <strong>{{ total_count }}</strong>        {% if selected_group %}
-        {{ selected_group }}s
-    {% endif %}
-        </div>
-    </div>
-
-    <!-- Table -->
-    <div class="table-container">
-        <div class="table-wrapper">
-            <table class="students-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Phone</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Receipt</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                {% for t in contributions|slice:":14" %}
-                    <tr>
-                        <td>{{ t.created_at|date:"M d, Y H:i" }}</td>
-                        <td>{{ t.phone_number }}</td>
-                        <td>{{ t.profile.group.name|default:"-" }}</td>
-                        <td class="amount">Ksh {{ t.amount }}</td>
-                        <td>{{ t.mpesa_receipt_number|default:"-" }}</td>
-                        <td>
-                            <span class="badge {{ t.status|lower }}">
-                                {{ t.status }}
-                            </span>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="5" class="no-results">
-                            No transactions found.
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
-        </div>
-    </div>
-
-</div>
 <style>
 
-/* ================= ROOT COLORS ================= */
-:root{
-    --primary-red:#e72326;
-    --primary-yellow:#f5d021;
-    --primary-blue:#1390cd;
-    --dark:#000000;
-    --light:#f5f7fa;
-    --white:#ffffff;
+/* =====================================================
+   GCI CONTRIBUTIONS REPORT
+   MODERN BLUE / RED / YELLOW DESIGN
+===================================================== */
+
+:root {
+
+    --primary-red: #e72326;
+    --primary-yellow: #f5d021;
+    --primary-blue: #1390cd;
+
+    --blue-dark: #0f78aa;
+    --blue-light: #eaf7fd;
+
+    --red-dark: #c91c20;
+    --yellow-light: #fff9d9;
+
+    --dark: #000000;
+    --text: #1f2937;
+    --muted: #6b7280;
+
+    --light: #f5f7fa;
+    --white: #ffffff;
+
+    --border: #e5e7eb;
+
 }
 
-/* ================= RESET ================= */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.content {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding:
+        15px 0 60px;
+
+    animation:
+        pageFade .45s ease;
+
 }
 
-html,
-body{
-    width:100%;
-    overflow-x:hidden;
-    background:var(--light);
-    font-family:Arial,sans-serif;
-}
 
-/* ================= PAGE CONTENT ================= */
-.content{
-    width:100%;
-    min-height:100vh;
-    padding:25px 35px;
-}
+@keyframes pageFade {
 
-/* ================= FILTER BAR ================= */
-.filter-bar{
-    margin-bottom:20px;
-    width:100%;
-}
+    from {
 
-.filter-bar select{
-    padding:12px 16px;
-    border-radius:10px;
-    border:1px solid #ddd;
-    font-size:15px;
-    cursor:pointer;
-    min-width:220px;
-    background:white;
-    transition:0.3s ease;
-}
+        opacity: 0;
 
-.filter-bar select:focus{
-    outline:none;
-    border-color:var(--primary-blue);
-    box-shadow:0 0 0 3px rgba(19,144,205,0.12);
-}
+        transform:
+            translateY(8px);
 
-/* ================= HEADER ================= */
-.table-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    flex-wrap:wrap;
-    margin-bottom:25px;
-}
-
-.table-header h2{
-    color:var(--primary-blue);
-    font-size:30px;
-    font-weight:700;
-}
-
-/* ================= TOTAL BOX ================= */
-.total-box{
-    background:var(--primary-blue);
-    color:white;
-    padding:12px 18px;
-    border-radius:12px;
-    font-weight:600;
-    box-shadow:0 4px 10px rgba(0,0,0,0.08);
-    font-size:15px;
-}
-
-/* ================= TABLE CONTAINER ================= */
-.table-container{
-    width:100%;
-    background:var(--white);
-    padding:25px;
-    border-radius:16px;
-    border-top:6px solid var(--primary-yellow);
-    box-shadow:0 5px 18px rgba(0,0,0,0.06);
-}
-
-/* ================= TABLE ================= */
-.table-wrapper{
-    width:100%;
-    overflow-x:auto;
-}
-
-.students-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-/* ================= TABLE HEADER ================= */
-.students-table thead{
-    background:var(--primary-blue);
-}
-
-.students-table th{
-    padding:16px;
-    text-align:left;
-    font-size:14px;
-    color:white;
-    white-space:nowrap;
-}
-
-/* ================= TABLE BODY ================= */
-.students-table td{
-    padding:16px;
-    border-top:1px solid #eee;
-    font-size:14px;
-    color:var(--dark);
-    white-space:nowrap;
-}
-
-/* ================= ROW EFFECTS ================= */
-.students-table tbody tr{
-    transition:0.2s ease;
-}
-
-.students-table tbody tr:hover{
-    background:rgba(19,144,205,0.08);
-}
-
-/* ================= AMOUNT ================= */
-.amount{
-    font-weight:bold;
-    color:var(--primary-red);
-}
-
-/* ================= BADGES ================= */
-.badge{
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:600;
-    color:white;
-    display:inline-block;
-}
-
-.badge.success{
-    background:var(--primary-blue);
-}
-
-.badge.pending{
-    background:var(--primary-yellow);
-    color:black;
-}
-
-.badge.failed{
-    background:var(--primary-red);
-}
-
-/* ================= EMPTY ================= */
-.no-results{
-    text-align:center;
-    padding:25px;
-    color:#777;
-}
-
-/* ================= LARGE DESKTOP ================= */
-@media (min-width:1600px){
-
-    .content{
-        padding:35px 60px;
     }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+.filter-bar {
+
+    width: 100%;
+
+    margin-bottom: 20px;
+
+}
+
+
+.filter-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f8fbfd
+        );
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 7px 25px
+        rgba(0,0,0,.045);
+
+}
+
+
+.filter-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-blue),
+            var(--blue-dark)
+        );
+
+    color: white;
+
+    box-shadow:
+        0 5px 15px
+        rgba(19,144,205,.18);
+
+}
+
+
+.filter-bar select {
+
+    flex: 1;
+
+    min-width: 220px;
+
+    height: 42px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid
+        #d8e0e7;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition: .25s ease;
+
+}
+
+
+.filter-bar select:hover {
+
+    border-color:
+        var(--primary-blue);
+
+}
+
+
+.filter-bar select:focus {
+
+    border-color:
+        var(--primary-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(19,144,205,.10);
+
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.table-header {
+
+    position: relative;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+
+    padding:
+        28px 30px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(245,208,33,.25),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 10% 100%,
+            rgba(231,35,38,.16),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            var(--primary-blue),
+            var(--blue-dark),
+            #075985
+        );
+
+    color: white;
+
+    box-shadow:
+        0 15px 40px
+        rgba(19,144,205,.20);
+
+}
+
+
+.table-header::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+
+    height: 190px;
+
+    right: -70px;
+
+    top: -95px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+}
+
+
+.table-header::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+
+    height: 90px;
+
+    right: 130px;
+
+    bottom: -45px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.06);
+
+}
+
+
+.table-title {
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+.table-title h2 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 27px;
+
+    font-weight: 800;
+
+}
+
+
+.table-title h2 i {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.15);
+
+    backdrop-filter:
+        blur(8px);
+
+    font-size: 18px;
+
+}
+
+
+.table-title p {
+
+    margin:
+        8px 0 0 58px;
+
+    color:
+        rgba(255,255,255,.80);
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   SUMMARY BOXES
+===================================================== */
+
+.summary-boxes {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+
+.total-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 155px;
+
+    padding:
+        11px 14px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.13);
+
+    border:
+        1px solid
+        rgba(255,255,255,.16);
+
+    backdrop-filter:
+        blur(10px);
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.total-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 34px;
+
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,.15);
+
+}
+
+
+.total-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+}
+
+
+.total-info small {
+
+    color:
+        rgba(255,255,255,.68);
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+}
+
+
+.total-info strong {
+
+    color: white;
+
+    font-size: 15px;
+
+}
+
+
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
+.table-container {
+
+    width: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fcfdfe
+        );
+
+    padding: 0;
+
+    border-radius: 20px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-top:
+        4px solid
+        var(--primary-yellow);
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.055);
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   TABLE TOP BAR
+===================================================== */
+
+.table-topbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding:
+        18px 22px;
+
+    border-bottom:
+        1px solid
+        #edf0f3;
+
+}
+
+
+.table-topbar-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+}
+
+
+.table-topbar-title i {
+
+    color:
+        var(--primary-blue);
+
+}
+
+
+.records-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 10px;
+
+    border-radius: 8px;
+
+    background:
+        var(--blue-light);
+
+    color:
+        var(--primary-blue);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.students-table {
+
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse:
+        collapse;
+
+}
+
+
+.students-table thead {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-blue),
+            var(--blue-dark)
+        );
+
+}
+
+
+.students-table th {
+
+    padding:
+        14px 18px;
+
+    color: white;
+
+    text-align: left;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .65px;
+
+    white-space: nowrap;
+
+}
+
+
+.students-table th i {
+
+    margin-right: 5px;
+
+    opacity: .85;
+
+}
+
+
+.students-table td {
+
+    padding:
+        14px 18px;
+
+    color: var(--text);
+
+    font-size: 12px;
+
+    border-bottom:
+        1px solid
+        #eef1f4;
+
+    white-space: nowrap;
+
+}
+
+
+.students-table tbody tr {
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+
+.students-table tbody tr:hover {
+
+    background:
+        linear-gradient(
+            90deg,
+            #f2faff,
+            #ffffff
+        );
+
+}
+
+
+.students-table tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+.date-cell {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.date-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 8px;
+
+    background:
+        #f1f8fc;
+
+    color:
+        var(--primary-blue);
+
+    font-size: 10px;
+
+}
+
+
+.date-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+}
+
+
+.date-text strong {
+
+    font-size: 11px;
+
+    color: #374151;
+
+}
+
+
+.date-text small {
+
+    color: #9ca3af;
+
+    font-size: 9px;
+
+}
+
+
+/* =====================================================
+   PHONE
+===================================================== */
+
+.phone-cell {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #4b5563;
+
+}
+
+
+.phone-cell i {
+
+    color:
+        var(--primary-blue);
+
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.category-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 9px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff9d9,
+            #fffdf0
+        );
+
+    border:
+        1px solid
+        rgba(245,208,33,.35);
+
+    color:
+        #7a6500;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.category-badge i {
+
+    color:
+        #c9a900;
+
+}
+
+
+/* =====================================================
+   AMOUNT
+===================================================== */
+
+.amount {
+
+    font-weight: 800;
+
+}
+
+
+.amount-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 10px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff1f1,
+            #fff8f8
+        );
+
+    color:
+        var(--primary-red);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+.amount-badge i {
+
+    font-size: 9px;
+
+}
+
+
+/* =====================================================
+   RECEIPT
+===================================================== */
+
+.receipt-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 9px;
+
+    border-radius: 7px;
+
+    background:
+        #f8fafc;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    color:
+        #6b7280;
+
+    font-family:
+        monospace;
+
+    font-size: 10px;
+
+}
+
+
+.receipt-badge i {
+
+    color:
+        var(--primary-blue);
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: capitalize;
+
+}
+
+
+.badge::before {
+
+    content: "";
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+}
+
+
+/* Success */
+
+.badge.success {
+
+    background:
+        rgba(19,144,205,.10);
+
+    color:
+        var(--primary-blue);
+
+}
+
+
+.badge.success::before {
+
+    background:
+        var(--primary-blue);
+
+}
+
+
+/* Pending */
+
+.badge.pending {
+
+    background:
+        rgba(245,208,33,.18);
+
+    color:
+        #806900;
+
+}
+
+
+.badge.pending::before {
+
+    background:
+        var(--primary-yellow);
+
+}
+
+
+/* Failed */
+
+.badge.failed {
+
+    background:
+        rgba(231,35,38,.10);
+
+    color:
+        var(--primary-red);
+
+}
+
+
+.badge.failed::before {
+
+    background:
+        var(--primary-red);
+
+}
+
+
+/* =====================================================
+   OTHER STATUS TYPES
+===================================================== */
+
+.badge.completed {
+
+    background:
+        rgba(19,144,205,.10);
+
+    color:
+        var(--primary-blue);
+
+}
+
+
+.badge.completed::before {
+
+    background:
+        var(--primary-blue);
+
+}
+
+
+.badge.cancelled,
+.badge.canceled {
+
+    background:
+        rgba(231,35,38,.10);
+
+    color:
+        var(--primary-red);
+
+}
+
+
+.badge.cancelled::before,
+.badge.canceled::before {
+
+    background:
+        var(--primary-red);
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.no-results {
+
+    text-align:
+        center !important;
+
+    padding:
+        60px 20px !important;
+
+    color:
+        #9ca3af !important;
+
+}
+
+
+.empty-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 62px;
+
+    height: 62px;
+
+    margin:
+        0 auto 14px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff9ff,
+            #f8fafc
+        );
+
+    color:
+        var(--primary-blue);
+
+    font-size: 23px;
+
+}
+
+
+.empty-title {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        #374151;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+}
+
+
+.empty-text {
+
+    font-size: 11px;
+
+    color:
+        #9ca3af;
+
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.table-wrapper::-webkit-scrollbar {
+
+    height: 7px;
+
+}
+
+
+.table-wrapper::-webkit-scrollbar-track {
+
+    background:
+        #f1f5f9;
+
+}
+
+
+.table-wrapper::-webkit-scrollbar-thumb {
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary-blue),
+            var(--primary-yellow)
+        );
+
+    border-radius:
+        10px;
+
+}
+
+
+/* =====================================================
+   LARGE DESKTOP
+===================================================== */
+
+@media (min-width: 1600px) {
+
+    .content {
+
+        padding:
+            25px 20px 70px;
+
+    }
+
+
+    .table-header {
+
+        padding:
+            35px 40px;
+
+    }
+
+
+    .table-title h2 {
+
+        font-size: 32px;
+
+    }
+
 
     .students-table th,
-    .students-table td{
-        padding:20px;
-        font-size:15px;
-    }
+    .students-table td {
 
-    .table-header h2{
-        font-size:36px;
-    }
+        padding:
+            17px 20px;
 
-}
-
-/* ================= TABLET ================= */
-@media (max-width:1024px){
-
-    .content{
-        padding:20px;
-    }
-
-    .table-container{
-        padding:18px;
     }
 
 }
 
-/* ================= MOBILE ================= */
-@media (max-width:768px){
 
-    .content{
-        padding:12px;
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1024px) {
+
+    .content {
+
+        padding:
+            15px 10px 40px;
+
     }
 
-    .table-header{
-        flex-direction:column;
-        align-items:flex-start;
+
+    .table-header {
+
+        padding:
+            24px;
+
     }
 
-    .table-header h2{
-        font-size:22px;
+
+    .summary-boxes {
+
+        flex-direction:
+            column;
+
     }
 
-    .filter-bar select{
-        width:100%;
-        min-width:100%;
+
+    .total-box {
+
+        min-width:
+            145px;
+
     }
 
-    .total-box{
-        width:100%;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .content {
+
+        padding:
+            8px 0 30px;
+
     }
 
-    .table-container{
-        padding:12px;
-        border-radius:12px;
+
+    .filter-wrapper {
+
+        padding:
+            10px;
+
     }
+
+
+    .filter-bar select {
+
+        min-width:
+            0;
+
+        width: 100%;
+
+    }
+
+
+    .table-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        padding:
+            22px 18px;
+
+        border-radius:
+            17px;
+
+    }
+
+
+    .table-title h2 {
+
+        font-size:
+            22px;
+
+    }
+
+
+    .table-title h2 i {
+
+        width:
+            40px;
+
+        height:
+            40px;
+
+    }
+
+
+    .table-title p {
+
+        margin-left:
+            0;
+
+        line-height:
+            1.5;
+
+    }
+
+
+    .summary-boxes {
+
+        width:
+            100%;
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .total-box {
+
+        width:
+            100%;
+
+        min-width:
+            0;
+
+    }
+
+
+    .table-container {
+
+        border-radius:
+            15px;
+
+    }
+
+
+    .table-topbar {
+
+        padding:
+            16px;
+
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .table-header {
+
+        padding:
+            20px 15px;
+
+    }
+
+
+    .table-title h2 {
+
+        font-size:
+            20px;
+
+    }
+
+
+    .table-title p {
+
+        font-size:
+            10px;
+
+    }
+
+
+    .summary-boxes {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .total-box {
+
+        padding:
+            9px 11px;
+
+    }
+
+
+    .table-topbar-title {
+
+        font-size:
+            12px;
+
+    }
+
+
+    .records-label {
+
+        font-size:
+            9px;
+
+    }
+
 
     .students-table th,
-    .students-table td{
-        font-size:12px;
-        padding:12px;
+    .students-table td {
+
+        padding:
+            11px 12px;
+
+        font-size:
+            11px;
+
     }
 
-    .badge{
-        font-size:10px;
-        padding:5px 8px;
-    }
 
-}
+    .badge {
 
-/* ================= EXTRA SMALL DEVICES ================= */
-@media (max-width:480px){
+        font-size:
+            9px;
 
-    .students-table th,
-    .students-table td{
-        font-size:11px;
-        padding:10px;
     }
 
 }
 
-/* ================= PRINT ================= */
-@media print{
 
-    .filter-bar{
-        display:none;
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+
+    .filter-bar {
+
+        display:
+            none;
+
     }
 
-    .content{
-        padding:0;
-        background:white;
+
+    .content {
+
+        padding:
+            0;
+
+        background:
+            white;
+
     }
 
-    .table-container{
-        box-shadow:none;
-        border:none;
-        padding:0;
+
+    .table-header {
+
+        box-shadow:
+            none;
+
     }
+
+
+    .table-container {
+
+        box-shadow:
+            none;
+
+        border:
+            none;
+
+    }
+
+
+    .table-topbar {
+
+        display:
+            none;
+
+    }
+
 
     .students-table th,
-    .students-table td{
-        font-size:10px;
-        padding:6px;
+    .students-table td {
+
+        font-size:
+            10px;
+
+        padding:
+            6px;
+
     }
 
 }
 
 </style>
+
+<div class="content">
+
+```
+<!-- =================================================
+     FILTER
+================================================= -->
+
+<form
+    method="get"
+    class="filter-bar"
+>
+
+    <div class="filter-wrapper">
+
+        <div class="filter-icon">
+
+            <i class="fas fa-filter"></i>
+
+        </div>
+
+
+        <select
+            name="group"
+            onchange="this.form.submit()"
+        >
+
+            <option value="">
+                GCI Groups
+            </option>
+
+            <option
+                value="swap"
+                {% if request.GET.group == "swap" %}
+                    selected
+                {% endif %}
+            >
+                Swap
+            </option>
+
+            <option
+                value="couple"
+                {% if request.GET.group == "couple" %}
+                    selected
+                {% endif %}
+            >
+                Couple
+            </option>
+
+            <option
+                value="parent"
+                {% if request.GET.group == "parent" %}
+                    selected
+                {% endif %}
+            >
+                Parent
+            </option>
+
+        </select>
+
+    </div>
+
+</form>
+
+
+
+<!-- =================================================
+     HEADER
+================================================= -->
+
+<div class="table-header">
+
+
+    <div class="table-title">
+
+        <h2>
+
+            <i class="fas fa-chart-pie"></i>
+
+            {% if selected_group %}
+
+                {{ selected_group }}s Report
+
+            {% else %}
+
+                Contributions Report
+
+            {% endif %}
+
+        </h2>
+
+
+        <p>
+
+            Monitor welfare contributions and payment activity.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-boxes">
+
+
+        <!-- TOTAL AMOUNT -->
+
+        <div class="total-box">
+
+            <div class="total-icon">
+
+                <i class="fas fa-wallet"></i>
+
+            </div>
+
+            <div class="total-info">
+
+                <small>
+                    Total Amount
+                </small>
+
+                <strong>
+                    Ksh {{ total_amount }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TOTAL COUNT -->
+
+        <div class="total-box">
+
+            <div class="total-icon">
+
+                <i class="fas fa-users"></i>
+
+            </div>
+
+            <div class="total-info">
+
+                <small>
+                    Total Records
+                </small>
+
+                <strong>
+
+                    {{ total_count }}
+
+                    {% if selected_group %}
+                        {{ selected_group }}s
+                    {% else %}
+                        Records
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =================================================
+     TABLE CARD
+================================================= -->
+
+<div class="table-container">
+
+
+    <!-- TABLE TOP -->
+
+    <div class="table-topbar">
+
+        <div class="table-topbar-title">
+
+            <i class="fas fa-list-alt"></i>
+
+            Contribution Transactions
+
+        </div>
+
+
+        <div class="records-label">
+
+            <i class="fas fa-database"></i>
+
+            Latest 14
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TABLE
+    ================================================= -->
+
+    <div class="table-wrapper">
+
+        <table class="students-table">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        <i class="fas fa-calendar-alt"></i>
+
+                        Date
+
+                    </th>
+
+
+                    <th>
+
+                        <i class="fas fa-phone"></i>
+
+                        Phone
+
+                    </th>
+
+
+                    <th>
+
+                        <i class="fas fa-layer-group"></i>
+
+                        Category
+
+                    </th>
+
+
+                    <th>
+
+                        <i class="fas fa-money-bill-wave"></i>
+
+                        Amount
+
+                    </th>
+
+
+                    <th>
+
+                        <i class="fas fa-receipt"></i>
+
+                        Receipt
+
+                    </th>
+
+
+                    <th>
+
+                        <i class="fas fa-check-circle"></i>
+
+                        Status
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+
+            {% for t in contributions|slice:":14" %}
+
+                <tr>
+
+
+                    <!-- DATE -->
+
+                    <td>
+
+                        <div class="date-cell">
+
+                            <div class="date-icon">
+
+                                <i class="fas fa-calendar-day"></i>
+
+                            </div>
+
+
+                            <div class="date-text">
+
+                                <strong>
+
+                                    {{ t.created_at|date:"M d, Y" }}
+
+                                </strong>
+
+                                <small>
+
+                                    <i class="far fa-clock"></i>
+
+                                    {{ t.created_at|date:"H:i" }}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+
+                    <!-- PHONE -->
+
+                    <td>
+
+                        <span class="phone-cell">
+
+                            <i class="fas fa-phone-alt"></i>
+
+                            {{ t.phone_number }}
+
+                        </span>
+
+                    </td>
+
+
+
+                    <!-- CATEGORY -->
+
+                    <td>
+
+                        <span class="category-badge">
+
+                            <i class="fas fa-users"></i>
+
+                            {{ t.profile.group.name|default:"-" }}
+
+                        </span>
+
+                    </td>
+
+
+
+                    <!-- AMOUNT -->
+
+                    <td class="amount">
+
+                        <span class="amount-badge">
+
+                            <i class="fas fa-arrow-down"></i>
+
+                            Ksh {{ t.amount }}
+
+                        </span>
+
+                    </td>
+
+
+
+                    <!-- RECEIPT -->
+
+                    <td>
+
+                        <span class="receipt-badge">
+
+                            <i class="fas fa-receipt"></i>
+
+                            {{ t.mpesa_receipt_number|default:"-" }}
+
+                        </span>
+
+                    </td>
+
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        <span class="badge {{ t.status|lower }}">
+
+                            {{ t.status }}
+
+                        </span>
+
+                    </td>
+
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="no-results"
+                    >
+
+                        <div class="empty-icon">
+
+                            <i class="fas fa-receipt"></i>
+
+                        </div>
+
+
+                        <span class="empty-title">
+
+                            No transactions found
+
+                        </span>
+
+
+                        <span class="empty-text">
+
+                            There are no contribution transactions to display.
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+
+</div>
+```
+
+</div>
 
 {% endblock %}

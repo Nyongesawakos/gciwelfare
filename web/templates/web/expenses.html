@@ -1,206 +1,1710 @@
 {% include 'web/main1.html' %}
 {% load static %}
+
 {% block content %}
 
-<div class="content">
+<style>
 
-    <!-- SEARCH -->
-    <form method="get" action="{% url 'members' %}" class="search-bar">
-        <input
-            type="text"
-            name="q"
-            placeholder="Search by name, reg no, email..."
-            value="{{ query|default:'' }}"
-        >
-        <button type="submit">🔍 Search</button>
-    </form>
+/* =====================================================
+   ROOT
+===================================================== */
 
-    <!-- TABLE -->
-    <div class="table-container">
+:root {
+    --blue: #1390cd;
+    --blue-dark: #0f78aa;
+    --yellow: #f5d021;
+    --green: #10b981;
+    --green-dark: #059669;
+    --red: #dc2626;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+    --slate: #64748b;
+
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --background: #f4f6f8;
+    --white: #ffffff;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.expenses-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 10px 50px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.expenses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 25px 30px;
+    margin-bottom: 20px;
+
+    background: linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue-dark)
+    );
+
+    color: white;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(19,144,205,.20);
+}
+
+
+.expenses-header-content h2 {
+    margin: 0 0 5px;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+.expenses-header-content p {
+    margin: 0;
+
+    font-size: 13px;
+
+    color: rgba(255,255,255,.85);
+}
+
+
+/* =====================================================
+   HEADER ACTIONS
+===================================================== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+
+.header-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+    border: none;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+    white-space: nowrap;
+}
+
+
+.header-button.add {
+    background: var(--green);
+    color: white;
+}
+
+
+.header-button.add:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+}
+
+
+.header-button.print {
+    background: white;
+    color: var(--blue);
+}
+
+
+.header-button.print:hover {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+
+.summary-card {
+    position: relative;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+
+    transition: .2s ease;
+}
+
+
+.summary-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.08);
+}
+
+
+.summary-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background: var(--blue);
+}
+
+
+.summary-card small {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+}
+
+
+.summary-card strong {
+    display: block;
+
+    color: var(--text);
+
+    font-size: 23px;
+    font-weight: 800;
+}
+
+
+.summary-card p {
+    margin: 5px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* SUMMARY COLORS */
+
+.summary-card.total::before {
+    background: var(--red);
+}
+
+.summary-card.total strong {
+    color: var(--red);
+}
+
+
+.summary-card.wedding::before {
+    background: var(--purple);
+}
+
+.summary-card.wedding strong {
+    color: var(--purple);
+}
+
+
+.summary-card.baby::before {
+    background: var(--pink);
+}
+
+.summary-card.baby strong {
+    color: var(--pink);
+}
+
+
+.summary-card.bereavement::before {
+    background: var(--slate);
+}
+
+.summary-card.bereavement strong {
+    color: #475569;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-card {
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 18px 20px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.04);
+}
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+.search-input-wrapper {
+    position: relative;
+
+    flex: 1;
+}
+
+
+.search-icon {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 16px;
+
+    color: #9ca3af;
+
+    pointer-events: none;
+}
+
+
+.search-bar {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 15px 12px 40px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    font-size: 13px;
+
+    color: var(--text);
+
+    background: #f9fafb;
+
+    transition: .2s ease;
+}
+
+
+.search-bar:focus {
+    background: white;
+
+    border-color: var(--blue);
+
+    box-shadow:
+        0 0 0 3px rgba(19,144,205,.10);
+}
+
+
+.clear-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 17px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: var(--blue);
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.clear-btn:hover {
+    background: var(--blue-dark);
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
+.expenses-card {
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+
+    overflow: hidden;
+}
+
+
+.card-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 20px 24px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.card-header h3 {
+    margin: 0;
+
+    font-size: 18px;
+
+    color: var(--text);
+}
+
+
+.card-header p {
+    margin: 5px 0 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+.record-count {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    background: #e0f2fe;
+
+    color: #0369a1;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+.expenses-table {
+    width: 100%;
+
+    min-width: 1050px;
+
+    border-collapse: collapse;
+}
+
+
+.expenses-table th {
+    padding: 14px 15px;
+
+    text-align: left;
+
+    background: #f8fafc;
+
+    color: var(--muted);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+    border-bottom: 1px solid var(--border);
+
+    white-space: nowrap;
+}
+
+
+.expenses-table td {
+    padding: 14px 15px;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    border-bottom: 1px solid #f0f2f5;
+
+    vertical-align: middle;
+}
+
+
+.expenses-table tbody tr {
+    transition: .2s ease;
+}
+
+
+.expenses-table tbody tr:hover {
+    background: #f8fbfd;
+}
+
+
+/* =====================================================
+   EXPENSE
+===================================================== */
+
+.expense-name {
+    color: var(--text);
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   MEMBER
+===================================================== */
+
+.member-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.member-name {
+    color: var(--text);
+
+    font-weight: 700;
+}
+
+
+.member-id {
+    color: #9ca3af;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.category-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 10px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+.category-badge.wedding {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+
+.category-badge.baby {
+    background: #fce7f3;
+    color: #be185d;
+}
+
+
+.category-badge.bereavement {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+
+.category-badge.other {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+
+/* =====================================================
+   AMOUNT
+===================================================== */
+
+.amount {
+    color: var(--red) !important;
+
+    font-size: 14px !important;
+
+    font-weight: 800 !important;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   ELIGIBILITY
+===================================================== */
+
+.eligibility {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.eligibility.eligible {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+
+.eligibility.ineligible {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+.eligibility-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.action {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    border: none;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+    white-space: nowrap;
+}
+
+
+.action.edit {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+
+.action.delete {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+.action:hover {
+    transform: translateY(-1px);
+
+    filter: brightness(.95);
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.no-results {
+    text-align: center !important;
+
+    padding: 55px 20px !important;
+
+    color: #9ca3af !important;
+
+    font-size: 13px !important;
+}
+
+
+.no-results-icon {
+    display: block;
+
+    font-size: 38px;
+
+    margin-bottom: 10px;
+}
+
+
+.no-results strong {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 15px;
+
+    margin-bottom: 5px;
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print {
+
+    /*
+       IMPORTANT:
+       Hide the website navigation/menu.
+    */
+
+    nav,
+    .navbar,
+    .sidebar,
+    .menu,
+    .main-menu,
+    .navigation,
+    .site-header,
+    .topbar,
+    .header,
+    .mobile-menu,
+    .mobile-nav,
+    aside,
+    footer {
+
+        display: none !important;
+    }
+
+
+    /*
+       Hide page controls.
+    */
+
+    .header-actions,
+    .search-card,
+    .actions,
+    .record-count {
+
+        display: none !important;
+    }
+
+
+    /*
+       Hide Django/main template controls
+       if they use common classes.
+    */
+
+    .btn,
+    .button,
+    .dropdown,
+    .dropdown-menu {
+
+        display: none !important;
+    }
+
+
+    body {
+
+        background: white !important;
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+    }
+
+
+    /*
+       Remove layout restrictions.
+    */
+
+    .expenses-page {
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        padding: 0 !important;
+
+        margin: 0 !important;
+    }
+
+
+    /*
+       Print header.
+    */
+
+    .expenses-header {
+
+        margin-bottom: 15px !important;
+
+        border-radius: 0 !important;
+
+        box-shadow: none !important;
+
+        print-color-adjust: exact !important;
+
+        -webkit-print-color-adjust: exact !important;
+    }
+
+
+    /*
+       Summary.
+    */
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(4, 1fr) !important;
+
+        gap: 10px !important;
+    }
+
+
+    .summary-card {
+
+        box-shadow: none !important;
+
+        border: 1px solid #ddd !important;
+    }
+
+
+    /*
+       Expense card.
+    */
+
+    .expenses-card {
+
+        box-shadow: none !important;
+
+        border: 1px solid #ddd !important;
+
+        border-radius: 0 !important;
+    }
+
+
+    .table-wrapper {
+
+        overflow: visible !important;
+    }
+
+
+    .expenses-table {
+
+        width: 100% !important;
+
+        min-width: 0 !important;
+    }
+
+
+    .expenses-table th {
+
+        background: #f3f4f6 !important;
+
+        color: #111827 !important;
+
+        print-color-adjust: exact !important;
+
+        -webkit-print-color-adjust: exact !important;
+    }
+
+
+    /*
+       Do not print search-result message.
+    */
+
+    #noSearchResults {
+
+        display: none !important;
+    }
+
+
+    /*
+       Prevent rows from being split across pages.
+    */
+
+    .expense-row {
+
+        break-inside: avoid;
+
+        page-break-inside: avoid;
+    }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .expenses-page {
+
+        padding: 10px 5px 30px;
+    }
+
+
+    .expenses-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 20px;
+
+        border-radius: 14px;
+    }
+
+
+    .expenses-header-content h2 {
+
+        font-size: 22px;
+    }
+
+
+    .expenses-header-content p {
+
+        font-size: 12px;
+    }
+
+
+    .header-actions {
+
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 8px;
+    }
+
+
+    .header-button {
+
+        width: 100%;
+
+        padding: 10px 8px;
+
+        font-size: 11px;
+    }
+
+
+    .summary-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 10px;
+    }
+
+
+    .summary-card {
+
+        padding: 16px;
+    }
+
+
+    .summary-card strong {
+
+        font-size: 19px;
+    }
+
+
+    .search-card {
+
+        padding: 14px;
+    }
+
+
+    .search-container {
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .clear-btn {
+
+        width: 100%;
+    }
+
+
+    .expenses-card {
+
+        border-radius: 12px;
+    }
+
+
+    .card-header {
+
+        padding: 18px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .expenses-table {
+
+        min-width: 1050px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media (max-width: 450px) {
+
+    .summary-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .header-actions {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .expenses-header-content h2 {
+
+        font-size: 20px;
+    }
+
+}
+
+</style>
+
+
+<div class="expenses-page">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="expenses-header">
+
+        <div class="expenses-header-content">
+
+            <h2>
+                Welfare Expenses
+            </h2>
+
+            <p>
+                Manage welfare expenditure by category and registered member.
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a
+                href="{% url 'cashflow' %}"
+                class="header-button add"
+            >
+                ➕ Add Expense
+            </a>
+
+
+            <button
+                type="button"
+                class="header-button print"
+                onclick="window.print();"
+            >
+                🖨 Print
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SUMMARY
+    ================================================= -->
+
+    <div class="summary-grid">
+
+
+        <div class="summary-card total">
+
+            <small>
+                Total Expenses
+            </small>
+
+            <strong>
+                KSh {{ total_expenses|default:"0.00" }}
+            </strong>
+
+            <p>
+                All welfare expenditure
+            </p>
+
+        </div>
+
+
+        <div class="summary-card wedding">
+
+            <small>
+                Wedding
+            </small>
+
+            <strong>
+                KSh {{ wedding_total|default:"0.00" }}
+            </strong>
+
+            <p>
+                Wedding welfare support
+            </p>
+
+        </div>
+
+
+        <div class="summary-card baby">
+
+            <small>
+                Baby Shower
+            </small>
+
+            <strong>
+                KSh {{ baby_shower_total|default:"0.00" }}
+            </strong>
+
+            <p>
+                Baby shower support
+            </p>
+
+        </div>
+
+
+        <div class="summary-card bereavement">
+
+            <small>
+                Bereavement
+            </small>
+
+            <strong>
+                KSh {{ bereavement_total|default:"0.00" }}
+            </strong>
+
+            <p>
+                Bereavement support
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SEARCH
+    ================================================= -->
+
+    <div class="search-card">
+
+        <div class="search-container">
+
+            <div class="search-input-wrapper">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    id="expenseSearch"
+                    class="search-bar"
+                    placeholder="Search by expense, member, category, date or amount..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button
+                type="button"
+                id="clearSearch"
+                class="clear-btn"
+            >
+                Clear Search
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TABLE
+    ================================================= -->
+
+    <div class="expenses-card">
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    Welfare Expense History
+                </h3>
+
+                <p>
+                    Expenditure recorded against registered members.
+                </p>
+
+            </div>
+
+
+            <span class="record-count">
+
+                {{ expenses|length }} Records
+
+            </span>
+
+        </div>
+
+
 
         <div class="table-wrapper">
-            <table class="students-table">
+
+            <table
+                class="expenses-table"
+                id="expensesTable"
+            >
 
                 <thead>
+
                     <tr>
-                        <th>Expense</th>
+
+                        <th>#</th>
+
+                        <th>Category</th>
+
+                        <th>Member</th>
+
                         <th>Date</th>
+
                         <th>Amount</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+
+                        <th>Eligibility</th>
+
+                        <th>Actions</th>
+
                     </tr>
+
                 </thead>
 
-                <tbody>
-                    {% for cash_expenditure in s %} 
-                    <tr>
-                        <td>{{ cash_expenditure.Expense }}</td>
-                        <td>{{ cash_expenditure.Date }}</td>
-                        <td>Ksh {{ cash_expenditure.Amount }}</td>
+
+                <tbody id="expenseTableBody">
+
+
+                {% for cash_expenditure in expenses %}
+
+                    <tr class="expense-row">
+
+
+                        <!-- NUMBER -->
 
                         <td>
-                            <a class="action edit" href="">
-                                Edit
-                            </a>
+                            <strong>
+                                {{ forloop.counter }}
+                            </strong>
                         </td>
+
+
+                        <!-- EXPENSE -->
+
+                      
+
+
+                        <!-- CATEGORY -->
 
                         <td>
-                            <a class="action delete" href=""
-                               onclick="return confirm('Delete this record?');">
-                                Delete
-                            </a>
+
+                            {% with category=cash_expenditure.category|lower %}
+
+                                {% if category == "wedding" %}
+
+                                    <span class="category-badge wedding">
+                                        💍 Wedding
+                                    </span>
+
+                                {% elif category == "baby shower" or category == "baby_shower" %}
+
+                                    <span class="category-badge baby">
+                                        👶 Baby Shower
+                                    </span>
+
+                                {% elif category == "bereavement" %}
+
+                                    <span class="category-badge bereavement">
+                                        🕊 Bereavement
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="category-badge other">
+                                        {{ cash_expenditure.category|default:"Other" }}
+                                    </span>
+
+                                {% endif %}
+
+                            {% endwith %}
+
                         </td>
+
+
+                        <!-- MEMBER -->
+
+                        <td>
+
+                            {% if cash_expenditure.member %}
+
+                                <div class="member-info">
+
+                                    <span class="member-name">
+
+                                        {{ cash_expenditure.member.FullName|default:cash_expenditure.member }}
+
+                                    </span>
+
+                                    <span class="member-id">
+
+                                        Member #{{ cash_expenditure.member.id }}
+
+                                    </span>
+
+                                </div>
+
+                            {% else %}
+
+                                <span style="color:#b91c1c;">
+                                    No member
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            <span class="expense-date">
+
+                                {{ cash_expenditure.date|default:"-" }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- AMOUNT -->
+
+                        <td class="amount">
+
+                            KSh {{ cash_expenditure.amount|floatformat:2 }}
+
+                        </td>
+
+
+                        <!-- ELIGIBILITY -->
+
+                        <td>
+
+                            {% if cash_expenditure.member %}
+
+                                {% if cash_expenditure.is_eligible %}
+
+                                    <span class="eligibility eligible">
+
+                                        <span class="eligibility-dot"></span>
+
+                                        Eligible
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="eligibility ineligible">
+
+                                        <span class="eligibility-dot"></span>
+
+                                        In Arrears
+
+                                    </span>
+
+                                {% endif %}
+
+                            {% else %}
+
+                                <span class="eligibility ineligible">
+
+                                    <span class="eligibility-dot"></span>
+
+                                    No Member
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="actions">
+
+                             
+
+
+                                <a
+                                    href=""
+                                    class="action delete"
+                                    onclick="return confirm('Are you sure you want to delete this expense?');"
+                                >
+                                    🗑 Delete
+                                </a>
+
+                            </div>
+
+                        </td>
+
                     </tr>
 
-                    {% empty %}
+
+                {% empty %}
+
                     <tr>
-                        <td colspan="5" class="no-results">
-                            No results found
+
+                        <td
+                            colspan="8"
+                            class="no-results"
+                        >
+
+                            <span class="no-results-icon">
+                                📋
+                            </span>
+
+                            <strong>
+                                No welfare expenses found
+                            </strong>
+
+                            There are currently no expense records.
+
                         </td>
+
                     </tr>
-                    {% endfor %}
+
+                {% endfor %}
+
+
+                    <!-- SEARCH RESULTS -->
+
+                    <tr
+                        id="noSearchResults"
+                        style="display:none;"
+                    >
+
+                        <td
+                            colspan="8"
+                            class="no-results"
+                        >
+
+                            <span class="no-results-icon">
+                                🔍
+                            </span>
+
+                            <strong>
+                                No matching expenses
+                            </strong>
+
+                            Try another member, category, date or amount.
+
+                        </td>
+
+                    </tr>
+
                 </tbody>
 
             </table>
+
         </div>
 
     </div>
 
 </div>
 
-<style>
 
-/* ROOT COLORS */
-:root {
-    --primary-red: #e72326;
-    --primary-yellow: #f5d021;
-    --primary-blue: #1390cd;
-    --gray: #f5f7fa;
-}
 
-/* LAYOUT */
-.content {
-    padding: 20px;
-}
+<script>
 
-/* SEARCH */
-.search-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    max-width: 400px;
-}
+/* =====================================================
+   SEARCH
+===================================================== */
 
-.search-bar input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-.search-bar input:focus {
-    outline: none;
-    border-color: var(--primary-blue);
-}
+        const searchInput =
+            document.getElementById("expenseSearch");
 
-.search-bar button {
-    background: var(--primary-blue);
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-}
+        const clearButton =
+            document.getElementById("clearSearch");
 
-/* TABLE CONTAINER */
-.table-container {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    border-top: 6px solid var(--primary-yellow);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
+        const rows =
+            document.querySelectorAll(".expense-row");
 
-/* TABLE */
-.table-wrapper {
-    overflow-x: auto;
-}
+        const noResults =
+            document.getElementById("noSearchResults");
 
-.students-table {
-    width: 100%;
-    border-collapse: collapse;
-}
 
-/* HEADER */
-.students-table thead {
-    background: var(--primary-blue);
-}
+        if (!searchInput) {
+            return;
+        }
 
-.students-table th {
-    color: white;
-    padding: 14px;
-    text-align: left;
-}
 
-/* ROWS */
-.students-table td {
-    padding: 14px;
-    border-top: 1px solid #eee;
-}
+        searchInput.addEventListener(
+            "input",
+            function () {
 
-.students-table tbody tr:nth-child(even) {
-    background: var(--gray);
-}
+                const searchValue =
+                    this.value
+                        .toLowerCase()
+                        .trim();
 
-.students-table tr:hover {
-    background: rgba(19,144,205,0.1);
-}
+                let visibleRows = 0;
 
-/* ACTION BUTTONS */
-.action {
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-    color: white;
-}
 
-.action.edit {
-    background: var(--primary-blue);
-}
+                rows.forEach(
+                    function (row) {
 
-.action.delete {
-    background: var(--primary-red);
-}
+                        const rowText =
+                            row.innerText
+                                .toLowerCase();
 
-/* EMPTY */
-.no-results {
-    text-align: center;
-    padding: 20px;
-    color: #777;
-}
 
-/* MOBILE */
-@media (max-width: 768px) {
+                        if (
+                            searchValue === "" ||
+                            rowText.includes(searchValue)
+                        ) {
 
-    .search-bar {
-        flex-direction: column;
-        max-width: 100%;
+                            row.style.display = "";
+
+                            visibleRows++;
+
+                        } else {
+
+                            row.style.display = "none";
+
+                        }
+
+                    }
+                );
+
+
+                if (
+                    searchValue !== "" &&
+                    visibleRows === 0
+                ) {
+
+                    noResults.style.display =
+                        "table-row";
+
+                } else {
+
+                    noResults.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+        clearButton.addEventListener(
+            "click",
+            function () {
+
+                searchInput.value = "";
+
+
+                rows.forEach(
+                    function (row) {
+
+                        row.style.display = "";
+
+                    }
+                );
+
+
+                noResults.style.display =
+                    "none";
+
+
+                searchInput.focus();
+
+            }
+        );
+
     }
+);
 
-    .search-bar input,
-    .search-bar button {
-        width: 100%;
-    }
+</script>
 
-    .students-table th,
-    .students-table td {
-        font-size: 12px;
-        padding: 10px;
-    }
-}
-
-</style>
 
 {% endblock %}

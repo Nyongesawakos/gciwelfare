@@ -1,310 +1,738 @@
-   {%include 'web/main1.html'%}
-{%load static%}
+{% include 'web/main1.html' %}
+{% load static %}
+
 {% block content %}
-
-        
-
-    <!-- Content -->
-  <div class="content">
-    <div class="card">
-        <h1>Update Outflows</h1>
-
-        <form method="post" class="form">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <button type="submit" class="btn primary">Update Record</button>
-        </form>
-
-      
-
-       
-    </div>
-</div>
-
 
 <style>
 
-/* ================= ROOT COLORS ================= */
-:root{
-    --primary-blue:#1390cd;
-    --primary-blue-dark:#0f7bb3;
-    --primary-yellow:#f5d021;
-    --primary-green:#10b981;
-    --background:#f4f6f8;
-    --white:#ffffff;
-    --text:#111827;
-    --muted:#6b7280;
-    --border:#d1d5db;
+/* =====================================================
+   PAGE
+===================================================== */
+
+.expense-edit-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 10px 50px;
 }
 
-/* ================= RESET ================= */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
 
-html,
-body{
-    width:100%;
-    overflow-x:hidden;
-    background:var(--background);
-    font-family:Arial,sans-serif;
-}
+/* =====================================================
+   HEADER
+===================================================== */
 
-/* ================= PAGE WRAPPER ================= */
-.content{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:30px;
-}
+.expense-edit-header {
 
-/* ================= CARD ================= */
-.card{
-    width:100%;
-    max-width:700px;
-    background:var(--white);
-    border-radius:20px;
-    padding:40px;
-    border-top:6px solid var(--primary-yellow);
-    box-shadow:0 12px 30px rgba(0,0,0,0.07);
-    animation:fadeIn 0.4s ease-in-out;
-}
+    display: flex;
 
-/* ================= HEADINGS ================= */
-.card h1{
-    font-size:34px;
-    margin-bottom:30px;
-    text-align:center;
-    color:var(--primary-blue);
-    font-weight:700;
-}
+    justify-content: space-between;
 
-.card h3{
-    margin:25px 0 12px;
-    font-size:18px;
-    text-align:center;
-    color:#374151;
-}
+    align-items: center;
 
-/* ================= FORM ================= */
-.form{
-    width:100%;
-}
+    gap: 20px;
 
-.form p{
-    margin-bottom:20px;
-}
+    padding: 25px 30px;
 
-/* LABELS */
-.form label{
-    display:block;
-    font-size:14px;
-    font-weight:600;
-    margin-bottom:8px;
-    color:#374151;
-}
+    margin-bottom: 20px;
 
-/* INPUTS */
-.form input,
-.form select,
-.form textarea,
-.upload-form input[type="file"]{
-    width:100%;
-    padding:14px 16px;
-    border-radius:12px;
-    border:1px solid var(--border);
-    font-size:15px;
-    transition:0.3s ease;
-    background:white;
-}
-
-/* TEXTAREA */
-.form textarea{
-    min-height:140px;
-    resize:vertical;
-}
-
-/* INPUT FOCUS */
-.form input:focus,
-.form select:focus,
-.form textarea:focus{
-    border-color:var(--primary-blue);
-    box-shadow:0 0 0 4px rgba(19,144,205,0.12);
-    outline:none;
-}
-
-/* ================= BUTTONS ================= */
-.btn{
-    width:100%;
-    padding:15px;
-    border-radius:12px;
-    border:none;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-    transition:0.3s ease;
-}
-
-/* PRIMARY BUTTON */
-.btn.primary{
-    background:linear-gradient(
+    background: linear-gradient(
         135deg,
-        var(--primary-blue),
-        var(--primary-blue-dark)
+        #1390cd,
+        #0f78aa
     );
-    color:white;
-    margin-top:10px;
+
+    color: white;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(19,144,205,.20);
 }
 
-/* SECONDARY BUTTON */
-.btn.secondary{
-    background:var(--primary-green);
-    color:white;
-    margin-top:10px;
+.expense-edit-header h2 {
+
+    margin: 0 0 5px;
+
+    font-size: 25px;
+
+    font-weight: 700;
 }
 
-/* HOVER */
-.btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 18px rgba(0,0,0,0.12);
+.expense-edit-header p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    color: rgba(255,255,255,.85);
 }
 
-/* ================= DIVIDER ================= */
-.divider{
-    display:flex;
-    align-items:center;
-    text-align:center;
-    margin:30px 0;
-    font-size:13px;
-    color:var(--muted);
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #1390cd;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    transition: .2s ease;
 }
 
-.divider::before,
-.divider::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:#e5e7eb;
+.back-button:hover {
+
+    background: #10b981;
+
+    color: white;
+
+    transform: translateY(-1px);
 }
 
-.divider::before{
-    margin-right:12px;
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.expense-form-card {
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-top: 5px solid #f5d021;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+
+    overflow: hidden;
 }
 
-.divider::after{
-    margin-left:12px;
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.form-card-header {
+
+    padding: 20px 24px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background: #ffffff;
 }
 
-/* ================= UPLOAD FORM ================= */
-.upload-form{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+.form-card-header h3 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    color: #111827;
 }
 
-/* ================= ANIMATION ================= */
-@keyframes fadeIn{
+.form-card-header p {
 
-    from{
-        opacity:0;
-        transform:translateY(10px);
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   FORM BODY
+===================================================== */
+
+.form-body {
+
+    padding: 25px;
+}
+
+
+/* =====================================================
+   FORM ROW
+===================================================== */
+
+.form-row {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   FORM GROUP
+===================================================== */
+
+.form-group {
+
+    width: 100%;
+}
+
+.form-group.full-width {
+
+    grid-column: 1 / -1;
+}
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: .2s ease;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   FOCUS
+===================================================== */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    border-color: #1390cd;
+
+    box-shadow:
+        0 0 0 3px rgba(19,144,205,.12);
+}
+
+
+/* =====================================================
+   TEXTAREA
+===================================================== */
+
+.form-group textarea {
+
+    min-height: 120px;
+
+    resize: vertical;
+}
+
+
+/* =====================================================
+   HELP TEXT
+===================================================== */
+
+.form-group .helptext {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   ERRORS
+===================================================== */
+
+.form-errors {
+
+    margin-bottom: 20px;
+
+    padding: 14px 16px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    border-left: 4px solid #ef4444;
+
+    border-radius: 9px;
+
+    color: #b91c1c;
+
+    font-size: 13px;
+}
+
+.field-error {
+
+    margin-top: 5px;
+
+    color: #dc2626;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   REQUIRED
+===================================================== */
+
+.required {
+
+    color: #ef4444;
+
+    margin-left: 2px;
+}
+
+
+/* =====================================================
+   FORM ACTIONS
+===================================================== */
+
+.form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding-top: 20px;
+
+    margin-top: 10px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.form-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 130px;
+
+    padding: 11px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+/* CANCEL */
+
+.form-button.cancel {
+
+    background: #f3f4f6;
+
+    color: #374151;
+}
+
+.form-button.cancel:hover {
+
+    background: #e5e7eb;
+}
+
+
+/* UPDATE */
+
+.form-button.update {
+
+    background: linear-gradient(
+        135deg,
+        #1390cd,
+        #0f78aa
+    );
+
+    color: white;
+
+    box-shadow:
+        0 5px 12px rgba(19,144,205,.20);
+}
+
+.form-button.update:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(19,144,205,.25);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .expense-edit-page {
+
+        padding: 10px 5px 30px;
     }
 
-    to{
-        opacity:1;
-        transform:translateY(0);
+
+    .expense-edit-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 20px;
+
+        border-radius: 14px;
+    }
+
+
+    .expense-edit-header h2 {
+
+        font-size: 21px;
+    }
+
+
+    .expense-edit-header p {
+
+        font-size: 12px;
+    }
+
+
+    .back-button {
+
+        width: 100%;
+    }
+
+
+    .expense-form-card {
+
+        border-radius: 12px;
+    }
+
+
+    .form-card-header {
+
+        padding: 18px;
+    }
+
+
+    .form-body {
+
+        padding: 18px;
+    }
+
+
+    .form-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .form-group.full-width {
+
+        grid-column: auto;
+    }
+
+
+    .form-actions {
+
+        flex-direction: column-reverse;
+
+        align-items: stretch;
+    }
+
+
+    .form-button {
+
+        width: 100%;
     }
 
 }
 
-/* ================= LARGE DESKTOP ================= */
-@media (min-width:1600px){
 
-    .card{
-        max-width:850px;
-        padding:50px;
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .expense-edit-header h2 {
+
+        font-size: 19px;
     }
 
-    .card h1{
-        font-size:40px;
+
+    .form-body {
+
+        padding: 15px;
     }
 
-    .form input,
-    .form select,
-    .form textarea{
-        font-size:16px;
-        padding:16px 18px;
-    }
 
-}
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
 
-/* ================= TABLET ================= */
-@media (max-width:1024px){
+        font-size: 13px;
 
-    .content{
-        padding:20px;
-    }
-
-    .card{
-        padding:32px;
-    }
-
-}
-
-/* ================= MOBILE ================= */
-@media (max-width:768px){
-
-    .content{
-        padding:12px;
-        align-items:flex-start;
-    }
-
-    .card{
-        padding:22px;
-        border-radius:16px;
-    }
-
-    .card h1{
-        font-size:26px;
-        margin-bottom:22px;
-    }
-
-    .form input,
-    .form select,
-    .form textarea{
-        padding:13px;
-        font-size:14px;
-    }
-
-    .btn{
-        padding:14px;
-        font-size:14px;
-    }
-
-}
-
-/* ================= EXTRA SMALL DEVICES ================= */
-@media (max-width:480px){
-
-    .card{
-        padding:18px;
-    }
-
-    .card h1{
-        font-size:22px;
-    }
-
-    .form input,
-    .form select,
-    .form textarea{
-        font-size:13px;
+        padding: 11px 12px;
     }
 
 }
 
 </style>
-{%endblock%}
+
+
+<div class="expense-edit-page">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================= -->
+
+    <div class="expense-edit-header">
+
+        <div>
+
+            <h2>
+                Update Expense
+            </h2>
+
+            <p>
+                Edit and update the selected expenditure record.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'expenses' %}"
+            class="back-button"
+        >
+            ← Back to Expenses
+        </a>
+
+    </div>
+
+
+
+    <!-- =================================================
+         FORM CARD
+    ================================================= -->
+
+    <div class="expense-form-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="form-card-header">
+
+            <h3>
+                Expense Details
+            </h3>
+
+            <p>
+                Update the information below and save your changes.
+            </p>
+
+        </div>
+
+
+
+        <!-- FORM -->
+
+        <form
+            method="post"
+            class="form-body"
+            novalidate
+        >
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 NON-FIELD ERRORS
+            ================================================= -->
+
+            {% if form.non_field_errors %}
+
+                <div class="form-errors">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 FORM FIELDS
+            ================================================= -->
+
+            <div class="form-row">
+
+                {% for field in form %}
+
+                    <div
+                        class="
+                            form-group
+                            {% if field.name == 'Expense' %}
+                                full-width
+                            {% endif %}
+                        "
+                    >
+
+                        <label for="{{ field.id_for_label }}">
+
+                            {{ field.label }}
+
+                            {% if field.field.required %}
+                                <span class="required">*</span>
+                            {% endif %}
+
+                        </label>
+
+
+                        {{ field }}
+
+
+                        {% if field.help_text %}
+
+                            <small class="helptext">
+                                {{ field.help_text }}
+                            </small>
+
+                        {% endif %}
+
+
+                        {% for error in field.errors %}
+
+                            <div class="field-error">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ACTIONS
+            ================================================= -->
+
+            <div class="form-actions">
+
+
+                <a
+                    href="{% url 'expenses' %}"
+                    class="form-button cancel"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="form-button update"
+                >
+                    ✓ Update Record
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

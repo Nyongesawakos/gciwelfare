@@ -1,6 +1,6 @@
-{% include 'main.html' %}
+{% extends 'main.html' %}
 {% load static %}
-
+{%block content%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +99,7 @@ body{
     position:relative;
     min-height:100vh;
     width:100%;
-    background:url("{% static 'images/joe2.jpg' %}") center/cover no-repeat;
+    background:url("{% static 'images/welfare.webp' %}") center/cover no-repeat;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -287,6 +287,7 @@ body{
 
     .slide p{
         line-height:1.7;
+        font-size:14px;
     }
 
     .prev{
@@ -481,3 +482,4 @@ setInterval(()=>{
 
 </body>
 </html>
+{%endblock%}

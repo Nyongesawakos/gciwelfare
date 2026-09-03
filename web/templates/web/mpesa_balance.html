@@ -1,0 +1,1543 @@
+{% include 'web/main1.html' %}
+
+{% block content %}
+
+<style>
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.statement-page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 10px 50px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.statement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 25px 30px;
+    margin-bottom: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #1390cd,
+        #0f78aa
+    );
+
+    color: white;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(19,144,205,.20);
+}
+
+.statement-header h2 {
+    margin: 0 0 5px;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.statement-header p {
+    margin: 0;
+
+    font-size: 13px;
+
+    color: rgba(255,255,255,.85);
+}
+
+
+/* =====================================================
+   HEADER ACTIONS
+===================================================== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+/* =====================================================
+   HEADER BUTTON
+===================================================== */
+
+.header-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    background: white;
+    color: #1390cd;
+
+    text-decoration: none;
+
+    border: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+    white-space: nowrap;
+}
+
+.header-button:hover {
+    background: #10b981;
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   OPENING BALANCE BUTTON
+===================================================== */
+
+.header-button.opening {
+    background: #f59e0b;
+    color: white;
+}
+
+.header-button.opening:hover {
+    background: #d97706;
+    color: white;
+}
+
+
+/* =====================================================
+   PRINT BUTTON
+===================================================== */
+
+.header-button.print {
+    background: white;
+    color: #1390cd;
+}
+
+.header-button.print:hover {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+
+/* =====================================================
+   DASHBOARD BUTTON
+===================================================== */
+
+.header-button.dashboard {
+    background: white;
+    color: #1390cd;
+}
+
+.header-button.dashboard:hover {
+    background: #10b981;
+    color: white;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.statement-card {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.05);
+
+    margin-bottom: 20px;
+
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.card-header {
+    padding: 20px 24px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background: #ffffff;
+}
+
+.card-header h3 {
+    margin: 0;
+
+    font-size: 18px;
+
+    color: #111827;
+}
+
+.card-header p {
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   CUSTOMER DETAILS
+===================================================== */
+
+.customer-details {
+    padding: 20px 24px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.customer-item {
+    padding: 15px;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+
+    border: 1px solid #eef0f3;
+}
+
+.customer-item small {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    margin-bottom: 5px;
+
+    text-transform: uppercase;
+}
+
+.customer-item strong {
+    display: block;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   BALANCE SUMMARY
+===================================================== */
+
+.balance-grid {
+    padding: 20px 24px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.balance-card {
+    position: relative;
+
+    padding: 22px;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    overflow: hidden;
+}
+
+.balance-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background: #1390cd;
+}
+
+.balance-card small {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+}
+
+.balance-card h2 {
+    margin: 0;
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: #111827;
+}
+
+.balance-card p {
+    margin: 6px 0 0;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   OPENING BALANCE
+===================================================== */
+
+.balance-card.opening::before {
+    background: #6366f1;
+}
+
+.balance-card.opening h2 {
+    color: #6366f1;
+}
+
+
+/* =====================================================
+   M-PESA
+===================================================== */
+
+.balance-card.mpesa::before {
+    background: #10b981;
+}
+
+.balance-card.mpesa h2 {
+    color: #10b981;
+}
+
+
+/* =====================================================
+   CURRENT BALANCE
+===================================================== */
+
+.balance-card.current {
+    background: #ecfdf5;
+}
+
+.balance-card.current::before {
+    background: #059669;
+}
+
+.balance-card.current h2 {
+    color: #059669;
+}
+
+
+/* =====================================================
+   TRANSACTION TABLE
+===================================================== */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.transaction-table {
+    width: 100%;
+
+    min-width: 1000px;
+
+    border-collapse: collapse;
+}
+
+.transaction-table th {
+    background: #f8fafc;
+
+    color: #6b7280;
+
+    padding: 14px 12px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    white-space: nowrap;
+}
+
+.transaction-table td {
+    padding: 14px 12px;
+
+    font-size: 13px;
+
+    color: #374151;
+
+    border-bottom: 1px solid #f0f2f5;
+
+    vertical-align: middle;
+}
+
+.transaction-table tbody tr:hover {
+    background: #f8fbfd;
+}
+
+.transaction-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =====================================================
+   TRANSACTION AMOUNT
+===================================================== */
+
+.transaction-amount {
+    color: #1390cd !important;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   RECEIPT
+===================================================== */
+
+.receipt {
+    font-weight: 700;
+
+    color: #111827;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   PHONE
+===================================================== */
+
+.phone {
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5px 10px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.status.success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status.pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status.failed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+/* =====================================================
+   DETAILS BUTTON
+===================================================== */
+
+.details-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 7px;
+
+    background: #e0f2fe;
+
+    color: #0369a1;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.details-button:hover {
+    background: #1390cd;
+
+    color: white;
+}
+
+
+/* =====================================================
+   TRANSACTION DETAILS
+===================================================== */
+
+.transaction-details {
+    display: none;
+
+    background: #f8fafc;
+}
+
+.transaction-details td {
+    padding: 18px;
+}
+
+
+/* =====================================================
+   DETAILS GRID
+===================================================== */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.detail-item {
+    padding: 12px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 8px;
+}
+
+.detail-item small {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+
+    text-transform: uppercase;
+}
+
+.detail-item span {
+    display: block;
+
+    color: #111827;
+
+    font-size: 12px;
+
+    word-break: break-all;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.no-results {
+    text-align: center !important;
+
+    padding: 50px !important;
+
+    color: #9ca3af !important;
+
+    font-size: 14px !important;
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+
+@media print {
+
+    .header-actions {
+
+        display: none !important;
+    }
+
+
+    .welfare-page {
+
+        max-width: 100%;
+
+        padding: 0;
+    }
+
+
+    .welfare-header {
+
+        box-shadow: none;
+
+        print-color-adjust: exact;
+
+        -webkit-print-color-adjust: exact;
+    }
+
+
+    .statement-card,
+    .transaction-card {
+
+        box-shadow: none;
+
+        border: 1px solid #ddd;
+    }
+
+
+    .transaction-table {
+
+        min-width: 0;
+    }
+
+}
+/* =====================================================
+   PRINT - EXCLUDE MENU / SIDEBAR
+===================================================== */
+
+@media print {
+
+    /* Hide page/menu navigation */
+    nav,
+    aside,
+    header,
+    .sidebar,
+    .side-bar,
+    .sidebar-menu,
+    .main-sidebar,
+    .menu,
+    .menu-container,
+    .navigation,
+    .navbar,
+    .topbar,
+    .header,
+    .dashboard-menu {
+        display: none !important;
+    }
+
+    /* Hide statement action buttons */
+    .header-actions,
+    .details-button,
+    .back-button {
+        display: none !important;
+    }
+
+    /* Make statement occupy the full page */
+    .statement-page {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Remove layout restrictions caused by main.html */
+    .main-content,
+    .content,
+    .content-wrapper,
+    .page-content {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Clean printed header */
+    .statement-header {
+        background: white !important;
+        color: #111827 !important;
+        box-shadow: none !important;
+        border: 1px solid #d1d5db !important;
+    }
+
+    .statement-header h2 {
+        color: #111827 !important;
+    }
+
+    .statement-header p {
+        color: #6b7280 !important;
+    }
+
+    /* Cards */
+    .statement-card {
+        box-shadow: none !important;
+        border: 1px solid #d1d5db !important;
+        page-break-inside: avoid;
+    }
+
+    /* Tables */
+    .table-wrapper {
+        overflow: visible !important;
+    }
+
+    .transaction-table {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* Transaction details */
+    .transaction-details {
+        display: table-row !important;
+    }
+
+    /* Hide interactive elements */
+    button,
+    .details-button {
+        display: none !important;
+    }
+
+    /* Don't print unnecessary backgrounds */
+    body {
+        background: white !important;
+    }
+}
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .customer-details {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .balance-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .details-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .statement-page {
+        padding: 10px 5px 30px;
+    }
+
+
+    /* HEADER */
+
+    .statement-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 20px;
+    }
+
+    .statement-header h2 {
+        font-size: 21px;
+    }
+
+
+    /* HEADER BUTTONS */
+
+    .header-actions {
+
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+    .header-button {
+
+        width: 100%;
+
+        padding: 10px 8px;
+
+        font-size: 12px;
+    }
+
+
+    /* CUSTOMER */
+
+    .customer-details {
+
+        grid-template-columns: 1fr;
+
+        padding: 15px;
+    }
+
+
+    /* BALANCE */
+
+    .balance-grid {
+
+        padding: 15px;
+    }
+
+    .balance-card {
+
+        padding: 18px;
+    }
+
+
+    /* CARD */
+
+    .card-header {
+
+        padding: 18px;
+    }
+
+
+    /* DETAILS */
+
+    .details-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =====================================================
+   VERY SMALL PHONES
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .header-actions {
+
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+
+
+<div class="statement-page">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="statement-header">
+
+        <div>
+
+            <h2>
+                M-Pesa Account Statement
+            </h2>
+
+            <p>
+                Complete contribution statement from 2024 to date.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             HEADER ACTIONS
+        ================================================= -->
+
+        <div class="header-actions">
+
+
+            <!-- ADD OPENING BALANCE -->
+
+            <a
+                href="{% url 'add_opening_balance' profile.id %}"
+                class="header-button opening"
+            >
+                💰 Add Opening Balance
+            </a>
+
+
+            <!-- PRINT -->
+
+            <button
+                type="button"
+                class="header-button print"
+                onclick="window.print();"
+            >
+                🖨 Print Statement
+            </button>
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="{% url 'user_list' %}"
+                class="header-button dashboard"
+            >
+                ← Dashboard
+            </a>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         CUSTOMER DETAILS
+    ================================================= -->
+
+    <div class="statement-card">
+
+        <div class="card-header">
+
+            <h3>
+                Customer Details
+            </h3>
+
+            <p>
+                Member information associated with this M-Pesa account.
+            </p>
+
+        </div>
+
+
+        <div class="customer-details">
+
+
+            <!-- FULL NAME -->
+
+            <div class="customer-item">
+
+                <small>
+                    Full Name
+                </small>
+
+                <strong>
+                    {{ profile.FullName|default:"-" }}
+                </strong>
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="customer-item">
+
+                <small>
+                    Username
+                </small>
+
+                <strong>
+                    {{ profile.host|default:"-" }}
+                </strong>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="customer-item">
+
+                <small>
+                    Email
+                </small>
+
+                <strong>
+                    {{ profile.Email|default:"-" }}
+                </strong>
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="customer-item">
+
+                <small>
+                    Phone
+                </small>
+
+                <strong>
+
+                    {% if profile.phone %}
+
+                        {{ profile.phone }}
+
+                    {% elif profile.Phone %}
+
+                        {{ profile.Phone }}
+
+                    {% else %}
+
+                        {% with first_transaction=transactions|first %}
+
+                            {{ first_transaction.phone_number|default:"-" }}
+
+                        {% endwith %}
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <!-- GROUP -->
+
+            <div class="customer-item">
+
+                <small>
+                    Group
+                </small>
+
+                <strong>
+                    {{ profile.group|default:"-" }}
+                </strong>
+
+            </div>
+
+
+            <!-- HBC -->
+
+            <div class="customer-item">
+
+                <small>
+                    HBC
+                </small>
+
+                <strong>
+                    {{ profile.HBC|default:"-" }}
+                </strong>
+
+            </div>
+
+
+            <!-- PROFILE ID -->
+
+            <div class="customer-item">
+
+                <small>
+                    Profile ID
+                </small>
+
+                <strong>
+                    #{{ profile.id }}
+                </strong>
+
+            </div>
+
+
+            <!-- TRANSACTION COUNT -->
+
+            <div class="customer-item">
+
+                <small>
+                    Successful Transactions
+                </small>
+
+                <strong>
+                    {{ transactions|length }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         BALANCE SUMMARY
+    ================================================= -->
+
+    <div class="statement-card">
+
+        <div class="card-header">
+
+            <h3>
+                Balance Summary
+            </h3>
+
+            <p>
+                Financial position from the balance brought forward in 2024 to date.
+            </p>
+
+        </div>
+
+
+        <div class="balance-grid">
+
+
+            <!-- =================================================
+                 OPENING BALANCE
+            ================================================= -->
+
+            <div class="balance-card opening">
+
+                <small>
+                    Balance Brought Forward
+                </small>
+
+                <h2>
+                    KSh {{ opening_balance|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Opening balance from 2024
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 M-PESA TOTAL
+            ================================================= -->
+
+            <div class="balance-card mpesa">
+
+                <small>
+                    Total M-Pesa Payments
+                </small>
+
+                <h2>
+                    KSh {{ mpesa_total|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Successful transactions
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 CURRENT BALANCE
+            ================================================= -->
+
+            <div class="balance-card current">
+
+                <small>
+                    Current Balance
+                </small>
+
+                <h2>
+                    KSh {{ current_balance|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Balance to date
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TRANSACTION HISTORY
+    ================================================= -->
+
+    <div class="statement-card">
+
+        <div class="card-header">
+
+            <h3>
+                M-Pesa Transaction History
+            </h3>
+
+            <p>
+                Complete record of successful M-Pesa payments.
+            </p>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="transaction-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Date</th>
+
+                        <th>Customer</th>
+
+                        <th>Phone</th>
+
+                        <th>Amount</th>
+
+                        <th>M-Pesa Receipt</th>
+
+                        <th>Status</th>
+
+                        <th>Details</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for transaction in transactions %}
+
+
+                    <!-- =================================================
+                         MAIN TRANSACTION
+                    ================================================= -->
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <td>
+
+                            {% if transaction.transaction_date %}
+
+                                {{ transaction.transaction_date }}
+
+                            {% else %}
+
+                                {{ transaction.created_at|date:"d M Y H:i" }}
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ transaction.full_name|default:profile.FullName|default:"-" }}
+
+                        </td>
+
+
+                        <td class="phone">
+
+                            {{ transaction.phone_number|default:"-" }}
+
+                        </td>
+
+
+                        <td class="transaction-amount">
+
+                            KSh {{ transaction.amount|floatformat:2 }}
+
+                        </td>
+
+
+                        <td class="receipt">
+
+                            {{ transaction.mpesa_receipt_number|default:"-" }}
+
+                        </td>
+
+
+                        <td>
+
+
+                            {% if transaction.status == "Success" %}
+
+                                <span class="status success">
+                                    Success
+                                </span>
+
+                            {% elif transaction.status == "Pending" %}
+
+                                <span class="status pending">
+                                    Pending
+                                </span>
+
+                            {% else %}
+
+                                <span class="status failed">
+                                    Failed
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="details-button"
+                                onclick="toggleDetails('{{ transaction.id }}')"
+                            >
+                                View Details
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- =================================================
+                         TECHNICAL TRANSACTION DETAILS
+                    ================================================= -->
+
+                    <tr
+                        id="details-{{ transaction.id }}"
+                        class="transaction-details"
+                    >
+
+                        <td colspan="8">
+
+                            <div class="details-grid">
+
+
+                                <!-- CHECKOUT REQUEST ID -->
+
+                                <div class="detail-item">
+
+                                    <small>
+                                        Checkout Request ID
+                                    </small>
+
+                                    <span>
+                                        {{ transaction.checkout_request_id|default:"-" }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- MERCHANT REQUEST ID -->
+
+                                <div class="detail-item">
+
+                                    <small>
+                                        Merchant Request ID
+                                    </small>
+
+                                    <span>
+                                        {{ transaction.merchant_request_id|default:"-" }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- RESULT CODE -->
+
+                                <div class="detail-item">
+
+                                    <small>
+                                        Result Code
+                                    </small>
+
+                                    <span>
+                                        {{ transaction.result_code|default:"-" }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- CREATED AT -->
+
+                                <div class="detail-item">
+
+                                    <small>
+                                        Created At
+                                    </small>
+
+                                    <span>
+                                        {{ transaction.created_at|date:"d M Y H:i:s" }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- RESULT DESCRIPTION -->
+
+                                <div
+                                    class="detail-item"
+                                    style="grid-column: 1 / -1;"
+                                >
+
+                                    <small>
+                                        Result Description
+                                    </small>
+
+                                    <span>
+                                        {{ transaction.result_desc|default:"-" }}
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                {% empty %}
+
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="no-results"
+                        >
+
+                            No M-Pesa transactions found for this member.
+
+                        </td>
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   TRANSACTION DETAILS
+===================================================== */
+
+function toggleDetails(transactionId) {
+
+    const row = document.getElementById(
+        "details-" + transactionId
+    );
+
+
+    if (!row) {
+
+        return;
+
+    }
+
+
+    if (row.style.display === "table-row") {
+
+        row.style.display = "none";
+
+    } else {
+
+        row.style.display = "table-row";
+
+    }
+
+}
+
+</script>
+
+
+{% endblock %}

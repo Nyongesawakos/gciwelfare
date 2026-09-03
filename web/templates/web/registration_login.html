@@ -1,203 +1,805 @@
-{%extends 'main.html'%}
+{% extends 'main.html' %}
+
 {% block content %}
-    
-           
 
-{% if page == 'login'%}
+<style>
 
+/* =========================================================
+   AUTH PAGE
+========================================================= */
 
-<div class="content">
-    <div class="card">
-        <h1>Sign In</h1>
-
-        <form method="post" class="form">
-            {% csrf_token %}
-            
-    <label for="room_name">Username</label>
-  
-    <input type="text" name="username" placeholder="enter username">
-
-    <label for="password">Password</label>
-    <input type="password" name="password" placeholder="enter password">
-            <div class="btn-wrapper">
-    <button type="submit"  class="btn primary">Sign In</button>
-    
-</div>
-<br>
-<!--{% load socialaccount %}
-
-<a href="{% provider_login_url 'google' %}" class="google-btn">
-    Sign in with Google
-</a>-->
-
-   <a href="{% url 'password_reset' %}">Forgot Password?</a>
-    <p>haven't you signed up?</p>
-    <a href="{% url 'register'%}">Register</a>
-    
-</div>
-{% else %}
- <div class="content">
-    <div class="card">
-        <h1>Register</h1>
-
-        <form method="post" class="form">
-            {% csrf_token %}
-            <label>Username</label>
-            {{form.username}}
-             {% if form.username.errors %}
-    <div class="form__error">
-      {{ form.username.errors }}
-    </div>
-  {% endif %}
-         <label>Email</label>
-            {{form.email}}
-              {% if form.email.errors %}
-    <div class="form__error">
-      {{ form.email.errors }}
-    </div>
-  {% endif %}
-         <label>Password</label>
-            {{form.password1}}
-              {% if form.password1.errors %}
-    <div class="form__error">
-      {{ form.password1.errors }}
-    </div>
-  {% endif %}
-    
-         <label>Confirm Password</label>
-            {{form.password2}}
-              {% if form.password2.errors %}
-    <div class="form__error">
-      {{ form.password2.errors }}
-    </div>
-    {% endif %}
-    
-  
-
-            <div class="btn-wrapper">
-    <button type="submit"  class="btn primary">Register</button>
-    
-</div>
-
-        </form>
-
-            <div class="auth__action">
-              <p>Already have an account?</p>
-              <a href="{% url 'login'%}" class="btn btn--link">LogIn</a>
-            </div>
-            
-    </div>
-</div>
-{% endif %}
-
-
-
-    <style>
-        .google-btn{
-    background:#1390cd;
-    color:white;
-    padding:12px 20px;
-    border-radius:6px;
-    text-decoration:none;
-    font-weight:600;
-}
-      .form__error {
-  color: #ff4d4f;
-  font-size: 1.3rem;
-  margin-top: 0.5rem;
-}
-  /* Page wrapper */
-.content {
-    min-height: 100vh;
+.auth-page {
+    min-height: calc(100vh - 80px);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f4f6f8;
-    padding: 20px;
+    padding: 40px 20px;
+    background:
+        linear-gradient(
+            135deg,
+            #f4f8fb 0%,
+            #eef6fa 50%,
+            #f8fafc 100%
+        );
 }
 
+/* =========================================================
+   AUTH CARD
+========================================================= */
 
-
-/* Card */
-.card {
+.auth-card {
     width: 100%;
-    max-width: 480px;
+    max-width: 460px;
     background: #ffffff;
-    border-radius: 14px;
-    padding: 30px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.4s ease-in-out;
+    border-radius: 20px;
+    padding: 38px;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.08),
+        0 5px 15px rgba(19, 144, 205, 0.06);
+    border: 1px solid #e8eef2;
+    animation: authFade 0.5s ease;
 }
 
-/* Headings */
-.card h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
+@keyframes authFade {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.auth-brand {
     text-align: center;
-    color: #111827;
+    margin-bottom: 28px;
 }
 
-.card h3 {
-    margin: 20px 0 10px;
-    font-size: 16px;
-    text-align: center;
-    color: #374151;
-}
+.auth-logo {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 15px;
 
-/* Django form styling */
-.form p {
-    margin-bottom: 15px;
-}
-
-.form label {
     display: flex;
-    font-size: 13px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: #374151;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: linear-gradient(
+        135deg,
+        #1390cd,
+        #0c79ad
+    );
+
+    color: #ffffff;
+
+    font-size: 26px;
+    font-weight: 800;
+
+    box-shadow:
+        0 10px 25px rgba(19, 144, 205, 0.25);
 }
 
-/* Inputs */
-.form input,
-.form select,
-.form textarea,
-.upload-form input[type="file"] {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
+.auth-brand h1 {
+    margin: 0;
+    color: #111827;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.auth-brand p {
+    margin-top: 8px;
+    color: #6b7280;
     font-size: 14px;
-    transition: all 0.2s ease;
 }
 
-.form input:focus,
-.form select:focus,
-.form textarea:focus {
-    border-color: #10b981;;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+/* =========================================================
+   FORM
+========================================================= */
+
+.auth-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #9ca3af;
+
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+.auth-form input {
+    width: 100%;
+
+    padding: 13px 14px 13px 42px;
+
+    border: 1px solid #d7dee5;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 14px;
+
     outline: none;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
 }
 
-/* Buttons */
-
-
-.btn.primary {
-    background: #1390cd;
-    color: white;
-    margin-top: 10px;
+.auth-form input::placeholder {
+    color: #a1a8b0;
 }
 
-.btn.secondary {
-    background: #1390cd;
-    color: white;
-    margin-top: 10px;
+.auth-form input:focus {
+    border-color: #1390cd;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 4px rgba(19, 144, 205, 0.10);
 }
 
-.btn:hover {
+.auth-form input:hover {
+    border-color: #b8c4cd;
+}
+
+/* =========================================================
+   DJANGO ERRORS
+========================================================= */
+
+.form__error {
+    margin-top: 7px;
+
+    padding: 8px 10px;
+
+    border-radius: 7px;
+
+    background: #fff1f2;
+
+    border-left: 3px solid #ef4444;
+
+    color: #dc2626;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.form__error ul {
+    margin: 0;
+    padding-left: 16px;
+}
+
+/* Non-field errors */
+
+.non-field-errors {
+    margin-bottom: 18px;
+
+    padding: 11px 13px;
+
+    border-radius: 9px;
+
+    background: #fff1f2;
+
+    border: 1px solid #fecdd3;
+
+    color: #dc2626;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.auth-submit {
+    width: 100%;
+
+    border: none;
+
+    padding: 14px 20px;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #1390cd,
+        #0c79ad
+    );
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all .25s ease;
+
+    box-shadow:
+        0 7px 18px rgba(19, 144, 205, 0.22);
+}
+
+.auth-submit:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(19, 144, 205, 0.30);
+}
+
+.auth-submit:active {
+    transform: translateY(0);
+}
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+.forgot-password {
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: 20px;
+}
+
+.forgot-password a {
+    color: #1390cd;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 25px 0;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: #e5e7eb;
+}
+
+/* =========================================================
+   GOOGLE / SECONDARY BUTTON
+========================================================= */
+
+.google-btn {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    border: 1px solid #dbe2e8;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: .25s ease;
+}
+
+.google-btn:hover {
+    border-color: #1390cd;
+
+    background: #f7fbfd;
+
     transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 
-/* Divider */
+/* =========================================================
+   BOTTOM ACTION
+========================================================= */
+
+.auth-action {
+    margin-top: 25px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #edf0f2;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    color: #6b7280;
+}
+
+.auth-action p {
+    margin-bottom: 8px;
+}
+
+.auth-action a {
+    color: #1390cd;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.auth-action a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   SECURITY NOTE
+========================================================= */
+
+.security-note {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+.security-note i {
+    color: #1390cd;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .auth-page {
+        min-height: 100vh;
+
+        padding: 25px 14px;
+
+        align-items: flex-start;
+    }
+
+    .auth-card {
+        margin-top: 20px;
+
+        padding: 28px 20px;
+
+        border-radius: 17px;
+    }
+
+    .auth-logo {
+        width: 58px;
+        height: 58px;
+
+        font-size: 23px;
+    }
+
+    .auth-brand h1 {
+        font-size: 23px;
+    }
+
+    .auth-brand p {
+        font-size: 13px;
+    }
+
+    .auth-form input {
+        padding: 13px 12px 13px 40px;
+    }
+
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .auth-card {
+        padding: 24px 16px;
+    }
+
+    .auth-brand h1 {
+        font-size: 21px;
+    }
+
+}
+
 </style>
-    {%endblock%}
+
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+
+        <!-- =================================================
+             LOGIN
+        ================================================== -->
+
+        {% if page == 'login' %}
+
+        <div class="auth-brand">
+
+            <div class="auth-logo">
+                GW
+            </div>
+
+            <h1>Welcome Back</h1>
+
+            <p>
+                Sign in to your account to continue
+            </p>
+
+        </div>
+
+
+        <form method="post" class="auth-form">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-user"></i>
+
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-lock"></i>
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- FORGOT PASSWORD -->
+
+            <div class="forgot-password">
+
+                <a href="#">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+
+                <i class="fas fa-right-to-bracket"></i>
+
+                &nbsp; Sign In
+
+            </button>
+
+        </form>
+
+
+        <div class="auth-action">
+
+            <p>
+                Don't have an account?
+            </p>
+
+            <a href="{% url 'register' %}">
+                Create an Account
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             REGISTER
+        ================================================== -->
+
+        {% else %}
+
+
+        <div class="auth-brand">
+
+            <div class="auth-logo">
+                KW
+            </div>
+
+            <h1>Create Account</h1>
+
+            <p>
+                Register your account to get started
+            </p>
+
+        </div>
+
+
+        <form method="post" class="auth-form">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+            <div class="non-field-errors">
+                {{ form.non_field_errors }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="{{ form.username.id_for_label }}">
+                    Username
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-user"></i>
+
+                    {{ form.username }}
+
+                </div>
+
+                {% if form.username.errors %}
+
+                <div class="form__error">
+                    {{ form.username.errors }}
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="{{ form.email.id_for_label }}">
+                    Email Address
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-envelope"></i>
+
+                    {{ form.email }}
+
+                </div>
+
+                {% if form.email.errors %}
+
+                <div class="form__error">
+                    {{ form.email.errors }}
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="{{ form.password1.id_for_label }}">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-lock"></i>
+
+                    {{ form.password1 }}
+
+                </div>
+
+                {% if form.password1.errors %}
+
+                <div class="form__error">
+                    {{ form.password1.errors }}
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="{{ form.password2.id_for_label }}">
+                    Confirm Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-lock"></i>
+
+                    {{ form.password2 }}
+
+                </div>
+
+                {% if form.password2.errors %}
+
+                <div class="form__error">
+                    {{ form.password2.errors }}
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- REGISTER BUTTON -->
+
+            <button
+                type="submit"
+                class="auth-submit"
+            >
+
+                <i class="fas fa-user-plus"></i>
+
+                &nbsp; Create Account
+
+            </button>
+
+        </form>
+
+
+        <div class="auth-action">
+
+            <p>
+                Already have an account?
+            </p>
+
+            <a href="{% url 'login' %}">
+                Sign In
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+        <!-- SECURITY -->
+
+        <div class="security-note">
+
+            <i class="fas fa-shield-halved"></i>
+
+            Secure and protected account access
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

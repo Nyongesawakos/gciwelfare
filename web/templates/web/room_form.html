@@ -1,175 +1,663 @@
-{% extends 'main.html '%}
+{% extends 'main.html' %}
 
-    
-        {% block content %}
+{% block content %}
 
- <div class="content">
-    <div class="card">
-        <h1>Register Profile</h1>
-
-        <form method="post" class="form">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <div class="btn-wrapper">
-    <button type="submit"  class="btn primary">Register</button>
-    
-</div>
-
-        </form>
-
-        <div class="divider"></div>
-
-   
-       
-    </div>
-</div>
 <style>
-  /* Page wrapper */
-.content {
-    min-height: 100vh;
+
+/* =========================================================
+   FORM PAGE
+========================================================= */
+
+.form-page {
+    min-height: calc(100vh - 80px);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f4f6f8;
-    padding: 20px;
+
+    padding: 40px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f4f8fb 0%,
+            #eef6fa 50%,
+            #f8fafc 100%
+        );
 }
 
 
+/* =========================================================
+   CARD
+========================================================= */
 
-/* Card */
-.card {
+.form-card {
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
+
     background: #ffffff;
-    border-radius: 14px;
-    padding: 30px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    animation: fadeIn 0.4s ease-in-out;
+
+    border-radius: 20px;
+
+    padding: 38px;
+
+    border: 1px solid #e8eef2;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.08),
+        0 5px 15px rgba(19, 144, 205, 0.06);
+
+    animation: fadeIn .45s ease;
 }
 
-/* Headings */
-.card h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #111827;
-}
 
-.card h3 {
-    margin: 20px 0 10px;
-    font-size: 16px;
-    text-align: center;
-    color: #374151;
-}
-
-/* Django form styling */
-.form p {
-    margin-bottom: 15px;
-}
-
-.form label {
-    display: flex;
-    font-size: 13px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: #374151;
-}
-
-/* Inputs */
-.form input,
-.form select,
-.form textarea,
-.upload-form input[type="file"] {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-    transition: all 0.2s ease;
-}
-
-.form input:focus,
-.form select:focus,
-.form textarea:focus {
-    border-color: #10b981;;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    outline: none;
-}
-
-/* Buttons */
-
-
-.btn.primary {
-    background: #1390cd;
-    color: white;
-    margin-top: 10px;
-}
-
-.btn.secondary {
-    background: #10b981;
-    color: white;
-    margin-top: 10px;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
-}
-
-/* Divider */
-.divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 25px 0;
-    font-size: 13px;
-    color: #6b7280;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #e5e7eb;
-}
-
-.divider::before {
-    margin-right: 10px;
-}
-
-.divider::after {
-    margin-left: 10px;
-}
-
-/* Upload form */
-.upload-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Animation */
 @keyframes fadeIn {
+
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(15px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
+
 }
 
-/* Mobile tweaks */
-@media (max-width: 480px) {
-    .card {
-        padding: 20px;
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.form-header {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.form-icon {
+
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0c79ad
+        );
+
+    color: white;
+
+    font-size: 25px;
+
+    box-shadow:
+        0 10px 25px rgba(19, 144, 205, .25);
+
+}
+
+
+.form-header h1 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 26px;
+
+    font-weight: 700;
+
+}
+
+
+.form-header p {
+
+    margin-top: 8px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   DJANGO FORM
+========================================================= */
+
+.form {
+
+    width: 100%;
+}
+
+
+.form p {
+
+    margin: 0 0 19px;
+}
+
+
+.form label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.form input,
+.form select,
+.form textarea {
+
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d7dee5;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+
+.form textarea {
+
+    min-height: 110px;
+
+    resize: vertical;
+
+}
+
+
+.form input::placeholder,
+.form textarea::placeholder {
+
+    color: #a1a8b0;
+
+}
+
+
+.form input:hover,
+.form select:hover,
+.form textarea:hover {
+
+    border-color: #b8c4cd;
+
+}
+
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+
+    border-color: #1390cd;
+
+    box-shadow:
+        0 0 0 4px rgba(19, 144, 205, .10);
+
+}
+
+
+/* =========================================================
+   HELP TEXT
+========================================================= */
+
+.form .helptext {
+
+    display: block;
+
+    margin-top: 6px;
+
+    color: #8a94a3;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ERRORS
+========================================================= */
+
+.form .errorlist {
+
+    margin: 7px 0 0;
+
+    padding: 8px 10px;
+
+    list-style: none;
+
+    border-radius: 7px;
+
+    border-left: 3px solid #ef4444;
+
+    background: #fff1f2;
+
+    color: #dc2626;
+
+    font-size: 12px;
+
+}
+
+
+.form .errorlist li {
+
+    margin: 0;
+
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.btn-wrapper {
+
+    margin-top: 8px;
+
+}
+
+
+.btn.primary {
+
+    width: 100%;
+
+    border: none;
+
+    padding: 14px 20px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0c79ad
+        );
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(19, 144, 205, .22);
+
+    transition: all .25s ease;
+}
+
+
+.btn.primary:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(19, 144, 205, .30);
+
+}
+
+
+.btn.primary:active {
+
+    transform: translateY(0);
+
+}
+
+
+/* =========================================================
+   SECONDARY BUTTON
+========================================================= */
+
+.btn.secondary {
+
+    width: 100%;
+
+    display: block;
+
+    text-align: center;
+
+    padding: 13px 20px;
+
+    margin-top: 12px;
+
+    border-radius: 10px;
+
+    background: #10b981;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: .25s ease;
+}
+
+
+.btn.secondary:hover {
+
+    background: #059669;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 26px 0;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+}
+
+
+.divider::before,
+.divider::after {
+
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: #e5e7eb;
+
+}
+
+
+/* =========================================================
+   FOOTER NOTE
+========================================================= */
+
+.form-footer {
+
+    text-align: center;
+
+    padding-top: 5px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.form-footer a {
+
+    color: #1390cd;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.form-footer a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.form-security {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+.form-security i {
+
+    color: #1390cd;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .form-page {
+
+        min-height: 100vh;
+
+        padding: 25px 14px;
+
+        align-items: flex-start;
+
     }
+
+
+    .form-card {
+
+        margin-top: 20px;
+
+        padding: 28px 20px;
+
+        border-radius: 17px;
+
+    }
+
+
+    .form-icon {
+
+        width: 56px;
+        height: 56px;
+
+        font-size: 22px;
+
+    }
+
+
+    .form-header h1 {
+
+        font-size: 23px;
+
+    }
+
+
+    .form-header p {
+
+        font-size: 13px;
+
+    }
+
+
+    .form input,
+    .form select,
+    .form textarea {
+
+        padding: 13px 12px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .form-card {
+
+        padding: 24px 16px;
+
+    }
+
+
+    .form-header h1 {
+
+        font-size: 21px;
+
+    }
+
 }
 
 </style>
 
 
-{% endblock content%}
+<div class="form-page">
+
+    <div class="form-card">
+
+
+        <!-- HEADER -->
+
+        <div class="form-header">
+
+            <div class="form-icon">
+
+                <i class="fas fa-user-plus"></i>
+
+            </div>
+
+            <h1>
+                Create Account
+            </h1>
+
+            <p>
+                Complete the form below to create your account.
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form method="post" class="form">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+
+            <!-- BUTTON -->
+
+            <div class="btn-wrapper">
+
+                <button
+                    type="submit"
+                    class="btn primary"
+                >
+
+                    <i class="fas fa-user-plus"></i>
+
+                    &nbsp; Register
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- DIVIDER -->
+
+        <div class="divider">
+            OR
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="form-footer">
+
+            Already have an account?
+
+            <a href="{% url 'login' %}">
+                Sign In
+            </a>
+
+        </div>
+
+
+        <!-- SECURITY -->
+
+        <div class="form-security">
+
+            <i class="fas fa-shield-halved"></i>
+
+            Your information is securely protected.
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock content %}

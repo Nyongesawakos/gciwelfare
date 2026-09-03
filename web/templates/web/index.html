@@ -1,83 +1,140 @@
 {% extends 'main.html' %}
 {% load static %}
+
 {% block content %}
 
 <div class="profile-page">
 
     <div class="profile-container">
 
-        <!-- PROFILE SIDEBAR -->
+        <!-- =========================
+             PROFILE SIDEBAR
+        ========================== -->
         <div class="profile-sidebar">
 
             <div class="profile-avatar">
-             {{ room.host.username|slice:":1"|upper }}
+                {{ room.FullName|slice:":1"|upper }}
             </div>
 
-            <h2>{{ room.host }}</h2>
-            <p class="member-role">Member Profile</p>
+            <!-- FULL NAME -->
+            <h2>
+                {{ room.FullName|default:"Member" }}
+            </h2>
+
+            <p class="member-role">
+                Member Profile
+            </p>
 
             <div class="member-badge">
                 Active Member
             </div>
 
             <div class="sidebar-actions">
-                <a href="{% url 'updateRoom' room.id %}" class="btn btn-primary">
+                <a href="{% url 'updateRoom' room.id %}"
+                   class="btn btn-primary">
                     Edit Profile
                 </a>
-
-                <!-- Optional Back Button -->
-                <!--
-                <a href="{% url 'members' %}" class="btn btn-outline">
-                    Back
-                </a>
-                -->
             </div>
 
         </div>
 
-        <!-- PROFILE CONTENT -->
+
+        <!-- =========================
+             PROFILE CONTENT
+        ========================== -->
         <div class="profile-content">
 
             <div class="content-header">
-                <h3>Member Information</h3>
-                <p>Personal and family details</p>
+                <h3>
+                    Member Information
+                </h3>
+
+                <p>
+                    Personal and family details
+                </p>
             </div>
+
 
             <div class="profile-grid">
 
+                <!-- FULL NAME -->
+                <div class="profile-card-item full-width">
+                    <span>Full Name</span>
+                    <h4>
+                        {{ room.FullName|default:"Not provided" }}
+                    </h4>
+                </div>
+
+
+                <!-- HBC -->
                 <div class="profile-card-item">
                     <span>HBC</span>
-                    <h4>{{ room.HBC }}</h4>
+                    <h4>
+                        {{ room.HBC|default:"Not provided" }}
+                    </h4>
                 </div>
 
+
+                <!-- PHONE -->
                 <div class="profile-card-item">
                     <span>Phone Number</span>
-                    <h4>{{ room.phone }}</h4>
+                    <h4>
+                        {{ room.phone|default:"Not provided" }}
+                    </h4>
                 </div>
 
+
+                <!-- EMAIL -->
+                <div class="profile-card-item">
+                    <span>Email</span>
+                    <h4>
+                        {{ room.Email|default:"Not provided" }}
+                    </h4>
+                </div>
+
+
+                <!-- ID NUMBER -->
                 <div class="profile-card-item">
                     <span>ID Number</span>
-                    <h4>{{ room.id_number }}</h4>
+                    <h4>
+                        {{ room.id_number|default:"Not provided" }}
+                    </h4>
                 </div>
 
+
+                <!-- PARENTS -->
                 <div class="profile-card-item">
                     <span>Parents</span>
-                    <h4>{{ room.Parent }}</h4>
+                    <h4>
+                        {{ room.Parent|default:"Not provided" }}
+                    </h4>
                 </div>
 
+
+                <!-- CHILDREN -->
                 <div class="profile-card-item">
                     <span>Children</span>
-                    <h4>{{ room.Child }}</h4>
+                    <h4>
+                        {{ room.Child|default:"Not provided" }}
+                    </h4>
                 </div>
 
+
+                <!-- SPOUSE -->
                 <div class="profile-card-item">
                     <span>Spouse</span>
-                    <h4>{{ room.Spouse }}</h4>
+                    <h4>
+                        {{ room.Spouse|default:"Not provided" }}
+                    </h4>
                 </div>
 
+
+                <!-- DATE JOINED -->
                 <div class="profile-card-item full-width">
                     <span>Date Joined</span>
-                    <h4>{{ room.created }}</h4>
+                    <h4>
+                        {{ room.created|date:"F d, Y" }}
+                    </h4>
                 </div>
 
             </div>
@@ -88,262 +145,695 @@
 
 </div>
 
+
 <style>
 
-/* ================= ROOT ================= */
+/* =========================================================
+   PROFILE PAGE
+   Uses the theme variables from main.html
+========================================================= */
 
-:root{
-    --primary: #1390cd;
-    --primary-dark: #0f6d9d;
-    --bg: #f4f7fb;
-    --card: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --border: #e5e7eb;
-    --shadow: 0 10px 35px rgba(0,0,0,0.08);
-}
+.profile-page {
 
-/* ================= PAGE ================= */
-
-.profile-page{
     min-height: 100vh;
-    background: var(--bg);
+
+    background:
+        var(
+            --page-bg,
+            var(
+                --bg-color,
+                var(
+                    --bg,
+                    #f8fbff
+                )
+            )
+        );
+
+    color:
+        var(
+            --text-color,
+            var(
+                --text,
+                #1f2937
+            )
+        );
+
     padding: 40px 20px;
+
+    box-sizing: border-box;
 }
 
-/* ================= MAIN LAYOUT ================= */
 
-.profile-container{
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.profile-container {
+
     width: 100%;
-    max-width: 1500px;
-    margin: auto;
+    max-width: 1200px;
+
+    margin: 0 auto;
 
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 30px;
-    align-items: start;
+
+    grid-template-columns: 280px 1fr;
+
+    gap: 25px;
+
+    align-items: stretch;
 }
 
-/* ================= SIDEBAR ================= */
 
-.profile-sidebar{
-    background: var(--card);
-    border-radius: 20px;
-    padding: 40px 30px;
+/* =========================================================
+   PROFILE SIDEBAR
+========================================================= */
+
+.profile-sidebar {
+
+    background:
+        var(
+            --content-bg,
+            var(
+                --card-color,
+                var(
+                    --card,
+                    #ffffff
+                )
+            )
+        );
+
+    border: 1px solid
+        var(
+            --border-color,
+            var(
+                --border,
+                #e5edf5
+            )
+        );
+
+    border-radius: 18px;
+
+    padding: 35px 25px;
+
     text-align: center;
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.055);
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.profile-avatar{
-    width: 110px;
-    height: 110px;
-    margin: auto;
+
+.profile-sidebar:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.075);
+}
+
+
+/* =========================================================
+   PROFILE AVATAR
+========================================================= */
+
+.profile-avatar {
+
+    width: 85px;
+    height: 85px;
+
+    margin: 0 auto 18px;
+
     border-radius: 50%;
 
-    background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--primary-dark)
-    );
-
-    color: white;
-    font-size: 42px;
-    font-weight: bold;
-
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 20px;
+    font-size: 32px;
+
+    font-weight: 700;
+
+    color:
+        var(
+            --button-text-color,
+            #ffffff
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            var(
+                --primary-color,
+                var(
+                    --primary,
+                    #1390cd
+                )
+            ),
+            var(
+                --primary-dark,
+                #0f6d9d
+            )
+        );
+
+    box-shadow:
+        0 8px 20px rgba(19, 144, 205, 0.20);
 }
 
-.profile-sidebar h2{
+
+/* =========================================================
+   FULL NAME
+========================================================= */
+
+.profile-sidebar h2 {
+
     margin: 0;
-    color: var(--text);
-    font-size: 28px;
-}
 
-.member-role{
-    color: var(--muted);
-    margin-top: 8px;
-    font-size: 15px;
-}
+    font-size: 21px;
 
-.member-badge{
-    display: inline-block;
-    margin-top: 18px;
-    background: rgba(19,144,205,0.1);
-    color: var(--primary);
-    padding: 8px 18px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 600;
-}
+    font-weight: 700;
 
-/* ================= BUTTONS ================= */
+    line-height: 1.35;
 
-.sidebar-actions{
-    margin-top: 35px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+    color:
+        var(
+            --heading-color,
+            var(
+                --text-color,
+                var(
+                    --text,
+                    #1f2937
+                )
+            )
+        );
 
-.btn{
-    padding: 14px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s ease;
-}
-
-.btn-primary{
-    background: var(--primary);
-    color: white;
-}
-
-.btn-primary:hover{
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-}
-
-.btn-outline{
-    border: 1px solid var(--border);
-    color: var(--text);
-    background: white;
-}
-
-.btn-outline:hover{
-    background: #f9fafb;
-}
-
-/* ================= CONTENT ================= */
-
-.profile-content{
-    background: var(--card);
-    border-radius: 20px;
-    padding: 35px;
-    box-shadow: var(--shadow);
-}
-
-.content-header{
-    margin-bottom: 30px;
-}
-
-.content-header h3{
-    margin: 0;
-    font-size: 28px;
-    color: var(--text);
-}
-
-.content-header p{
-    margin-top: 8px;
-    color: var(--muted);
-}
-
-/* ================= GRID ================= */
-
-.profile-grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 22px;
-}
-
-.profile-card-item{
-    background: #fafcff;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 22px;
-    transition: 0.3s ease;
-}
-
-.profile-card-item:hover{
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-}
-
-.profile-card-item span{
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--muted);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.profile-card-item h4{
-    margin: 0;
-    color: var(--primary);
-    font-size: 20px;
     word-break: break-word;
 }
 
-/* FULL WIDTH */
 
-.full-width{
+/* =========================================================
+   MEMBER ROLE
+========================================================= */
+
+.member-role {
+
+    margin: 7px 0 16px;
+
+    font-size: 14px;
+
+    color:
+        var(
+            --muted-color,
+            var(
+                --muted,
+                #6b7280
+            )
+        );
+}
+
+
+/* =========================================================
+   ACTIVE MEMBER BADGE
+========================================================= */
+
+.member-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 14px;
+
+    border-radius: 30px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    background:
+        color-mix(
+            in srgb,
+            var(
+                --primary-color,
+                var(
+                    --primary,
+                    #1390cd
+                )
+            ) 10%,
+            #ffffff
+        );
+
+    color:
+        var(
+            --primary-color,
+            var(
+                --primary,
+                #1390cd
+            )
+        );
+
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(
+                --primary-color,
+                var(
+                    --primary,
+                    #1390cd
+                )
+            ) 20%,
+            #ffffff
+        );
+}
+
+
+/* =========================================================
+   SIDEBAR BUTTON
+========================================================= */
+
+.sidebar-actions {
+
+    margin-top: 28px;
+}
+
+
+.sidebar-actions .btn {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.sidebar-actions .btn:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.10);
+
+    opacity: 0.95;
+}
+
+
+.sidebar-actions .btn-primary {
+
+    background:
+        var(
+            --primary-color,
+            var(
+                --primary,
+                #1390cd
+            )
+        );
+
+    color:
+        var(
+            --button-text-color,
+            #ffffff
+        );
+
+    border: none;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.profile-content {
+
+    background:
+        var(
+            --content-bg,
+            var(
+                --card-color,
+                var(
+                    --card,
+                    #ffffff
+                )
+            )
+        );
+
+    border: 1px solid
+        var(
+            --border-color,
+            var(
+                --border,
+                #e5edf5
+            )
+        );
+
+    border-radius: 18px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.055);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   CONTENT HEADER
+========================================================= */
+
+.content-header {
+
+    padding-bottom: 22px;
+
+    margin-bottom: 25px;
+
+    border-bottom: 1px solid
+        var(
+            --border-color,
+            var(
+                --border,
+                #e8eef5
+            )
+        );
+}
+
+
+.content-header h3 {
+
+    margin: 0 0 7px;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    color:
+        var(
+            --heading-color,
+            var(
+                --text-color,
+                var(
+                    --text,
+                    #1f2937
+                )
+            )
+        );
+}
+
+
+.content-header p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    color:
+        var(
+            --muted-color,
+            var(
+                --muted,
+                #6b7280
+            )
+        );
+}
+
+
+/* =========================================================
+   PROFILE GRID
+========================================================= */
+
+.profile-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   INFORMATION CARDS
+========================================================= */
+
+.profile-card-item {
+
+    background:
+        var(
+            --inner-card-bg,
+            #fbfdff
+        );
+
+    border: 1px solid
+        var(
+            --border-color,
+            var(
+                --border,
+                #e8eef5
+            )
+        );
+
+    border-radius: 13px;
+
+    padding: 20px;
+
+    min-height: 92px;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.profile-card-item:hover {
+
+    background:
+        var(
+            --content-bg,
+            var(
+                --card-color,
+                var(
+                    --card,
+                    #ffffff
+                )
+            )
+        );
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(
+                --primary-color,
+                var(
+                    --primary,
+                    #1390cd
+                )
+            ) 25%,
+            #e8eef5
+        );
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.045);
+}
+
+
+/* =========================================================
+   CARD LABEL
+========================================================= */
+
+.profile-card-item span {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    color:
+        var(
+            --muted-color,
+            var(
+                --muted,
+                #6b7280
+            )
+        );
+}
+
+
+/* =========================================================
+   CARD VALUE
+========================================================= */
+
+.profile-card-item h4 {
+
+    margin: 0;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+
+    color:
+        var(
+            --text-color,
+            var(
+                --text,
+                #1f2937
+            )
+        );
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   FULL WIDTH
+========================================================= */
+
+.profile-card-item.full-width {
+
     grid-column: 1 / -1;
 }
 
-/* ================= LARGE SCREEN ================= */
 
-@media (min-width: 1600px){
+/* =========================================================
+   TABLET
+========================================================= */
 
-    .profile-container{
-        max-width: 1800px;
+@media (max-width: 900px) {
+
+    .profile-container {
+
+        grid-template-columns: 230px 1fr;
+
+        gap: 18px;
     }
 
-    .profile-grid{
-        grid-template-columns: repeat(3, 1fr);
+    .profile-sidebar {
+
+        padding: 30px 18px;
     }
 
-}
+    .profile-content {
 
-/* ================= TABLET ================= */
-
-@media (max-width: 992px){
-
-    .profile-container{
-        grid-template-columns: 1fr;
-    }
-
-    .profile-sidebar{
-        position: relative;
-        top: 0;
+        padding: 28px;
     }
 
 }
 
-/* ================= MOBILE ================= */
 
-@media (max-width: 768px){
+/* =========================================================
+   MOBILE
+========================================================= */
 
-    .profile-page{
-        padding: 20px 12px;
+@media (max-width: 700px) {
+
+    .profile-page {
+
+        padding: 25px 15px;
     }
 
-    .profile-content,
-    .profile-sidebar{
-        padding: 25px 20px;
-    }
+    .profile-container {
 
-    .profile-sidebar h2{
-        font-size: 22px;
-    }
-
-    .content-header h3{
-        font-size: 22px;
-    }
-
-    .profile-grid{
         grid-template-columns: 1fr;
-        gap: 16px;
+
+        gap: 18px;
     }
 
-    .profile-card-item h4{
-        font-size: 18px;
+    .profile-sidebar {
+
+        padding: 30px 20px;
+    }
+
+    .profile-content {
+
+        padding: 22px 18px;
+    }
+
+    .profile-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+    }
+
+    .profile-card-item.full-width {
+
+        grid-column: auto;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .profile-page {
+
+        padding: 18px 10px;
+    }
+
+    .profile-content {
+
+        padding: 18px 14px;
+    }
+
+    .profile-sidebar {
+
+        padding: 25px 16px;
+    }
+
+    .content-header h3 {
+
+        font-size: 20px;
+    }
+
+    .profile-card-item {
+
+        padding: 17px;
     }
 
 }

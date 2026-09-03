@@ -1,140 +1,1231 @@
 {% extends 'main.html' %}
-{%load static%}
+{% load static %}
+
 {% block content %}
-{% if user.is_superuser %} 
-
-
-<br>
-<div class="form-container" style="align-items: center;">
-
-<div class="roomList__header">
-  <a class="btn btn--primary" href="{% url 'Msge' %}">Reply</a>
-</div>
-  
-  <p>Messages from Members</p>
-    {% for message in R_messages|slice:':15'%}
-    
-    <small style="color: brown;">@{{message.user}}</small><br><br>
-    
-    
-<p > <b>{{message.body}}</b></p>
- <small><p style="font-size: x-small; color: royalblue; padding: 30px; text-align: right;"><i>{{message.updated|timesince}} ago</i></p></small>
-  <hr>
-  
-{%endfor%}
-</div >
-{%endif%}
-<br><br>
-
-{% if not user.is_superuser %}
-
-<div class="form-container" style="align-items: center;">
-<h2>Notifications for You</h2>
-<hr>
-<br>
-{% for Msg in adm%}
-{% if request.user == Msg.sender %}
-<p><p>{{Msg.body}}</p></p>
-<small style="padding: 30px; text-align: right;"><p style="font-size: x-small; color: royalblue;"><i>{{Msg.updated|timesince}} ago</i></p></small>
-<hr>
-{%endif%}
-{%endfor%}
-</div>
-
-{%endif%}
-</div>
 
 <style>
-    .form-container {
-  margin: auto;
-  max-width: 300px;
-  padding: 10px;
-  background-color: white;
- 
-  color: black;
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.messages-page {
+
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 20px 15px 60px;
+
+    color: #111827;
+
 }
-    </style>
-    <br><br>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
- 
-  <style>
-    body {
-      background-color: #f4f4f4;
-      font-family: 'Arial', sans-serif;
-      display: block;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.messages-header {
+
+    position: relative;
+
+    padding: 30px 34px;
+
+    margin-bottom: 25px;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(255,255,255,.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 10% 100%,
+            rgba(16,185,129,.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0f78aa 55%,
+            #075985
+        );
+
+    box-shadow:
+        0 15px 40px
+        rgba(19,144,205,.20);
+
+}
+
+
+.messages-header h1 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+}
+
+
+.messages-header h1 i {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.16);
+
+}
+
+
+.messages-header p {
+
+    margin: 9px 0 0 58px;
+
+    color:
+        rgba(255,255,255,.82);
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   MAIN CARD
+===================================================== */
+
+.messages-card {
+
+    background: white;
+
+    border-radius: 20px;
+
+    border:
+        1px solid #e5e7eb;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.055);
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   CARD HEADER
+===================================================== */
+
+.messages-card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 22px 26px;
+
+    border-bottom:
+        1px solid #edf0f3;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fbfcfd
+        );
+
+}
+
+
+.messages-card-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.messages-card-title i {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(19,144,205,.10);
+
+    color: #1390cd;
+
+}
+
+
+.messages-card-title h2 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    color: #111827;
+
+}
+
+
+.messages-card-title span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   REPLY BUTTON
+===================================================== */
+
+.reply-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 18px;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0f78aa
+        );
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 6px 16px
+        rgba(19,144,205,.18);
+
+    transition: .25s ease;
+
+}
+
+
+.reply-btn:hover {
+
+    color: white;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 22px
+        rgba(19,144,205,.25);
+
+}
+
+
+/* =====================================================
+   MESSAGE LIST
+===================================================== */
+
+.message-list {
+
+    padding: 5px 25px 25px;
+
+}
+
+
+/* =====================================================
+   MESSAGE ITEM
+===================================================== */
+
+.message-item {
+
+    display: flex;
+
+    gap: 15px;
+
+    padding: 20px 5px;
+
+    border-bottom:
+        1px solid #edf0f3;
+
+}
+
+
+.message-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+.message-avatar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1390cd,
+            #0f78aa
+        );
+
+    color: white;
+
+    font-size: 15px;
+
+    box-shadow:
+        0 5px 12px
+        rgba(19,144,205,.16);
+
+}
+
+
+/* =====================================================
+   MESSAGE CONTENT
+===================================================== */
+
+.message-content {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.message-meta {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.message-user {
+
+    color: #1390cd;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+.message-time {
+
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+
+}
+
+
+.message-body {
+
+    margin: 0;
+
+    color: #374151;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    word-break: break-word;
+
+}
+
+
+/* =====================================================
+   MEMBER MESSAGE
+===================================================== */
+
+.member-message {
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbfd,
+            #ffffff
+        );
+
+}
+
+
+/* =====================================================
+   ADMIN NOTIFICATION
+===================================================== */
+
+.notification-item {
+
+    padding: 20px;
+
+    margin-bottom: 12px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff9ff,
+            #f8fcff
+        );
+
+    border-left:
+        4px solid #1390cd;
+
+}
+
+
+.notification-item .message-body {
+
+    color: #374151;
+
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-state {
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+}
+
+
+.empty-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 65px;
+
+    height: 65px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff9ff,
+            #f8fafc
+        );
+
+    color: #1390cd;
+
+    font-size: 25px;
+
+}
+
+
+.empty-state h3 {
+
+    margin: 0 0 6px;
+
+    color: #374151;
+
+    font-size: 15px;
+
+}
+
+
+.empty-state p {
+
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   CONTRIBUTION CARD
+===================================================== */
+
+.contribution-wrapper {
+
+    margin-top: 25px;
+
+}
+
+
+.contribution-card {
+
+    position: relative;
+
+    max-width: 500px;
+
+    margin: 0 auto;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(255,255,255,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #008c44,
+            #007a3d
+        );
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,140,68,.20);
+
+}
+
+
+.contribution-card h2 {
+
+    margin: 0 0 22px;
+
+    padding-bottom: 12px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.20);
+
+    text-align: center;
+
+    font-size: 20px;
+
+}
+
+
+.contribution-details {
+
+    display: grid;
+
+    gap: 12px;
+
+}
+
+
+.contribution-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 13px 15px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.09);
+
+}
+
+
+.contribution-row span {
+
+    font-size: 12px;
+
+    color:
+        rgba(255,255,255,.80);
+
+}
+
+
+.contribution-row strong {
+
+    font-size: 14px;
+
+    color: white;
+
+}
+
+
+.thank-you {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 11px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #e72326;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .messages-page {
+
+        padding:
+            8px 10px 40px;
+
     }
 
-    .payment-card {
-      background-color: #008c44; /* Safaricom Green */
-      color: white;
-      width: 370px;
-      margin: auto;
-      border-radius: 15px;
-      padding: 30px 30px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      position: relative;
+
+    .messages-header {
+
+        padding:
+            22px 20px;
+
+        border-radius: 17px;
+
     }
 
-    .payment-card h2 {
-      margin: 0 0 20px;
-      font-size: 22px;
-      border-bottom: 2px solid #ffffff33;
-      padding-bottom: 10px;
-      text-align: center;
+
+    .messages-header h1 {
+
+        font-size: 22px;
+
     }
 
-    .payment-card label {
-      display: block;
-      margin-top: 15px;
-      font-size: 16px;
-      text-align: center;
+
+    .messages-header h1 i {
+
+        width: 40px;
+
+        height: 40px;
+
     }
 
-    .payment-card input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 5px;
-      outline: none;
+
+    .messages-header p {
+
+        margin-left: 50px;
+
+        font-size: 11px;
+
+        line-height: 1.5;
+
     }
 
-    .payment-card button {
-      margin-top: 2px;
-      width: 100%;
-      padding: 4px;
-      background-color: #ff0000; /* Safaricom Red */
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
+
+    .messages-card {
+
+        border-radius: 16px;
+
     }
 
-    .payment-card button:hover {
-      background-color: #cc0000;
+
+    .messages-card-header {
+
+        padding: 18px;
+
+        align-items: flex-start;
+
     }
-  </style>
 
 
-  <div class="payment-card">
-    <h2>Contributions Details</h2>
-    <label for="phone">Paybill Number:   <b>4146385</b> </label>
-   <!--input type="tel" id="phone" placeholder="e.g. 07xxxxxxxx"-->
+    .messages-card-title h2 {
 
-    <label for="amount">Name: <b>Input your name</b></label>
-    <label for="amount">Amount: <b>200 per person</b></label>
-    <!--input type="number" id="amount" placeholder="Enter amount"-->
-<br>
-    <button type="submit">Thank you</button>
-  </div>
+        font-size: 16px;
 
-</body>
-</html>
+    }
 
-    {%endblock%}
+
+    .reply-btn {
+
+        padding:
+            9px 12px;
+
+        font-size: 11px;
+
+    }
+
+
+    .message-list {
+
+        padding:
+            5px 15px 20px;
+
+    }
+
+
+    .message-item {
+
+        gap: 10px;
+
+        padding:
+            17px 2px;
+
+    }
+
+
+    .message-avatar {
+
+        width: 36px;
+
+        height: 36px;
+
+        border-radius: 10px;
+
+        font-size: 12px;
+
+    }
+
+
+    .message-meta {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 4px;
+
+    }
+
+
+    .message-body {
+
+        font-size: 12px;
+
+    }
+
+
+    .contribution-card {
+
+        padding: 22px;
+
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .messages-header h1 {
+
+        font-size: 20px;
+
+    }
+
+
+    .messages-header p {
+
+        margin-left: 0;
+
+    }
+
+
+    .messages-card-header {
+
+        flex-direction: column;
+
+    }
+
+
+    .reply-btn {
+
+        width: 100%;
+
+    }
+
+
+    .contribution-row {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+    }
+
+}
+
+</style>
+
+
+<div class="messages-page">
+
+
+    <!-- =================================================
+         PAGE HEADER
+    ================================================= -->
+
+    <div class="messages-header">
+
+        {% if user.is_superuser %}
+
+            <h1>
+
+                <i class="fas fa-comments"></i>
+
+                Member Messages
+
+            </h1>
+
+            <p>
+
+                View messages and enquiries received from members.
+
+            </p>
+
+        {% else %}
+
+            <h1>
+
+                <i class="fas fa-bell"></i>
+
+                Notifications
+
+            </h1>
+
+            <p>
+
+                View important messages and notifications from administration.
+
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =================================================
+         SUPERUSER / ADMIN
+    ================================================= -->
+
+    {% if user.is_superuser %}
+
+    <div class="messages-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="messages-card-header">
+
+            <div class="messages-card-title">
+
+                <i class="fas fa-inbox"></i>
+
+                <div>
+
+                    <h2>
+                        Messages from Members
+                    </h2>
+
+                    <span>
+                        Recent member enquiries and messages
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'Msge' %}"
+                class="reply-btn"
+            >
+
+                <i class="fas fa-reply"></i>
+
+                Reply
+
+            </a>
+
+        </div>
+
+
+
+        <!-- MESSAGE LIST -->
+
+        <div class="message-list">
+
+            {% for message in R_messages|slice:":15" %}
+
+            <div class="message-item member-message">
+
+
+                <!-- AVATAR -->
+
+                <div class="message-avatar">
+
+                    <i class="fas fa-user"></i>
+
+                </div>
+
+
+                <!-- CONTENT -->
+
+                <div class="message-content">
+
+
+                    <div class="message-meta">
+
+                        <span class="message-user">
+
+                            @{{ message.user }}
+
+                        </span>
+
+
+                        <span class="message-time">
+
+                            <i class="far fa-clock"></i>
+
+                            {{ message.updated|timesince }} ago
+
+                        </span>
+
+                    </div>
+
+
+                    <p class="message-body">
+
+                        {{ message.body }}
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+            {% empty %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fas fa-inbox"></i>
+
+                </div>
+
+                <h3>
+                    No messages
+                </h3>
+
+                <p>
+                    There are currently no messages from members.
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         NORMAL USER NOTIFICATIONS
+    ================================================= -->
+
+    {% if not user.is_superuser %}
+
+    <div class="messages-card">
+
+
+        <!-- HEADER -->
+
+        <div class="messages-card-header">
+
+            <div class="messages-card-title">
+
+                <i class="fas fa-bell"></i>
+
+                <div>
+
+                    <h2>
+                        Notifications for You
+                    </h2>
+
+                    <span>
+                        Messages and updates from administration
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- NOTIFICATIONS -->
+
+        <div class="message-list">
+
+            {% for Msg in adm %}
+
+                {% if request.user == Msg.sender %}
+
+                <div class="notification-item">
+
+
+                    <div class="message-meta">
+
+                        <span class="message-user">
+
+                            <i class="fas fa-user-shield"></i>
+
+                            Administration
+
+                        </span>
+
+
+                        <span class="message-time">
+
+                            <i class="far fa-clock"></i>
+
+                            {{ Msg.updated|timesince }} ago
+
+                        </span>
+
+                    </div>
+
+
+                    <p class="message-body">
+
+                        {{ Msg.body }}
+
+                    </p>
+
+
+                </div>
+
+                {% endif %}
+
+            {% empty %}
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="fas fa-bell-slash"></i>
+
+                    </div>
+
+                    <h3>
+                        No notifications
+                    </h3>
+
+                    <p>
+                        You don't have any notifications at the moment.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         CONTRIBUTION DETAILS
+    ================================================= -->
+
+    <div class="contribution-wrapper">
+
+        <div class="contribution-card">
+
+            <h2>
+
+                <i class="fas fa-hand-holding-usd"></i>
+
+                Contribution Details
+
+            </h2>
+
+
+            <div class="contribution-details">
+
+
+                <div class="contribution-row">
+
+                    <span>
+                        Paybill Number
+                    </span>
+
+                    <strong>
+                        4146385
+                    </strong>
+
+                </div>
+
+
+                <div class="contribution-row">
+
+                    <span>
+                        Name
+                    </span>
+
+                    <strong>
+                        Input your name
+                    </strong>
+
+                </div>
+
+
+                <div class="contribution-row">
+
+                    <span>
+                        Contribution
+                    </span>
+
+                    <strong>
+                        Ksh 200 per person
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                type="button"
+                class="thank-you"
+            >
+
+                <i class="fas fa-check-circle"></i>
+
+                Thank You
+
+            </button>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

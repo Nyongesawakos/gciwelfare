@@ -1,6 +1,6 @@
-{% include 'main.html' %}
+{% extends 'main.html' %}
 {% load static %}
-
+{%block content%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,7 +100,7 @@ body{
     padding:70px 20px 40px;
     text-align:center;
     background:linear-gradient(rgba(5,22,52,0.85), rgba(5,22,52,0.85)),
-    url("{% static 'images/welfare.jpg' %}") center/cover no-repeat;
+    url("{% static 'images/welfare.png' %}") center/cover no-repeat;
     color:white;
 }
 
@@ -429,10 +429,6 @@ tbody tr:hover{
 
 </div>
 
-<!-- ================= FOOTER ================= -->
-<footer class="footer">
-    <p>© 2026 GCI Welfare Management. All Rights Reserved.</p>
-</footer>
 
 <!-- ================= SCRIPT ================= -->
 <script>
@@ -445,3 +441,4 @@ function toggleMenu(){
 
 </body>
 </html>
+{%endblock%}

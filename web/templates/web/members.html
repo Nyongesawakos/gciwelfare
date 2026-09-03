@@ -1,33 +1,753 @@
 {% include 'web/main1.html' %}
 {% load static %}
+
 {% block content %}
 
-<div class="content">
+<style>
 
-    <!-- Search -->
-    <form method="get" action="{% url 'members' %}" class="search-bar">
+/* =========================================================
+   MEMBERS PAGE
+========================================================= */
+
+.members-page {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SEARCH BAR
+========================================================= */
+
+.search-bar {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    flex: 1;
+    min-width: 0;
+
+    padding: 15px 18px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+
+    outline: none;
+
+    font-size: 16px;
+    color: #1f2937;
+
+    background: #ffffff;
+
+    transition: .2s ease;
+
+    box-sizing: border-box;
+}
+
+.search-bar input:focus {
+    border-color: #1390cd;
+
+    box-shadow:
+        0 0 0 3px rgba(19, 144, 205, .12);
+}
+
+.search-bar input::placeholder {
+    color: #9ca3af;
+}
+
+.search-bar button {
+    flex-shrink: 0;
+
+    padding: 14px 22px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #1390cd;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.search-bar button:hover {
+    background: #0d78ad;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+.download-container {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-bottom: 25px;
+}
+
+.download-container form {
+    margin: 0;
+}
+
+.download-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 13px 22px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #10b981;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.download-btn:hover {
+    background: #059669;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   REPORT
+========================================================= */
+
+#mn {
+    width: 100%;
+}
+
+#mn > h2 {
+    margin: 0 0 20px;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    color: #111827;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.table-container {
+    width: 100%;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, .05);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.students-table {
+    width: 100%;
+
+    min-width: 1050px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.students-table th {
+    background: #1390cd;
+    color: white;
+
+    padding: 13px 8px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: left;
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    border-bottom: 1px solid #0f78aa;
+}
+
+
+/* =========================================================
+   TABLE CELLS
+========================================================= */
+
+.students-table td {
+    padding: 12px 8px;
+
+    font-size: 13px;
+
+    color: #374151;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+    vertical-align: middle;
+}
+
+
+/* =========================================================
+   COLUMN WIDTHS
+========================================================= */
+
+/* Username */
+
+.students-table th:nth-child(1),
+.students-table td:nth-child(1) {
+    width: 10%;
+}
+
+
+/* Full Name */
+
+.students-table th:nth-child(2),
+.students-table td:nth-child(2) {
+    width: 14%;
+}
+
+
+/* Email */
+
+.students-table th:nth-child(3),
+.students-table td:nth-child(3) {
+    width: 17%;
+}
+
+
+/* Category */
+
+.students-table th:nth-child(4),
+.students-table td:nth-child(4) {
+    width: 9%;
+}
+
+
+/* HBC */
+
+.students-table th:nth-child(5),
+.students-table td:nth-child(5) {
+    width: 8%;
+}
+
+
+/* Statement */
+
+.students-table th:nth-child(6),
+.students-table td:nth-child(6) {
+    width: 11%;
+}
+
+
+/* View */
+
+.students-table th:nth-child(7),
+.students-table td:nth-child(7) {
+    width: 10%;
+}
+
+
+/* Edit */
+
+.students-table th:nth-child(8),
+.students-table td:nth-child(8) {
+    width: 10%;
+}
+
+
+/* Remove */
+
+.students-table th:nth-child(9),
+.students-table td:nth-child(9) {
+    width: 11%;
+}
+
+
+/* =========================================================
+   ROWS
+========================================================= */
+
+.students-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.students-table tbody tr:hover {
+    background: #eef8fc;
+}
+
+.students-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    min-width: 65px;
+
+    padding: 8px 7px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
+
+    transition: .2s ease;
+}
+
+.action:hover {
+    transform: translateY(-1px);
+
+    filter: brightness(.95);
+}
+
+
+/* =========================================================
+   STATEMENT BUTTON
+========================================================= */
+
+.action.statement {
+    background: #ede9fe;
+
+    color: #6d28d9;
+
+    border: 1px solid #ddd6fe;
+}
+
+.action.statement:hover {
+    background: #ddd6fe;
+
+    color: #5b21b6;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.action.view {
+    background: #e0f2fe;
+
+    color: #0369a1;
+
+    border: 1px solid #bae6fd;
+}
+
+.action.view:hover {
+    background: #bae6fd;
+}
+
+
+/* =========================================================
+   EDIT BUTTON
+========================================================= */
+
+.action.edit {
+    background: #dcfce7;
+
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+}
+
+.action.edit:hover {
+    background: #bbf7d0;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.action.delete {
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    border: 1px solid #fecaca;
+}
+
+.action.delete:hover {
+    background: #fecaca;
+}
+
+
+/* =========================================================
+   NO RESULTS
+========================================================= */
+
+.no-results {
+    text-align: center !important;
+
+    padding: 35px 20px !important;
+
+    font-size: 15px !important;
+
+    color: #9ca3af !important;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 992px) {
+
+    .members-page {
+        padding: 8px;
+    }
+
+    #mn > h2 {
+        font-size: 26px;
+    }
+
+    .students-table {
+        min-width: 1000px;
+    }
+
+    .students-table th {
+        padding: 11px 7px;
+
+        font-size: 12px;
+    }
+
+    .students-table td {
+        padding: 11px 7px;
+
+        font-size: 12px;
+    }
+
+    .action {
+        min-width: 60px;
+
+        padding: 7px 5px;
+
+        font-size: 10px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .members-page {
+        padding: 5px;
+    }
+
+
+    /* -------------------------
+       SEARCH
+    ------------------------- */
+
+    .search-bar {
+        gap: 8px;
+
+        margin-bottom: 15px;
+    }
+
+    .search-bar input {
+        padding: 13px 12px;
+
+        font-size: 14px;
+    }
+
+    .search-bar button {
+        padding: 12px 14px;
+
+        font-size: 13px;
+    }
+
+
+    /* -------------------------
+       DOWNLOAD
+    ------------------------- */
+
+    .download-container {
+        width: 100%;
+
+        margin-bottom: 18px;
+    }
+
+    .download-container form {
+        width: 100%;
+    }
+
+    .download-btn {
+        width: 100%;
+
+        padding: 13px;
+
+        font-size: 14px;
+    }
+
+
+    /* -------------------------
+       TITLE
+    ------------------------- */
+
+    #mn > h2 {
+        font-size: 23px;
+
+        margin-bottom: 15px;
+    }
+
+
+    /* -------------------------
+       TABLE
+    ------------------------- */
+
+    .table-container {
+        border-radius: 10px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .students-table {
+        min-width: 1000px;
+
+        width: 1000px;
+
+        table-layout: fixed;
+    }
+
+    .students-table th {
+        padding: 11px 7px;
+
+        font-size: 12px;
+    }
+
+    .students-table td {
+        padding: 10px 7px;
+
+        font-size: 12px;
+    }
+
+
+    /* -------------------------
+       ACTIONS
+    ------------------------- */
+
+    .action {
+        width: auto;
+
+        min-width: 65px;
+
+        padding: 7px 8px;
+
+        font-size: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .members-page {
+        padding: 3px;
+    }
+
+
+    /* Search */
+
+    .search-bar {
+        gap: 6px;
+    }
+
+    .search-bar input {
+        padding: 11px 10px;
+
+        font-size: 13px;
+    }
+
+    .search-bar button {
+        padding: 10px 12px;
+
+        font-size: 12px;
+    }
+
+
+    /* Title */
+
+    #mn > h2 {
+        font-size: 21px;
+    }
+
+
+    /* Table */
+
+    .students-table {
+        min-width: 950px;
+
+        width: 950px;
+    }
+
+    .students-table th {
+        padding: 9px 6px;
+
+        font-size: 11px;
+    }
+
+    .students-table td {
+        padding: 9px 6px;
+
+        font-size: 11px;
+    }
+
+
+    /* Actions */
+
+    .action {
+        min-width: 58px;
+
+        padding: 6px 6px;
+
+        font-size: 9px;
+    }
+
+}
+
+</style>
+
+
+<div class="members-page">
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <div class="search-bar">
+
         <input
             type="text"
-            name="q"
-            placeholder="Search by name, HBC, email..."
-            value="{{ query|default:'' }}"
+            id="memberSearch"
+            placeholder="🔍 Search by name, username, email, HBC or category..."
+            autocomplete="off"
         >
-        <button type="submit">🔍 Search</button>
-    </form>
 
-    <!-- Download -->
-    <div class="download-container">
-        <form method="get" action="{% url 'download_members_excel' %}">
-            <button type="submit" class="download-btn">
-                Download Excel
-            </button>
-        </form>
+        <button
+            type="button"
+            id="clearSearch"
+        >
+            Clear
+        </button>
+
     </div>
 
-    <!-- TITLE -->
+
+    <!-- =====================================================
+         DOWNLOAD
+    ====================================================== -->
+
+    <div class="download-container">
+
+        <form
+            method="get"
+            action="{% url 'download_members_excel' %}"
+        >
+
+            <button
+                type="submit"
+                class="download-btn"
+            >
+                📊 Download Excel
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         REPORT
+    ====================================================== -->
+
     <div id="mn">
-        <h2>Members Report</h2>
-        <br>
+
+        <h2>
+            Members Report
+        </h2>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
 
         <div class="table-container">
 
@@ -36,53 +756,212 @@
                 <table class="students-table">
 
                     <thead>
+
                         <tr>
-                            <th>Username</th>
-                            <th>FullName</th>
-                            <th>Email</th>
-                            <th>Category</th>
-                            <th>HBC</th>
-                            <th>More Info</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+
+                            <th>
+                                Username
+                            </th>
+
+                            <th>
+                                Full Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                HBC
+                            </th>
+
+                            <th>
+                                Statement
+                            </th>
+
+                            <th>
+                                View
+                            </th>
+
+                            <th>
+                                Edit
+                            </th>
+
+                            <th>
+                                Remove
+                            </th>
+
                         </tr>
+
                     </thead>
 
+
                     <tbody>
+
+
                         {% for room in member %}
-                        <tr>
-                            <td>{{ room.host }}</td>
-                            <td>{{ room.FullName }}</td>
-                            <td>{{ room.Email }}</td>
-                            <td>{{ room.group }}</td>
-                            <td>{{ room.HBC }}</td>
+
+                        <tr class="member-row">
+
+
+                            <!-- USERNAME -->
 
                             <td>
-                                <a class="action view" href="{% url 'index' room.id %}">
-                                    View
-                                </a>
+                                {{ room.host }}
                             </td>
 
-                            <td>
-                                <a class="action edit" href="{% url 'updateRoom' room.id %}">
-                                    Edit
-                                </a>
-                            </td>
+
+                            <!-- FULL NAME -->
 
                             <td>
-                                <a class="action delete" href="{% url 'deleteRoom' room.id %}">
-                                    Remove
-                                </a>
+
+                                <strong>
+                                    {{ room.FullName }}
+                                </strong>
+
                             </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td>
+                                {{ room.Email }}
+                            </td>
+
+
+                            <!-- CATEGORY -->
+
+                            <td>
+                                {{ room.group }}
+                            </td>
+
+
+                            <!-- HBC -->
+
+                            <td>
+                                {{ room.HBC }}
+                            </td>
+
+
+                            <!-- =================================================
+                                 M-PESA STATEMENT
+                            ================================================== -->
+
+                            <td>
+
+                                <a
+                                    class="action statement"
+                                    href="{% url 'mpesa_balance' room.id %}"
+                                    title="View M-Pesa statement"
+                                >
+
+                                    💰 Statement
+
+                                </a>
+
+                            </td>
+
+
+                            <!-- VIEW -->
+
+                            <td>
+
+                                <a
+                                    class="action view"
+                                    href="{% url 'index' room.id %}"
+                                    title="View member"
+                                >
+
+                                    👁 View
+
+                                </a>
+
+                            </td>
+
+
+                            <!-- EDIT -->
+
+                            <td>
+
+                                <a
+                                    class="action edit"
+                                    href="{% url 'updateRoom' room.id %}"
+                                    title="Edit member"
+                                >
+
+                                    ✏ Edit
+
+                                </a>
+
+                            </td>
+
+
+                            <!-- DELETE -->
+
+                            <td>
+
+                                <a
+                                    class="action delete"
+                                    href="{% url 'deleteRoom' room.id %}"
+                                    title="Remove member"
+                                    onclick="return confirm('Are you sure you want to remove this member?');"
+                                >
+
+                                    🗑 Remove
+
+                                </a>
+
+                            </td>
+
+
                         </tr>
+
 
                         {% empty %}
+
+
                         <tr>
-                            <td colspan="8" class="no-results">
-                                No members found
+
+                            <td
+                                colspan="9"
+                                class="no-results"
+                            >
+
+                                No members found.
+
                             </td>
+
                         </tr>
+
+
                         {% endfor %}
+
+
+                        <!-- =================================================
+                             SEARCH NO RESULTS
+                        ================================================== -->
+
+                        <tr
+                            id="noSearchResults"
+                            style="display:none;"
+                        >
+
+                            <td
+                                colspan="9"
+                                class="no-results"
+                            >
+
+                                No matching members found.
+
+                            </td>
+
+                        </tr>
+
+
                     </tbody>
 
                 </table>
@@ -90,321 +969,118 @@
             </div>
 
         </div>
+
     </div>
 
 </div>
 
 
+<!-- =========================================================
+     SEARCH JAVASCRIPT
+========================================================= -->
 
-<!-- ================= CSS (MATCHING PAYMENT STYLE) ================= -->
-<style>
+<script>
 
-/* ================= ROOT COLORS ================= */
-:root{
-    --primary-red:#e72326;
-    --primary-yellow:#f5d021;
-    --primary-blue:#1390cd;
-    --gray:#f5f7fa;
-    --white:#ffffff;
-}
+document.addEventListener("DOMContentLoaded", function () {
 
-/* ================= RESET ================= */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    const searchInput =
+        document.getElementById("memberSearch");
 
-html,
-body{
-    width:100%;
-    overflow-x:hidden;
-    background:var(--gray);
-    font-family:Arial,sans-serif;
-}
+    const clearButton =
+        document.getElementById("clearSearch");
 
-/* ================= MAIN CONTENT ================= */
-.content{
-    width:100%;
-    min-height:100vh;
-    padding:25px 35px;
-}
+    const rows =
+        document.querySelectorAll(".member-row");
 
-/* ================= SEARCH ================= */
-.search-bar{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    width:100%;
-    max-width:600px;
-    margin-bottom:20px;
-}
+    const noResults =
+        document.getElementById("noSearchResults");
 
-.search-bar input{
-    flex:1;
-    padding:13px 15px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-    background:white;
-    transition:0.3s ease;
-}
 
-.search-bar input:focus{
-    outline:none;
-    border-color:var(--primary-blue);
-    box-shadow:0 0 0 3px rgba(19,144,205,0.15);
-}
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
-.search-bar button{
-    background:var(--primary-blue);
-    color:white;
-    border:none;
-    padding:13px 18px;
-    border-radius:10px;
-    font-weight:600;
-    cursor:pointer;
-    transition:0.3s ease;
-    white-space:nowrap;
-}
+    searchInput.addEventListener("input", function () {
 
-.search-bar button:hover{
-    opacity:0.9;
-}
+        const searchValue =
+            this.value
+                .toLowerCase()
+                .trim();
 
-/* ================= DOWNLOAD ================= */
-.download-container{
-    width:100%;
-    margin-bottom:20px;
-}
+        let visibleRows = 0;
 
-.download-btn{
-    background:linear-gradient(135deg,var(--primary-blue),#0f7db4);
-    color:white;
-    border:none;
-    padding:13px 24px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:600;
-    transition:0.3s ease;
-}
 
-.download-btn:hover{
-    transform:translateY(-2px);
-}
+        rows.forEach(function (row) {
 
-/* ================= TITLE ================= */
-#mn h2{
-    color:var(--primary-blue);
-    margin-bottom:20px;
-    font-size:30px;
-}
+            const rowText =
+                row.innerText
+                    .toLowerCase();
 
-/* ================= TABLE CONTAINER ================= */
-.table-container{
-    width:100%;
-    background:var(--white);
-    padding:25px;
-    border-radius:16px;
-    border-top:6px solid var(--primary-yellow);
-    box-shadow:0 5px 18px rgba(0,0,0,0.06);
-}
 
-/* ================= TABLE ================= */
-.table-wrapper{
-    width:100%;
-    overflow-x:auto;
-}
+            if (
+                rowText.includes(searchValue)
+            ) {
 
-.students-table{
-    width:100%;
-    border-collapse:collapse;
-}
+                row.style.display = "";
 
-/* HEADER */
-.students-table thead{
-    background:var(--primary-blue);
-}
+                visibleRows++;
 
-.students-table th{
-    color:white;
-    padding:16px;
-    text-align:left;
-    font-size:14px;
-    white-space:nowrap;
-}
+            } else {
 
-/* BODY */
-.students-table td{
-    padding:16px;
-    border-top:1px solid #eee;
-    white-space:nowrap;
-    font-size:14px;
-}
+                row.style.display = "none";
 
-/* ZEBRA */
-.students-table tbody tr:nth-child(even){
-    background:var(--gray);
-}
+            }
 
-/* HOVER */
-.students-table tbody tr{
-    transition:0.2s ease;
-}
+        });
 
-.students-table tbody tr:hover{
-    background:rgba(19,144,205,0.1);
-}
 
-/* ACTION BUTTONS */
-.action{
-    padding:8px 14px;
-    border-radius:8px;
-    text-decoration:none;
-    font-size:13px;
-    color:white;
-    display:inline-block;
-    font-weight:600;
-    transition:0.3s ease;
-}
+        /* Show no results */
 
-.action:hover{
-    transform:translateY(-1px);
-}
+        if (
+            searchValue !== "" &&
+            visibleRows === 0
+        ) {
 
-.action.view{
-    background:#10b981;
-}
+            noResults.style.display =
+                "table-row";
 
-.action.edit{
-    background:var(--primary-blue);
-}
+        } else {
 
-.action.delete{
-    background:var(--primary-red);
-}
+            noResults.style.display =
+                "none";
 
-/* EMPTY */
-.no-results{
-    text-align:center;
-    padding:25px;
-    color:#777;
-}
+        }
 
-/* ================= LARGE DESKTOP ================= */
-@media (min-width:1600px){
+    });
 
-    .content{
-        padding:35px 60px;
-    }
 
-    .students-table th,
-    .students-table td{
-        padding:20px;
-        font-size:15px;
-    }
+    /* =====================================================
+       CLEAR SEARCH
+    ===================================================== */
 
-    #mn h2{
-        font-size:36px;
-    }
+    clearButton.addEventListener("click", function () {
 
-}
+        searchInput.value = "";
 
-/* ================= TABLET ================= */
-@media (max-width:1024px){
 
-    .content{
-        padding:20px;
-    }
+        rows.forEach(function (row) {
 
-    .table-container{
-        padding:18px;
-    }
+            row.style.display = "";
 
-}
+        });
 
-/* ================= MOBILE ================= */
-@media (max-width:768px){
 
-    .content{
-        padding:12px;
-    }
+        noResults.style.display =
+            "none";
 
-    .search-bar{
-        flex-direction:column;
-        align-items:stretch;
-        max-width:100%;
-    }
 
-    .search-bar input,
-    .search-bar button{
-        width:100%;
-    }
+        searchInput.focus();
 
-    .download-btn{
-        width:100%;
-    }
+    });
 
-    .table-container{
-        padding:12px;
-        border-radius:12px;
-    }
+});
 
-    #mn h2{
-        font-size:22px;
-    }
+</script>
 
-    .students-table th,
-    .students-table td{
-        font-size:12px;
-        padding:12px;
-    }
 
-    .action{
-        font-size:11px;
-        padding:7px 10px;
-    }
-
-}
-
-/* ================= EXTRA SMALL DEVICES ================= */
-@media (max-width:480px){
-
-    .students-table th,
-    .students-table td{
-        font-size:11px;
-        padding:10px;
-    }
-
-}
-
-/* ================= PRINT ================= */
-@media print{
-
-    .search-bar,
-    .download-container,
-    .action{
-        display:none;
-    }
-
-    .content{
-        padding:0;
-        background:white;
-    }
-
-    .table-container{
-        box-shadow:none;
-        border:none;
-        padding:0;
-    }
-
-    .students-table th,
-    .students-table td{
-        font-size:10px;
-        padding:6px;
-    }
-
-}
-
-</style>
 {% endblock %}

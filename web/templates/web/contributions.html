@@ -1,432 +1,2563 @@
-{% include 'main.html' %}
+{% extends 'main.html' %}
 {% load static %}
+
 {% block content %}
 
-<div class="content">
-
-    <!-- Header -->
-    <div class="table-header">
-       <h2>Welfare Summary</h2>
-        <div class="total-box">
-            Total: <strong>Ksh {{ total_amount }}</strong>
-        </div>
-    </div>
-<div class="welfare-summary">
-
-    
-
-    <div class="welfare-grid">
-
-        <div class="welfare-card">
-            <b>Paid Months</b>
-            <span>{{ paid_months }}</span>
-        </div>
-
-        <div class="welfare-card">
-            <b>Missing Months</b>
-            <span>{{ months_missing }}</span>
-        </div>
-
-        <div class="welfare-card">
-            <b>Total Arrears</b>
-            <span class="arrears">
-                Ksh {{ amount_due }}
-            </span>
-        </div>
-
-    </div>
- <!-- Header -->
-    
-        <h3>Transaction History</h3>
-  
-</div>
-    <!-- Table -->
-    <div class="table-container">
-        <div class="table-wrapper">
-            <table class="students-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Phone</th>
-                        <th>Amount</th>
-                        <th>Receipt</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                {% for t in contributions|slice:":14" %}
-                    <tr>
-                        <td>{{ t.created_at|date:"M d, Y H:i" }}</td>
-                        <td>{{ t.phone_number }}</td>
-                        <td class="amount">Ksh {{ t.amount }}</td>
-                        <td>{{ t.mpesa_receipt_number|default:"-" }}</td>
-                        <td>
-                            <span class="badge {{ t.status|lower }}">
-                                {{ t.status }}
-                            </span>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="5" class="no-results">
-                            No transactions found.
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
-        </div>
-        
-
-
-    </div>
-
-</div>
-
 <style>
+/* =========================================================
+   GCI WELFARE PAGE
+   Scoped CSS - DOES NOT override main.html
+   ========================================================= */
 
+.welfare-page {
+    /* Page-only variables */
+    --welfare-primary: #0b82bd;
+    --welfare-primary-dark: #075985;
+    --welfare-blue: #2563eb;
+    --welfare-green: #10b981;
+    --welfare-green-dark: #047857;
+    --welfare-orange: #f59e0b;
+    --welfare-red: #ef4444;
+    --welfare-purple: #8b5cf6;
+    --welfare-pink: #ec4899;
 
+    --welfare-text: #172033;
+    --welfare-muted: #64748b;
+    --welfare-border: #dbe5ef;
+    --welfare-light: #f1f5f9;
+    --welfare-dark: #0f172a;
+    --welfare-dark-2: #172033;
 
-/* ================= ROOT ================= */
-:root{
-    --primary:#1390cd;
-    --danger:#e72326;
-    --warning:#f5d021;
-    --bg:#f4f6f8;
-    --text:#111827;
-    --white:#ffffff;
-    --border:#e5e7eb;
+    --welfare-radius: 18px;
+
+    width: 100%;
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 25px 15px 60px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(14, 165, 233, .10),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            rgba(37, 99, 235, .06),
+            transparent 30%
+        );
 }
 
-/* ================= RESET ================= */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+/* =========================================================
+   GLOBAL BOX SIZING - SCOPED
+   ========================================================= */
+
+.welfare-page *,
+.welfare-page *::before,
+.welfare-page *::after {
+    box-sizing: border-box;
 }
 
-html,
-body{
-    width:100%;
-    font-family:"Segoe UI", Arial, sans-serif;
-    background:var(--bg);
-    color:var(--text);
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.welfare-page .welfare-header {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 32px;
+    margin-bottom: 25px;
+
+    color: #ffffff;
+
+    border-radius: 22px;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #06283d 0%,
+            #075985 35%,
+            #0b82bd 68%,
+            #164e63 100%
+        );
+
+    box-shadow:
+        0 18px 45px rgba(2, 45, 70, .28);
 }
 
-/* ================= LAYOUT ================= */
-.content{
-    width:100%;
-    max-width:1400px;
-    margin:auto;
-    padding:25px;
+.welfare-page .welfare-header::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -100px;
+    top: -160px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(56, 189, 248, .30),
+            rgba(14, 165, 233, .05) 65%,
+            transparent 70%
+        );
 }
 
-/* ================= HEADER ================= */
-.table-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
+.welfare-page .welfare-header::after {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    right: 180px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.12),
+            transparent 70%
+        );
 }
 
-.table-header h2{
-    font-size:32px;
-    color:var(--primary);
-    font-weight:700;
+/* =========================================================
+   HEADER CONTENT
+   ========================================================= */
+
+.welfare-page .welfare-header-content {
+    position: relative;
+    z-index: 2;
 }
 
-/* ================= TOTAL BOX ================= */
-.total-box{
-    background:linear-gradient(135deg, var(--primary), #0d6efd);
-    color:white;
-    padding:14px 20px;
-    border-radius:14px;
-    font-size:18px;
-    font-weight:600;
-    box-shadow:0 6px 18px rgba(0,0,0,0.1);
+.welfare-page .welfare-header-content h2 {
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    letter-spacing: -.5px;
 }
 
-/* ================= CONTAINER ================= */
-.table-container{
-    width:100%;
-    background:var(--white);
-    padding:25px;
-    border-radius:18px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.06);
-    overflow:hidden;
+.welfare-page .welfare-header-content h2 i {
+    margin-right: 9px;
+    color: #7dd3fc;
 }
 
-/* ================= TABLE WRAPPER ================= */
-.table-wrapper{
-    width:100%;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    border-radius:14px;
+.welfare-page .welfare-header-content p {
+    margin: 0;
+
+    max-width: 700px;
+
+    color: rgba(255,255,255,.82);
+
+    font-size: 14px;
+    line-height: 1.6;
 }
 
-/* ================= TABLE ================= */
-.students-table{
-    width:100%;
-    min-width:700px;
-    border-collapse:collapse;
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.welfare-page .header-actions {
+    position: relative;
+    z-index: 5;
+
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-/* ================= HEADER ================= */
-.students-table thead{
-    background:var(--primary);
+.welfare-page .header-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 43px;
+
+    padding: 10px 17px;
+
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #e8f6fc
+        );
+
+    color: #075985;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease,
+        color .25s ease;
 }
 
-.students-table th{
-    padding:16px;
-    text-align:left;
-    color:white;
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:0.5px;
-    white-space:nowrap;
+.welfare-page .header-button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.22);
 }
 
-/* ================= BODY ================= */
-.students-table td{
-    padding:16px;
-    border-bottom:1px solid var(--border);
-    font-size:14px;
-    white-space:nowrap;
+.welfare-page .header-button.dashboard:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #10b981,
+            #047857
+        );
+
+    color: #ffffff;
 }
 
-/* ================= HOVER ================= */
-.students-table tbody tr{
-    transition:0.2s ease;
+.welfare-page .header-button.print:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #e0f2fe,
+            #bae6fd
+        );
+
+    color: #075985;
 }
 
-.students-table tbody tr:hover{
-    background:#f0f9ff;
+/* =========================================================
+   COMMON CARDS
+   ========================================================= */
+
+.welfare-page .statement-card,
+.welfare-page .transaction-card,
+.welfare-page .expense-card,
+.welfare-page .months-card {
+    position: relative;
+
+    margin-bottom: 25px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f7fafc
+        );
+
+    border: 1px solid var(--welfare-border);
+
+    border-radius: var(--welfare-radius);
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.07);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
 }
 
-/* ================= AMOUNT ================= */
-.amount{
-    color:var(--danger);
-    font-weight:700;
+.welfare-page .statement-card:hover,
+.welfare-page .transaction-card:hover,
+.welfare-page .expense-card:hover,
+.welfare-page .months-card:hover {
+    box-shadow:
+        0 16px 40px rgba(15,23,42,.11);
 }
 
-/* ================= BADGES ================= */
-.badge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:6px 12px;
-    border-radius:30px;
-    font-size:12px;
-    font-weight:600;
-    text-transform:capitalize;
+/* =========================================================
+   CARD HEADERS
+   ========================================================= */
+
+.welfare-page .card-header,
+.welfare-page .transaction-header,
+.welfare-page .months-card-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 22px 25px;
+
+    border-bottom: 1px solid var(--welfare-border);
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fbff,
+            #eef6fb
+        );
 }
 
-.badge.success{
-    background:#dcfce7;
-    color:#166534;
+.welfare-page .card-header h3,
+.welfare-page .transaction-header h3,
+.welfare-page .months-card-header h3 {
+    margin: 0;
+
+    color: var(--welfare-text);
+
+    font-size: 19px;
+    font-weight: 800;
 }
 
-.badge.pending{
-    background:#fef9c3;
-    color:#854d0e;
+.welfare-page .card-header h3 i,
+.welfare-page .transaction-header h3 i,
+.welfare-page .months-card-header h3 i {
+    margin-right: 8px;
+    color: var(--welfare-primary);
 }
 
-.badge.failed{
-    background:#fee2e2;
-    color:#991b1b;
+.welfare-page .card-header p,
+.welfare-page .transaction-header p,
+.welfare-page .months-card-header p {
+    margin: 5px 0 0;
+
+    color: var(--welfare-muted);
+
+    font-size: 12px;
+    line-height: 1.5;
 }
 
-/* ================= EMPTY ================= */
-.no-results{
-    text-align:center;
-    padding:25px;
-    color:#6b7280;
+/* =========================================================
+   SUMMARY GRIDS
+   ========================================================= */
+
+.welfare-page .welfare-grid,
+.welfare-page .balance-grid,
+.welfare-page .expense-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+
+    padding: 22px 25px;
 }
 
-/* ================= WELFARE SUMMARY ================= */
-.welfare-summary{
-    margin-top:30px;
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.welfare-page .welfare-card,
+.welfare-page .balance-card,
+.welfare-page .expense-summary-card {
+    position: relative;
+
+    min-height: 145px;
+
+    padding: 24px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,.8);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 7px 20px rgba(15,23,42,.07);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
 }
 
-.welfare-summary h3{
-    margin-bottom:18px;
-    color:var(--primary);
-    font-size:24px;
+.welfare-page .welfare-card:hover,
+.welfare-page .balance-card:hover,
+.welfare-page .expense-summary-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 16px 32px rgba(15,23,42,.13);
 }
 
-/* ================= GRID ================= */
-.welfare-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-    gap:18px;
+/* Decorative circle */
+
+.welfare-page .welfare-card::after,
+.welfare-page .balance-card::after,
+.welfare-page .expense-summary-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 140px;
+    height: 140px;
+
+    right: -55px;
+    bottom: -65px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.30),
+            rgba(255,255,255,.05) 70%
+        );
 }
 
-/* ================= CARDS ================= */
-.welfare-card{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.05);
-    transition:0.2s ease;
+/* =========================================================
+   LEFT ACCENT
+   ========================================================= */
+
+.welfare-page .welfare-card::before,
+.welfare-page .balance-card::before,
+.welfare-page .expense-summary-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background: var(--welfare-primary);
 }
 
-.welfare-card:hover{
-    transform:translateY(-2px);
+/* =========================================================
+   CARD TEXT
+   ========================================================= */
+
+.welfare-page .welfare-card small,
+.welfare-page .balance-card small,
+.welfare-page .expense-summary-card small {
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #475569;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: .4px;
 }
 
-.welfare-card b{
-    display:block;
-    margin-bottom:10px;
-    font-size:14px;
-    color:#6b7280;
+.welfare-page .welfare-card small i,
+.welfare-page .balance-card small i,
+.welfare-page .expense-summary-card small i {
+    margin-right: 6px;
 }
 
-.welfare-card span{
-    font-size:24px;
-    font-weight:700;
+.welfare-page .welfare-card h2,
+.welfare-page .balance-card h2,
+.welfare-page .expense-summary-card h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0;
+
+    color: var(--welfare-text);
+
+    font-size: 28px;
+    font-weight: 900;
+
+    letter-spacing: -.5px;
 }
 
-.arrears{
-    color:var(--danger);
+.welfare-page .welfare-card p,
+.welfare-page .balance-card p,
+.welfare-page .expense-summary-card p {
+    position: relative;
+    z-index: 2;
+
+    margin: 8px 0 0;
+
+    color: #64748b;
+
+    font-size: 11px;
 }
 
-/* ================= LARGE SCREENS ================= */
-@media (min-width:1600px){
+/* =========================================================
+   PAID CARD
+   ========================================================= */
 
-    .content{
-        max-width:1600px;
+.welfare-page .welfare-card.paid {
+    background:
+        linear-gradient(
+            135deg,
+            #064e3b,
+            #047857,
+            #10b981
+        );
+
+    color: #ffffff;
+}
+
+.welfare-page .welfare-card.paid::before {
+    background: #34d399;
+}
+
+.welfare-page .welfare-card.paid small,
+.welfare-page .welfare-card.paid p {
+    color: rgba(255,255,255,.75);
+}
+
+.welfare-page .welfare-card.paid h2 {
+    color: #ffffff;
+}
+
+/* =========================================================
+   MISSING CARD
+   ========================================================= */
+
+.welfare-page .welfare-card.missing {
+    background:
+        linear-gradient(
+            135deg,
+            #78350f,
+            #b45309,
+            #f59e0b
+        );
+}
+
+.welfare-page .welfare-card.missing::before {
+    background: #fbbf24;
+}
+
+.welfare-page .welfare-card.missing small,
+.welfare-page .welfare-card.missing p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .welfare-card.missing h2 {
+    color: #ffffff;
+}
+
+/* =========================================================
+   ARREARS CARD
+   ========================================================= */
+
+.welfare-page .welfare-card.arrears {
+    background:
+        linear-gradient(
+            135deg,
+            #7f1d1d,
+            #b91c1c,
+            #ef4444
+        );
+}
+
+.welfare-page .welfare-card.arrears::before {
+    background: #f87171;
+}
+
+.welfare-page .welfare-card.arrears small,
+.welfare-page .welfare-card.arrears p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .welfare-card.arrears h2 {
+    color: #ffffff;
+}
+
+/* =========================================================
+   MONTHLY STATUS
+   ========================================================= */
+
+.welfare-page .months-card-header {
+    background:
+        linear-gradient(
+            135deg,
+            #e0f2fe,
+            #f8fbff
+        );
+}
+
+/* =========================================================
+   MONTH COUNT
+   ========================================================= */
+
+.welfare-page .months-count {
+    min-width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    box-shadow:
+        0 7px 18px rgba(0,0,0,.08);
+}
+
+.welfare-page .paid-count {
+    background:
+        linear-gradient(
+            135deg,
+            #047857,
+            #10b981
+        );
+
+    color: #ffffff;
+}
+
+.welfare-page .missing-count {
+    background:
+        linear-gradient(
+            135deg,
+            #b91c1c,
+            #ef4444
+        );
+
+    color: #ffffff;
+}
+
+/* =========================================================
+   MONTH LIST
+   ========================================================= */
+
+.welfare-page .months-list {
+    padding: 8px 25px;
+}
+
+.welfare-page .month-row {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 16px 10px;
+
+    border-bottom: 1px solid #e5edf4;
+
+    transition:
+        background .2s ease,
+        padding .2s ease;
+}
+
+.welfare-page .month-row:hover {
+    padding-left: 14px;
+    padding-right: 14px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #edf7fc,
+            #ffffff
+        );
+
+    border-radius: 10px;
+}
+
+.welfare-page .month-row:last-child {
+    border-bottom: none;
+}
+
+/* =========================================================
+   MONTH INFO
+   ========================================================= */
+
+.welfare-page .month-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+.welfare-page .month-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #047857,
+            #10b981
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    box-shadow:
+        0 6px 15px rgba(16,185,129,.20);
+}
+
+.welfare-page .missing-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #b91c1c,
+            #ef4444
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 15px rgba(239,68,68,.16);
+}
+
+.welfare-page .month-info strong {
+    display: block;
+
+    color: var(--welfare-text);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.welfare-page .month-info small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   MONTH PAYMENT
+   ========================================================= */
+
+.welfare-page .month-due {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    white-space: nowrap;
+}
+
+.welfare-page .month-due > span:first-child {
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.welfare-page .month-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 78px;
+
+    padding: 7px 11px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+.welfare-page .month-status i {
+    margin-right: 5px;
+}
+
+.welfare-page .month-status.paid {
+    background:
+        linear-gradient(
+            135deg,
+            #047857,
+            #10b981
+        );
+
+    color: #ffffff;
+}
+
+.welfare-page .month-status.missing {
+    background:
+        linear-gradient(
+            135deg,
+            #b91c1c,
+            #ef4444
+        );
+
+    color: #ffffff;
+}
+
+/* =========================================================
+   ARREARS TOTAL
+   ========================================================= */
+
+.welfare-page .arrears-total {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin: 5px 25px 22px;
+
+    padding: 17px 20px;
+
+    border: 1px solid #fdba74;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c2d12,
+            #c2410c,
+            #f97316
+        );
+
+    box-shadow:
+        0 8px 20px rgba(249,115,22,.14);
+}
+
+.welfare-page .arrears-total span {
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.welfare-page .arrears-total strong {
+    color: #ffffff;
+
+    font-size: 19px;
+    font-weight: 900;
+}
+
+/* =========================================================
+   BALANCE CARDS
+   ========================================================= */
+
+.welfare-page .balance-card.opening {
+    background:
+        linear-gradient(
+            135deg,
+            #312e81,
+            #4338ca,
+            #6366f1
+        );
+}
+
+.welfare-page .balance-card.opening::before {
+    background: #818cf8;
+}
+
+.welfare-page .balance-card.opening small,
+.welfare-page .balance-card.opening p {
+    color: rgba(255,255,255,.75);
+}
+
+.welfare-page .balance-card.opening h2 {
+    color: #ffffff;
+}
+
+.welfare-page .balance-card.mpesa {
+    background:
+        linear-gradient(
+            135deg,
+            #064e3b,
+            #047857,
+            #10b981
+        );
+}
+
+.welfare-page .balance-card.mpesa::before {
+    background: #34d399;
+}
+
+.welfare-page .balance-card.mpesa small,
+.welfare-page .balance-card.mpesa p {
+    color: rgba(255,255,255,.75);
+}
+
+.welfare-page .balance-card.mpesa h2 {
+    color: #ffffff;
+}
+
+.welfare-page .balance-card.current {
+    background:
+        linear-gradient(
+            135deg,
+            #075985,
+            #0b82bd,
+            #06b6d4
+        );
+
+    border: 1px solid #67e8f9;
+}
+
+.welfare-page .balance-card.current::before {
+    background: #67e8f9;
+}
+
+.welfare-page .balance-card.current small,
+.welfare-page .balance-card.current p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .balance-card.current h2 {
+    color: #ffffff;
+}
+
+/* =========================================================
+   EXPENSE CARDS
+   ========================================================= */
+
+.welfare-page .expense-summary-card.total {
+    background:
+        linear-gradient(
+            135deg,
+            #7c2d12,
+            #c2410c,
+            #f97316
+        );
+}
+
+.welfare-page .expense-summary-card.total::before {
+    background: #fdba74;
+}
+
+.welfare-page .expense-summary-card.total small,
+.welfare-page .expense-summary-card.total p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .expense-summary-card.total h2 {
+    color: #ffffff;
+}
+
+.welfare-page .expense-summary-card.wedding {
+    background:
+        linear-gradient(
+            135deg,
+            #4c1d95,
+            #6d28d9,
+            #8b5cf6
+        );
+}
+
+.welfare-page .expense-summary-card.wedding::before {
+    background: #c4b5fd;
+}
+
+.welfare-page .expense-summary-card.wedding small,
+.welfare-page .expense-summary-card.wedding p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .expense-summary-card.wedding h2 {
+    color: #ffffff;
+}
+
+.welfare-page .expense-summary-card.baby {
+    background:
+        linear-gradient(
+            135deg,
+            #831843,
+            #be185d,
+            #ec4899
+        );
+}
+
+.welfare-page .expense-summary-card.baby::before {
+    background: #f9a8d4;
+}
+
+.welfare-page .expense-summary-card.baby small,
+.welfare-page .expense-summary-card.baby p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .expense-summary-card.baby h2 {
+    color: #ffffff;
+}
+
+.welfare-page .expense-summary-card.bereavement {
+    background:
+        linear-gradient(
+            135deg,
+            #1e293b,
+            #334155,
+            #64748b
+        );
+}
+
+.welfare-page .expense-summary-card.bereavement::before {
+    background: #cbd5e1;
+}
+
+.welfare-page .expense-summary-card.bereavement small,
+.welfare-page .expense-summary-card.bereavement p {
+    color: rgba(255,255,255,.78);
+}
+
+.welfare-page .expense-summary-card.bereavement h2 {
+    color: #ffffff;
+}
+
+/* =========================================================
+   NET BALANCE
+   ========================================================= */
+
+.welfare-page .net-balance-card {
+    position: relative;
+
+    margin: 0 25px 22px;
+
+    padding: 25px;
+
+    overflow: hidden;
+
+    border: 1px solid #38bdf8;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #082f49,
+            #075985,
+            #047857
+        );
+
+    box-shadow:
+        0 10px 25px rgba(7,89,133,.20);
+}
+
+.welfare-page .net-balance-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 6px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #38bdf8,
+            #34d399
+        );
+}
+
+.welfare-page .net-balance-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -70px;
+    bottom: -100px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.16),
+            transparent 70%
+        );
+}
+
+.welfare-page .net-balance-card small {
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: rgba(255,255,255,.70);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.welfare-page .net-balance-card h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 31px;
+    font-weight: 900;
+}
+
+.welfare-page .net-balance-card p {
+    position: relative;
+    z-index: 2;
+
+    margin: 7px 0 0;
+
+    color: rgba(255,255,255,.65);
+
+    font-size: 11px;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.welfare-page .table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.welfare-page .transaction-table {
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.welfare-page .transaction-table th {
+    padding: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8f3f9,
+            #f5f9fc
+        );
+
+    color: #475569;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+
+    border-bottom: 1px solid var(--welfare-border);
+
+    white-space: nowrap;
+}
+
+.welfare-page .transaction-table td {
+    padding: 15px 14px;
+
+    color: #334155;
+
+    font-size: 13px;
+
+    border-bottom: 1px solid #e5edf4;
+
+    vertical-align: middle;
+}
+
+.welfare-page .transaction-table tbody tr {
+    transition: background .2s ease;
+}
+
+.welfare-page .transaction-table tbody tr:hover {
+    background:
+        linear-gradient(
+            90deg,
+            #edf7fc,
+            #ffffff
+        );
+}
+
+.welfare-page .transaction-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =========================================================
+   TABLE DATA
+   ========================================================= */
+
+.welfare-page .transaction-date,
+.welfare-page .transaction-phone,
+.welfare-page .transaction-receipt {
+    white-space: nowrap;
+}
+
+.welfare-page .transaction-phone {
+    font-weight: 600;
+}
+
+.welfare-page .transaction-amount {
+    color: #0369a1 !important;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+.welfare-page .transaction-receipt {
+    color: #1e293b;
+
+    font-weight: 800;
+}
+
+.welfare-page .expense-amount {
+    color: #dc2626 !important;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+.welfare-page .expense-description {
+    max-width: 350px;
+
+    color: #64748b;
+
+    line-height: 1.5;
+}
+
+/* =========================================================
+   CATEGORY BADGES
+   ========================================================= */
+
+.welfare-page .category-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 11px;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #eff6ff
+        );
+
+    color: #1d4ed8;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.welfare-page .category-badge.wedding {
+    background:
+        linear-gradient(
+            135deg,
+            #ede9fe,
+            #ddd6fe
+        );
+
+    color: #6d28d9;
+}
+
+.welfare-page .category-badge.baby_shower {
+    background:
+        linear-gradient(
+            135deg,
+            #fce7f3,
+            #fbcfe8
+        );
+
+    color: #be185d;
+}
+
+.welfare-page .category-badge.bereavement {
+    background:
+        linear-gradient(
+            135deg,
+            #e2e8f0,
+            #f1f5f9
+        );
+
+    color: #475569;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.welfare-page .status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    min-width: 75px;
+
+    padding: 6px 11px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.welfare-page .status.success {
+    background:
+        linear-gradient(
+            135deg,
+            #047857,
+            #10b981
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 10px rgba(16,185,129,.15);
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.welfare-page .no-results {
+    padding: 55px 20px !important;
+
+    text-align: center !important;
+
+    color: #94a3b8 !important;
+
+    font-size: 14px !important;
+}
+
+.welfare-page .no-results i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #64748b;
+
+    font-size: 38px;
+}
+
+.welfare-page .months-empty {
+    padding: 35px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+.welfare-page .success-empty {
+    color: #059669;
+
+    font-weight: 800;
+}
+
+/* =========================================================
+   EXPENSE FOOTER
+   ========================================================= */
+
+.welfare-page .transaction-table tfoot td {
+    background:
+        linear-gradient(
+            135deg,
+            #f1f5f9,
+            #f8fafc
+        );
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .welfare-page .welfare-grid,
+    .welfare-page .balance-grid,
+    .welfare-page .expense-summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 750px) {
+
+    .welfare-page .welfare-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 25px;
     }
 
-    .students-table th,
-    .students-table td{
-        padding:20px;
-        font-size:15px;
+    .welfare-page .header-actions {
+        width: 100%;
     }
 
+    .welfare-page .header-button {
+        flex: 1;
+    }
+
+    .welfare-page .welfare-grid,
+    .welfare-page .balance-grid,
+    .welfare-page .expense-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welfare-page .month-row {
+        align-items: flex-start;
+    }
+
+    .welfare-page .month-due {
+        flex-direction: column;
+
+        align-items: flex-end;
+
+        gap: 6px;
+    }
 }
 
-/* ================= TABLETS ================= */
-@media (max-width:992px){
+@media (max-width: 600px) {
 
-    .content{
-        padding:20px;
+    .welfare-page {
+        padding: 12px 6px 35px;
     }
 
-    .table-container{
-        padding:18px;
+    .welfare-page .welfare-header {
+        padding: 22px 18px;
+
+        border-radius: 17px;
     }
 
-    .students-table{
-        min-width:650px;
+    .welfare-page .welfare-header-content h2 {
+        font-size: 23px;
     }
 
+    .welfare-page .welfare-header-content p {
+        font-size: 12px;
+    }
+
+    .welfare-page .header-actions {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+    .welfare-page .header-button {
+        width: 100%;
+
+        min-height: 40px;
+
+        padding: 9px 7px;
+
+        font-size: 11px;
+    }
+
+    .welfare-page .card-header,
+    .welfare-page .transaction-header,
+    .welfare-page .months-card-header {
+        padding: 18px;
+    }
+
+    .welfare-page .card-header h3,
+    .welfare-page .transaction-header h3,
+    .welfare-page .months-card-header h3 {
+        font-size: 16px;
+    }
+
+    .welfare-page .welfare-grid,
+    .welfare-page .balance-grid,
+    .welfare-page .expense-summary-grid {
+        padding: 15px;
+
+        gap: 12px;
+    }
+
+    .welfare-page .welfare-card,
+    .welfare-page .balance-card,
+    .welfare-page .expense-summary-card {
+        min-height: 125px;
+
+        padding: 20px;
+    }
+
+    .welfare-page .welfare-card h2,
+    .welfare-page .balance-card h2,
+    .welfare-page .expense-summary-card h2 {
+        font-size: 24px;
+    }
+
+    .welfare-page .months-list {
+        padding: 5px 12px;
+    }
+
+    .welfare-page .month-row {
+        padding: 13px 3px;
+
+        gap: 10px;
+    }
+
+    .welfare-page .month-info {
+        gap: 9px;
+    }
+
+    .welfare-page .month-icon {
+        width: 36px;
+        height: 36px;
+
+        border-radius: 10px;
+
+        font-size: 14px;
+    }
+
+    .welfare-page .month-info strong {
+        font-size: 12px;
+    }
+
+    .welfare-page .month-info small {
+        font-size: 10px;
+    }
+
+    .welfare-page .month-due > span:first-child {
+        font-size: 11px;
+    }
+
+    .welfare-page .month-status {
+        min-width: 60px;
+
+        padding: 5px 8px;
+
+        font-size: 9px;
+    }
+
+    .welfare-page .months-count {
+        min-width: 40px;
+        height: 40px;
+
+        border-radius: 11px;
+
+        font-size: 12px;
+    }
+
+    .welfare-page .arrears-total {
+        margin: 5px 15px 15px;
+
+        padding: 14px 15px;
+    }
+
+    .welfare-page .arrears-total span {
+        font-size: 11px;
+    }
+
+    .welfare-page .arrears-total strong {
+        font-size: 15px;
+    }
+
+    .welfare-page .net-balance-card {
+        margin: 0 15px 15px;
+
+        padding: 20px;
+    }
+
+    .welfare-page .net-balance-card h2 {
+        font-size: 25px;
+    }
+
+    .welfare-page .transaction-table th {
+        padding: 11px 10px;
+    }
+
+    .welfare-page .transaction-table td {
+        padding: 12px 10px;
+
+        font-size: 12px;
+    }
 }
 
-/* ================= MOBILE ================= */
-@media (max-width:768px){
+@media (max-width: 400px) {
 
-    .content{
-        padding:12px;
+    .welfare-page .header-actions {
+        grid-template-columns: 1fr;
     }
 
-    .table-header{
-        flex-direction:column;
-        align-items:flex-start;
+    .welfare-page .month-row {
+        flex-direction: column;
     }
 
-    .table-header h2{
-        font-size:24px;
-    }
+    .welfare-page .month-due {
+        width: 100%;
 
-    .total-box{
-        width:100%;
-        text-align:center;
-        font-size:16px;
-    }
+        flex-direction: row;
 
-    .table-container{
-        padding:12px;
-        border-radius:14px;
-    }
+        justify-content: space-between;
 
-    .students-table th,
-    .students-table td{
-        padding:12px;
-        font-size:12px;
-    }
+        align-items: center;
 
-    .badge{
-        font-size:11px;
-        padding:5px 10px;
+        padding-left: 45px;
     }
-
-    .welfare-summary h3{
-        font-size:20px;
-    }
-
-    .welfare-card{
-        padding:16px;
-    }
-
-    .welfare-card span{
-        font-size:20px;
-    }
-
 }
 
-/* ================= SMALL PHONES ================= */
-@media (max-width:480px){
+/* =========================================================
+   PRINT
+   ========================================================= */
 
-    .content{
-        padding:10px;
+@media print {
+
+    .welfare-page .header-actions,
+    .welfare-page button {
+        display: none !important;
     }
 
-    .table-header h2{
-        font-size:20px;
+    .welfare-page {
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+
+        background: #ffffff !important;
     }
 
-    .students-table th,
-    .students-table td{
-        font-size:11px;
-        padding:10px;
+    .welfare-page .welfare-header {
+        box-shadow: none !important;
+
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
     }
 
-    .total-box{
-        padding:12px;
-        font-size:15px;
+    .welfare-page .statement-card,
+    .welfare-page .transaction-card,
+    .welfare-page .expense-card,
+    .welfare-page .months-card {
+        box-shadow: none !important;
+
+        border: 1px solid #ddd;
+
+        page-break-inside: avoid;
     }
 
-    .welfare-grid{
-        grid-template-columns:1fr;
+    .welfare-page .table-wrapper {
+        overflow: visible !important;
     }
 
+    .welfare-page .transaction-table {
+        width: 100%;
+
+        min-width: 0;
+    }
+
+    nav,
+    aside,
+    header,
+    .sidebar,
+    .side-bar,
+    .sidebar-menu,
+    .main-sidebar,
+    .menu,
+    .menu-container,
+    .navigation,
+    .navbar,
+    .topbar,
+    .dashboard-menu {
+        display: none !important;
+    }
+
+    .main-content,
+    .content,
+    .content-wrapper,
+    .page-content {
+        width: 100% !important;
+
+        margin: 0 !important;
+
+        padding: 0 !important;
+    }
+
+    body {
+        background: #ffffff !important;
+    }
 }
-
-/* ================= PRINT ================= */
-@media print{
-
-    body{
-        background:white;
-    }
-
-    .content{
-        padding:0;
-    }
-
-    .table-container{
-        box-shadow:none;
-        border:none;
-    }
-
-}
-
 </style>
 
 
+<!-- =========================================================
+     WELFARE PAGE
+     ========================================================= -->
+
+<div class="welfare-page">
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <div class="welfare-header">
+
+        <div class="welfare-header-content">
+
+            <h2>
+                <i class="fa fa-heart"></i>
+                Welfare Summary
+            </h2>
+
+            <p>
+                Overview of your welfare contributions, monthly
+                payment status, expenses and current financial position.
+            </p>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                type="button"
+                class="header-button print"
+                onclick="window.print();"
+            >
+                <i class="fa fa-print"></i>
+                Print Statement
+            </button>
+
+            <a
+                href="{% url 'home' %}"
+                class="header-button dashboard"
+            >
+                <i class="fa fa-dashboard"></i>
+                Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTRIBUTION OVERVIEW
+    ===================================================== -->
+
+    <div class="statement-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    <i class="fa fa-bar-chart"></i>
+                    Contribution Overview
+                </h3>
+
+                <p>
+                    Your welfare contribution status and outstanding
+                    monthly obligations.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="welfare-grid">
+
+            <div class="welfare-card paid">
+
+                <small>
+                    <i class="fa fa-check-circle"></i>
+                    Paid Months
+                </small>
+
+                <h2>
+                    {{ paid_months }}
+                </h2>
+
+                <p>
+                    Fully covered months
+                </p>
+
+            </div>
+
+
+            <div class="welfare-card missing">
+
+                <small>
+                    <i class="fa fa-exclamation-triangle"></i>
+                    Months in Arrears
+                </small>
+
+                <h2>
+                    {{ months_missing }}
+                </h2>
+
+                <p>
+                    Months not fully covered
+                </p>
+
+            </div>
+
+
+            <div class="welfare-card arrears">
+
+                <small>
+                    <i class="fa fa-money"></i>
+                    Total Arrears
+                </small>
+
+                <h2>
+                    KSh {{ amount_due|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Outstanding contribution
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MONTHLY STATUS
+    ===================================================== -->
+
+    <div class="months-card">
+
+        <div class="months-card-header">
+
+            <div>
+
+                <h3>
+                    <i class="fa fa-calendar"></i>
+                    Monthly Contribution Status
+                </h3>
+
+                <p>
+                    Track your required and actual welfare contributions
+                    month by month.
+                </p>
+
+            </div>
+
+            <span class="months-count paid-count">
+                {{ paid_months }}/{{ monthly_status|length }}
+            </span>
+
+        </div>
+
+
+        <div class="months-list">
+
+            {% for month in monthly_status %}
+
+                <div class="month-row">
+
+                    <div class="month-info">
+
+                        {% if month.status == "paid" %}
+
+                            <span class="month-icon">
+                                <i class="fa fa-check"></i>
+                            </span>
+
+                        {% else %}
+
+                            <span class="month-icon missing-icon">
+                                <i class="fa fa-exclamation"></i>
+                            </span>
+
+                        {% endif %}
+
+
+                        <div>
+
+                            <strong>
+                                {{ month.month }} {{ month.year }}
+                            </strong>
+
+                            <small>
+                                Required:
+                                KSh {{ month.required|floatformat:2 }}
+
+                                &nbsp; • &nbsp;
+
+                                Paid:
+                                KSh {{ month.paid|floatformat:2 }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="month-due">
+
+                        {% if month.status == "paid" %}
+
+                            <span style="color:#047857;">
+                                KSh {{ month.paid|floatformat:2 }}
+                            </span>
+
+                            <span class="month-status paid">
+
+                                <i class="fa fa-check"></i>
+
+                                Paid
+
+                            </span>
+
+                        {% else %}
+
+                            <span style="color:#dc2626;">
+                                KSh {{ month.paid|floatformat:2 }}
+                            </span>
+
+                            <span class="month-status missing">
+
+                                <i class="fa fa-exclamation-triangle"></i>
+
+                                Arrears
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <div class="months-empty">
+
+                    <i class="fa fa-calendar-o"></i>
+
+                    No welfare months available.
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% if amount_due > 0 %}
+
+            <div class="arrears-total">
+
+                <span>
+                    <i class="fa fa-exclamation-triangle"></i>
+                    Total Outstanding Contribution
+                </span>
+
+                <strong>
+                    KSh {{ amount_due|floatformat:2 }}
+                </strong>
+
+            </div>
+
+        {% else %}
+
+            <div
+                class="arrears-total"
+                style="
+                    background:
+                        linear-gradient(
+                            135deg,
+                            #064e3b,
+                            #047857,
+                            #10b981
+                        );
+                    border-color:#34d399;
+                "
+            >
+
+                <span>
+
+                    <i class="fa fa-check-circle"></i>
+
+                    Contribution Status
+
+                </span>
+
+                <strong>
+                    Fully Paid
+                </strong>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTRIBUTION BALANCE
+    ===================================================== -->
+
+    <div class="statement-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    <i class="fa fa-credit-card"></i>
+                    Contribution Balance
+                </h3>
+
+                <p>
+                    Your current welfare financial position.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="balance-grid">
+
+            <div class="balance-card opening">
+
+                <small>
+
+                    <i class="fa fa-history"></i>
+
+                    Balance Brought Forward
+
+                </small>
+
+                <h2>
+                    KSh {{ opening_balance|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Opening balance
+                </p>
+
+            </div>
+
+
+            <div class="balance-card mpesa">
+
+                <small>
+
+                    <i class="fa fa-mobile"></i>
+
+                    M-Pesa Contributions
+
+                </small>
+
+                <h2>
+                    KSh {{ mpesa_total|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Successful contributions
+                </p>
+
+            </div>
+
+
+            <div class="balance-card current">
+
+                <small>
+
+                    <i class="fa fa-line-chart"></i>
+
+                    Current Balance
+
+                </small>
+
+                <h2>
+                    KSh {{ current_balance|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Opening balance + contributions
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         WELFARE EXPENSES
+    ===================================================== -->
+
+    <div class="expense-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h3>
+                    <i class="fa fa-gift"></i>
+                    Welfare Benefits 
+                </h3>
+
+                <p>
+                    Welfare benefits and support allocated to you.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="expense-summary-grid">
+
+            <div class="expense-summary-card total">
+
+                <small>
+                    <i class="fa fa-money"></i>
+                    Total Benefits
+                </small>
+
+                <h2>
+                    KSh {{ total_expenses|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Total welfare benefits received
+                </p>
+
+            </div>
+
+
+            <div class="expense-summary-card wedding">
+
+                <small>
+                    <i class="fa fa-heart"></i>
+                    Wedding
+                </small>
+
+                <h2>
+                    KSh {{ wedding_expenses|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Wedding welfare support
+                </p>
+
+            </div>
+
+
+            <div class="expense-summary-card baby">
+
+                <small>
+                    <i class="fa fa-child"></i>
+                    Baby Shower
+                </small>
+
+                <h2>
+                    KSh {{ baby_shower_expenses|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Baby shower welfare support
+                </p>
+
+            </div>
+
+
+            <div class="expense-summary-card bereavement">
+
+                <small>
+                    <i class="fa fa-heart-o"></i>
+                    Bereavement
+                </small>
+
+                <h2>
+                    KSh {{ bereavement_expenses|floatformat:2 }}
+                </h2>
+
+                <p>
+                    Bereavement welfare support
+                </p>
+
+            </div>
+
+        </div>
+
+
+       
+    <!-- =====================================================
+         CONTRIBUTION HISTORY
+    ===================================================== -->
+
+    <div class="transaction-card">
+
+        <div class="transaction-header">
+
+            <div>
+
+                <h3>
+
+                    <i class="fa fa-credit-card"></i>
+
+                    Contribution History
+
+                </h3>
+
+                <p>
+                    Your successful welfare contribution transactions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="transaction-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Date</th>
+
+                        <th>Phone Number</th>
+
+                        <th>Amount</th>
+
+                        <th>M-Pesa Receipt</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for t in contributions|slice:":14" %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td class="transaction-date">
+                                {{ t.created_at|date:"d M Y H:i" }}
+                            </td>
+
+                            <td class="transaction-phone">
+                                {{ t.phone_number|default:"-" }}
+                            </td>
+
+                            <td class="transaction-amount">
+                                KSh {{ t.amount|floatformat:2 }}
+                            </td>
+
+                            <td class="transaction-receipt">
+                                {{ t.mpesa_receipt_number|default:"-" }}
+                            </td>
+
+                            <td>
+
+                                <span class="status success">
+
+                                    <i class="fa fa-check-circle"></i>
+
+                                    Success
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="no-results"
+                            >
+
+                                <i class="fa fa-file-text-o"></i>
+
+                                No welfare contributions found.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         EXPENSE HISTORY
+    ===================================================== -->
+
+    <div class="expense-card">
+
+        <div class="transaction-header">
+
+            <div>
+
+                <h3>
+
+                    <i class="fa fa-gift"></i>
+
+                    Welfare Expense History
+
+                </h3>
+
+                <p>
+                    Detailed record of welfare benefits and expenses
+                    allocated to you.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="transaction-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Date</th>
+
+                        <th>Category</th>
+
+                        <th>Description</th>
+
+                        <th>Amount</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for expense in expenses %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+
+                            <td class="transaction-date">
+
+                                {% if expense.date %}
+
+                                    {{ expense.date|date:"d M Y" }}
+
+                                {% else %}
+
+                                    {{ expense.created|date:"d M Y" }}
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="category-badge {{ expense.category }}"
+                                >
+
+                                    {% if expense.category == "wedding" %}
+
+                                        <i class="fa fa-heart"></i>
+
+                                    {% elif expense.category == "baby_shower" %}
+
+                                        <i class="fa fa-child"></i>
+
+                                    {% elif expense.category == "bereavement" %}
+
+                                        <i class="fa fa-heart-o"></i>
+
+                                    {% else %}
+
+                                        <i class="fa fa-tag"></i>
+
+                                    {% endif %}
+
+                                    {{ expense.get_category_display }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td class="expense-description">
+
+                                {{ expense.description|default:"No description provided" }}
+
+                            </td>
+
+
+                            <td class="expense-amount">
+
+                                - KSh {{ expense.amount|floatformat:2 }}
+
+                            </td>
+
+                        </tr>
+
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="no-results"
+                            >
+
+                                <i class="fa fa-file-text-o"></i>
+
+                                No welfare expenses have been recorded
+                                for you.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+
+                {% if expenses %}
+
+                    <tfoot>
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                style="
+                                    text-align:right;
+                                    font-weight:900;
+                                    padding:17px 14px;
+                                "
+                            >
+
+                                Total Expenses
+
+                            </td>
+
+
+                            <td
+                                class="expense-amount"
+                                style="
+                                    padding:17px 14px;
+                                "
+                            >
+
+                                - KSh {{ total_expenses|floatformat:2 }}
+
+                            </td>
+
+                        </tr>
+
+                    </tfoot>
+
+                {% endif %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}
