@@ -6,6 +6,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm  
 from django.core.exceptions import ValidationError
 from .models import WhatsAppContact
+from .models import OpeningBalance
+
+
+class OpeningBalanceForm(forms.ModelForm):
+    class Meta:
+        model = OpeningBalance
+        fields = ['amount', 'balance_date', 'description']
+        widgets = {
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'balance_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'description': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 
@@ -29,12 +41,20 @@ class MessageForm(ModelForm):
 
 
 class cash_expenditureForm(ModelForm):
+
     class Meta:
-        model=cash_expenditure
-        fields='__all__'
-        exclude = ['host']
-   
-        
+        model = cash_expenditure
+        fields = "__all__"
+        exclude = ["host"]
+
+        widgets = {
+            "date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                }
+            ),
+        }
   
 
 class UpdateForm(ModelForm):
@@ -166,3 +186,4 @@ class MpesaTransactionForm(forms.ModelForm):
                 'placeholder': 'Result Description'
             }),
         }
+        

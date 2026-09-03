@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class user(models.Model):
@@ -91,6 +92,7 @@ class room(models.Model):
     
 
     class Meta:
+        
         ordering = ['-updated', '-created']
 
     def __str__(self):
@@ -151,7 +153,46 @@ class MpesaTransaction(models.Model):
         return f"{self.created_at.strftime('%Y-%m-%d')} - {self.full_name} - {self.phone_number} - {self.status}"
 
 
-    
+
+
+class OpeningBalance(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="opening_balances", null=True, blank=True
+    )
+
+    profile = models.ForeignKey(
+        room,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+
+    amount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0, null = True, blank=True
+    )
+
+    balance_date = models.DateField(
+        default="2024-12-31"
+    )
+
+    description = models.CharField(
+        max_length=255,
+        blank=True, null=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True
+    )
+
+    class Meta:
+        ordering = ["balance_date"]
+
+    def __str__(self):
+        return f"{self.user} - {self.amount} - {self.balance_date}"
     
 class update(models.Model):
         user_name= models.ForeignKey(User,on_delete=models.CASCADE)
@@ -241,17 +282,101 @@ class update(models.Model):
           return self.choose if self.choose is not None else "Unnamed"
 
 class cash_expenditure(models.Model):
-    Expense =models.CharField(max_length=100, blank=True)
-    Date =models.CharField(max_length=20, blank=True)
-    Amount=models.DecimalField(max_digits=10, decimal_places=2)
-    updated=models.DateTimeField(auto_now=True, null=True, blank=True)
-    created=models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    
+
+    CATEGORY_CHOICES = [
+        ("wedding", "Wedding"),
+        ("baby_shower", "Baby Shower"),
+        ("bereavement", "Bereavement"),
+    ]
+
+    member = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="cash_expenditures",
+        verbose_name="Registered Member", null=True, blank=True
+    )
+
+    category = models.CharField(
+        max_length=30,
+        choices=CATEGORY_CHOICES, null=True, blank=True
+    )
+
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Additional description of the expenditure.", 
+    )
+
+    date = models.DateField( null=True, blank=True, help_text="Date .")
+
+    amount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2, null=True, blank=True
+    )
+
+    updated = models.DateTimeField(
+        auto_now=True, null=True, blank=True
+    )
+
+    created = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True
+    )
+
     class Meta:
-     ordering = ['-updated', '-created']
+        ordering = ["-date", "-created"]
+        verbose_name = "Cash Expenditure"
+        verbose_name_plural = "Cash Expenditures"
+
+    def clean(self):
+        """
+        Prevent expenditure for a member who is
+        3 or more months in arrears.
+        """
+
+        super().clean()
+
+        if not self.member_id:
+            return
+
+        # Replace this with your actual arrears calculation.
+        months_in_arrears = self.get_months_in_arrears()
+
+        if months_in_arrears >= 3:
+            raise ValidationError({
+                "member": (
+                    f"This member is {months_in_arrears} months in arrears. "
+                    "A member must not be 3 or more months in arrears "
+                    "to qualify for this benefit."
+                )
+            })
+
+    def get_months_in_arrears(self):
+        """
+        Calculate the number of months the member is in arrears.
+
+        IMPORTANT:
+        Replace the logic below with your actual welfare/contribution
+        calculation.
+        """
+
+        # Example placeholder.
+        #
+        # If you already have a welfare model that calculates:
+        #
+        #     paid_months
+        #     months_missing
+        #     amount_due
+        #
+        # use that calculation here.
+
+        return 0
 
     def __str__(self):
-      return self.Expense or ""
+        return (
+            f"{self.get_category_display()} - "
+            f"{self.member.username} - "
+            f"KSh {self.amount}"
+        )
     
 class WhatsAppContact(models.Model):
     name = models.CharField(max_length=100)

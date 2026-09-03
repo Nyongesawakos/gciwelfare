@@ -46,6 +46,16 @@ path('remove-admin/<int:user_id>/', views.remove_admin, name='remove_admin'),
 path('bulk-sms/', views.bulk_sms_view, name='bulk_sms'),
 path('admi/', views.admi, name='admi'),
 path('manual-transaction/', views.manual_transaction, name='manual_transaction'),
+path(
+    'mpesa-balance/<int:profile_id>/',
+    views.mpesa_balance,
+    name='mpesa_balance'
+),
+path(
+    'add-opening-balance/<int:profile_id>/',
+    views.add_opening_balance,
+    name='add_opening_balance'
+)
  
 
 
